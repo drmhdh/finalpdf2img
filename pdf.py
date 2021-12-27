@@ -181,8 +181,8 @@ async def rename_doc(bot, message):
                 )
             )
             try:
-                #os.remove(new_file_name)
-                os.remove(thumb_image_path)
+                os.remove(new_file_name)
+                #os.remove(thumb_image_path)
             except:
                 pass
             await bot.edit_message_text(
