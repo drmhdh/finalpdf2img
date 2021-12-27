@@ -94,7 +94,7 @@ async def generate_custom_thumbnail(bot, message):
             revoke=True
         )
         return
-    #TRChatBase(update.from_user.id, message.text, "generatecustomthumbnail")
+    #TRChatBase(message.from_user.id, message.text, "generatecustomthumbnail")
     if message.reply_to_message is not None (message.from_user.id, message.text, "generatecustomthumbnail"):
        
         reply_message = message.reply_to_message
@@ -150,7 +150,7 @@ async def savethumbnail(bot, message):
             revoke=True
         )
         return
-    #TRChatBase(update.from_user.id, message.text, "savethumbnail")
+    #TRChatBase(message.from_user.id, message.text, "savethumbnail")
     message.from_user.id, message.text, "savethumbnail"
     if message.reply_to_message.media_group_id is not None:
         # album is sent
