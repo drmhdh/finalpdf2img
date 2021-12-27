@@ -8,7 +8,6 @@
 #    copyright ©️ 2021 nabilanavab
 #    Released Under Apache License
 
-
 import os
 import time
 import math
@@ -31,16 +30,14 @@ from PIL import Image
 import numpy
 
 logger = logging.getLogger(__name__)
+# LOGGING INFO
+# logging.basicConfig(level=logging.INFO)
+logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 if __name__ == "__main__" :
     # create download directory, if not exist
     if not os.path.isdir(Config.DOWNLOAD_LOCATION):
         os.makedirs(Config.DOWNLOAD_LOCATION)   
-
-# LOGGING INFO
-# logging.basicConfig(level=logging.INFO)
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
-
 
 # PYROGRAM INSTANCE
 bot = Client(
@@ -59,7 +56,6 @@ PROCESS = []        # to check current process
 mediaDoc = {}       # sending group document(pdf 2 img)
 PAGENOINFO = {}     # saves no.of pages that user send last
 PDF2IMGPGNO = {}    # more info about pdf file(for extraction)
-
 
 # SUPPORTED FILES
 suprtedFile = [
@@ -80,7 +76,6 @@ suprtedPdfFile2 = [
     ".xlsx", ".xlt", ".xltx", ".xml"
 ]                                       # file to pdf (ConvertAPI limit)
 
-
 # CREATING ConvertAPI INSTANCE
 if Config.CONVERT_API is not None:
     convertapi.api_secret = os.getenv("CONVERT_API")
@@ -88,7 +83,6 @@ if Config.CONVERT_API is not None:
 if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE"))
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
-
 
 @bot.on_message(filters.command('rename'))
 async def rename_doc(bot, message):
@@ -267,8 +261,7 @@ def TimeFormatter(milliseconds: int) -> str:
         ((str(seconds) + "s, ") if seconds else "") + \
         ((str(milliseconds) + "ms, ") if milliseconds else "")
     return tmp[:-2]        
-        
-        
+                
 @bot.on_message(filters.command(["generatecustomthumbnail"]))
 async def generate_custom_thumbnail(bot, message):
     if message.from_user.id in Config.BANNED_USERS:
@@ -385,8 +378,8 @@ async def delete_thumbnail(bot, message):
     
     
 # if message is an image
-@bot.on_message(filters.private & filters.photo)
-async def images(bot, message):
+@bot.on_message(filters.command(["img2pdf"]) & filters.private) # & filters.photo
+async def img2pdf(bot, message):
     
     try:
         await bot.send_chat_action(
@@ -423,9 +416,7 @@ async def images(bot, message):
         
     except Exception:
         pass
-    
-    
- 
+         
 # if message is a document/file
 @bot.on_message(filters.command(["scan"])) #& filters.document  & filters.private
 async def documents(bot, message):
@@ -760,12 +751,6 @@ async def documents(bot, message):
     except Exception:
         pass
 
-
-
-
-
-
-
 # REPLY TO /start COMMAND
 @bot.on_message(filters.command(["start"]))
 async def start(bot, message):
@@ -850,9 +835,7 @@ async def start(bot, message):
         
     except Exception:
         pass
-    
-    
-    
+            
 # /deletes : Deletes current Images to pdf Queue
 @bot.on_message(filters.command(["deletepdf"]))
 async def cancelI2P(bot, message):
@@ -892,7 +875,6 @@ async def cancelP2I(bot, message):
         await bot.send_message(
             message.chat.id, '`Nothing to cancel..`🏃'
         )
-
        
 # if message is a /feedback
 @bot.on_message(filters.command(["feedback"]))
@@ -909,7 +891,6 @@ async def feedback(bot, message):
         
     except Exception:
         pass
-
 
 # If message is /generate
 @bot.on_message(filters.command(["generate"]) & filters.private)
@@ -992,13 +973,11 @@ async def generate(bot, message):
         os.remove(fileName)
         shutil.rmtree(f"{message.chat.id}")
         print(e)
-   
-    
+       
 # If message is /encrypt
 @bot.on_message(filters.command(["encrypt"]))
 async def encrypt(bot, message):
-    try:
-        
+    try:        
         if message.chat.id in PROCESS:
             
             await bot.send_chat_action(
@@ -1334,10 +1313,8 @@ async def encrypt(bot, message):
                         )
                 
                     except Exception:
-                        pass
-         
-        
-        
+                        pass        
+                
             except:
                 pass
         
@@ -1447,7 +1424,6 @@ async def encrypt(bot, message):
             message.chat.id, Msgs.feedbackMsg,
             disable_web_page_preview=True
         )
-
        
     except Exception as e:
         
@@ -1464,8 +1440,7 @@ async def encrypt(bot, message):
             
         except Exception:
             pass
-    
-    
+        
 @bot.on_message(filters.command(["extract"])) #& filters.user(ADMINS)
 async def extract(bot, message):        
     try:
@@ -1833,17 +1808,13 @@ async def extract(bot, message):
                             message.chat.id,
                             "`Syntax Error: errorInEndingPageNumber 😅`"
                         )
-                        return
-                        #pass
-                        
+                        return                       
                 else:
                     await bot.send_message(
                         message.chat.id,
                         "`Syntax Error: errorInStartingPageNumber 😅`"
                     )
-                    return
-                    #pass
-                    
+                    return                               
             except:
                     
                 await bot.send_message(
@@ -1851,8 +1822,7 @@ async def extract(bot, message):
                     "`Syntax Error: noSuchPageNumbers 🤭`"
                 )
                 return
-                #pass
-            
+                            
         elif len(pageStartAndEnd) == 1:
                 
             if pageStartAndEnd[0] == "/extract":
@@ -1976,8 +1946,7 @@ async def extract(bot, message):
             
         except Exception:
             pass
-            
-            
+                        
 @bot.on_callback_query()
 async def answer(client, callbackQuery):
     
@@ -2248,13 +2217,7 @@ async def answer(client, callbackQuery):
                     for pageNo in pgList:
                         page = doc.loadPage(pageNo-1)
                         pix = page.getPixmap(matrix = mat)
-                        cnvrtpg += 1
-                        
-                        """await bot.edit_message_text(
-                            chat_id = callbackQuery.message.chat.id,
-                            message_id = callbackQuery.message.message_id,
-                            text = f"`Converted: {cnvrtpg}/{int((PAGENOINFO[callbackQuery.message.chat.id][2])+1 - int(PAGENOINFO[callbackQuery.message.chat.id][1]))} pages.. 🤞`"
-                        )"""
+                        cnvrtpg += 1                                              
                         
                         if callbackQuery.message.chat.id not in PROCESS:
                             
@@ -2281,12 +2244,7 @@ async def answer(client, callbackQuery):
                         message_id = callbackQuery.message.message_id,
                         text = f"`Started  📤  from {cnvrtpg}'th 📃 \n⏳ This might take some Time` \n🙇 Trying to Extract 📜 `{PAGENOINFO[callbackQuery.message.chat.id][1]}` to `{PAGENOINFO[callbackQuery.message.chat.id][2]}`:"
                                
-                    )
-                    """sleep(10)
-                    await bot.delete_messages(
-                    chat_id = callbackQuery.message.chat.id,
-                    message_ids = callbackQuery.message.message_id
-                    )"""
+                    )                   
                     directory = f'{callbackQuery.message.message_id}/pgs'
                     imag = [os.path.join(directory, file) for file in os.listdir(directory)]
                     imag.sort(key=os.path.getctime)
@@ -2388,12 +2346,7 @@ async def answer(client, callbackQuery):
                 PROCESS.remove(callbackQuery.message.chat.id)
                 del PAGENOINFO[callbackQuery.message.chat.id]
                 doc.close()
-                """sleep(5)
-                await bot.edit_message_text(
-                    chat_id = callbackQuery.message.chat.id,
-                    message_id = callbackQuery.message.message_id,
-                    text = f'`Uploading Completed.. `🏌️'
-                )"""
+             
                 shutil.rmtree(f'{callbackQuery.message.message_id}')
                 
                 sleep(2)
