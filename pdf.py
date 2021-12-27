@@ -101,7 +101,7 @@ async def rename_doc(bot, message):
         return
     message.message_id, message.text, "rename"
     if (" " in message.text) and (message.reply_to_message is not None):
-        message, file_name = message.text.split(" ", 1)
+        cmd, file_name = message.text.split(" ", 1)
         if len(file_name) > 64:
             ne_x = file_name[:60]+file_name[-4:]
             file_name = ne_x
@@ -111,7 +111,7 @@ async def rename_doc(bot, message):
         description = Translation.CUSTOM_CAPTION_UL_FILE
         download_location = Config.DOWNLOAD_LOCATIONS + "/"
         a = await bot.send_message(
-            message.chat.id,
+            chat_id=message.chat.id,
             text=Translation.DOWNLOAD_START,
             reply_to_message_id=message.reply_to_message.message_id
         )
