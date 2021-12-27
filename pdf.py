@@ -179,11 +179,11 @@ async def rename_doc(bot, message):
                     c_time
                 )
             )
-            try:
+            #try:
                 #os.remove(new_file_name)
                 #os.remove(thumb_image_path)
-            except:
-                pass
+            #except:
+                #pass
             await bot.edit_message_text(
                 text=Translation.AFTER_SUCCESSFUL_UPLOAD_MSG,
                 chat_id=message.chat.id,
