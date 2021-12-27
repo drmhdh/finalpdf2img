@@ -154,7 +154,7 @@ async def rename_doc(bot, message):
                 # https://pillow.readthedocs.io/en/3.1.x/reference/Image.html#create-thumbnails
             c_time = time.time()
             await bot.send_document(
-                chat_id=update.chat.id,
+                chat_id=message.chat.id,
                 document=new_file_name,
                 thumb=thumb_image_path,
                 caption=description,
@@ -180,7 +180,7 @@ async def rename_doc(bot, message):
             )
     else:
         await bot.send_message(
-            chat_id=update.chat.id,
+            chat_id=message.chat.id,
             text=Translation.REPLY_TO_DOC_FOR_RENAME_FILE,
             reply_to_message_id=message.message_id
         )    
