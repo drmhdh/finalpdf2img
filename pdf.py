@@ -110,7 +110,7 @@ async def rename_doc(bot, message):
             pass
                      
         description = Translation.CUSTOM_CAPTION_UL_FILE
-        download_location = Config.DOWNLOAD_LOCATION + "/"
+        download_location = Config.DOWNLOAD_LOCATIONS + "/"
         a = await bot.send_message(
             chat_id=message.chat.id,
             text=Translation.DOWNLOAD_START,
@@ -144,7 +144,7 @@ async def rename_doc(bot, message):
                 message_id=a.message_id
                 )
             logger.info(the_real_download_location)
-            thumb_image_path = Config.DOWNLOAD_LOCATION + "/" + str(message.from_user.id) + ".jpg"
+            thumb_image_path = Config.DOWNLOAD_LOCATIONS + "/" + str(message.from_user.id) + ".jpg"
             if not os.path.exists(thumb_image_path):
                 thumb_image_path = None
             else:
@@ -211,7 +211,7 @@ async def generate_custom_thumbnail(bot, message):
        
         reply_message = message.reply_to_message
         if reply_message.media_group_id is not None:
-            download_location = Config.DOWNLOAD_LOCATION + "/" + str(message.from_user.id) + "/" + str(reply_message.media_group_id) + "/"
+            download_location = Config.DOWNLOAD_LOCATIONS + "/" + str(message.from_user.id) + "/" + str(reply_message.media_group_id) + "/"
             save_final_image = download_location + str(round(time.time())) + ".jpg"
             list_im = os.listdir(download_location)
             if len(list_im) == 2:
@@ -266,7 +266,7 @@ async def savethumbnail(bot, message):
     message.from_user.id, message.text, "savethumbnail"
     if message.reply_to_message.media_group_id is not None:
         # album is sent
-        download_location = Config.DOWNLOAD_LOCATION + "/" + str(message.from_user.id) + "/" + str(message.media_group_id) + "/"
+        download_location = Config.DOWNLOAD_LOCATIONS + "/" + str(message.from_user.id) + "/" + str(message.media_group_id) + "/"
         # create download directory, if not exist
         if not os.path.isdir(download_location):
             os.makedirs(download_location)
@@ -276,7 +276,7 @@ async def savethumbnail(bot, message):
         )
     else:
         # received single photo
-        download_location = Config.DOWNLOAD_LOCATION + "/" + str(message.from_user.id) + ".jpg"
+        download_location = Config.DOWNLOAD_LOCATIONS + "/" + str(message.from_user.id) + ".jpg"
         await bot.download_media(
             message=message.reply_to_message,
             file_name=download_location
@@ -299,7 +299,7 @@ async def delete_thumbnail(bot, message):
         return
     #TRChatBase(message.from_user.id, message.text, "deletethumbnail")
     message.from_user.id, message.text, "deletethumbnail"
-    download_location = Config.DOWNLOAD_LOCATION + "/" + str(message.from_user.id)
+    download_location = Config.DOWNLOAD_LOCATIONS + "/" + str(message.from_user.id)
     try:
         os.remove(download_location + ".jpg")
         # os.remove(download_location + ".json")
