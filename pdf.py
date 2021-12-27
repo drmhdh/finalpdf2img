@@ -403,7 +403,7 @@ async def img2pdf(bot, message):
             f"{message.reply_to_message.message_id}/{message.reply_to_message.message_id}.jpg"
         ).convert("RGB")
         
-        PDF[message.reply_to_message.message_id].append(img)
+        PDF[message.chat.id].append(img)
         await imageReply.edit(
             Msgs.imageAdded.format(len(PDF[message.chat.id]))
         )
