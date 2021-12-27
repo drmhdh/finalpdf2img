@@ -17,14 +17,13 @@ import logging
 import convertapi
 from PIL import Image
 from time import sleep
-from configs import Config, Msgs, ADMINS
+from configs import Config, Msgs, ADMINS, Translation
 from pyrogram import Client, filters
 from pyrogram.types import ForceReply
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from pyrogram.types import InputMediaPhoto, InputMediaDocument
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from translation import Translation
 from helper_funcs.display_progress import progress_for_pyrogram
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
