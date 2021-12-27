@@ -99,6 +99,7 @@ async def rename_doc(bot, message):
             revoke=True
         )
         return
+    HAMID=message.reply_to_message.message_id
     message.message_id, message.text, "rename"
     if (" " in message.text) and (message.reply_to_message is not None):
         cmd, file_name = message.text.split(" ", 1)
@@ -171,7 +172,7 @@ async def rename_doc(bot, message):
                 thumb=thumb_image_path,
                 caption=description,
                 # reply_markup=reply_markup,
-                reply_to_message_id=message.reply_to_message.message_id,
+                reply_to_message_id=HAMID,
                 progress=progress_for_pyrogram,
                 progress_args=(
                     Translation.UPLOAD_START,
@@ -181,7 +182,7 @@ async def rename_doc(bot, message):
             )
             #try:
                 #os.remove(new_file_name)
-                #os.remove(thumb_image_path)
+                os.remove(thumb_image_path)
             #except:
                 #pass
             await bot.edit_message_text(
