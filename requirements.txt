@@ -1,0 +1,12 @@
+pillow
+PyPDF2
+PyMuPdf
+pyrogram
+tgcrypto
+convertapi
+
+pyromod
+hachoir
+numpy
+Pillow
+requests
