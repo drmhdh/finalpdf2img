@@ -372,7 +372,7 @@ async def delete_thumbnail(bot, message):
     
                                 #pdf2img from Nabil Navab    
 # if message is an image Convert Image to PDF
-@bot.on_message(filters.command(["img2pdf"]) & filters.private) # & filters.photo
+@bot.on_message(filters.command(["img2pdf"])) # & filters.private) # & filters.photo
 async def img2pdf(bot, message):
     
     try:
