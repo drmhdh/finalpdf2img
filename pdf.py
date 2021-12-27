@@ -385,7 +385,7 @@ async def img2pdf(bot, message):
             
             if check == "notSubscribed":
                 return
-        
+        mytryx = message.reply_to_message.message_id
         imageReply = await bot.send_message(
             message.chat.id,
             "`Downloading your Image..⏳`",
@@ -396,11 +396,11 @@ async def img2pdf(bot, message):
             PDF[message.chat.id] = []
         
         await message.download(
-            f"{message.reply_to_message.message_id}/{message.reply_to_message.message_id}.jpg"
+            f"{mytryx}/{mytryx}.jpg"
         )
         
         img = Image.open(
-            f"{message.reply_to_message.message_id}/{message.reply_to_message.message_id}.jpg"
+            f"{mytryx}/{mytryx}.jpg"
         ).convert("RGB")
         
         PDF[message.chat.id].append(img)
