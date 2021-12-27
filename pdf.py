@@ -10,10 +10,8 @@
 
 
 import os
-import pyrogram
 import fitz
 import shutil
-import asyncio
 import logging
 import convertapi
 from PIL import Image
@@ -31,10 +29,10 @@ logger = logging.getLogger(__name__)
 # logging.basicConfig(level=logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
-BOT = {} 
-# PYROGRAM INSTANCE  
+
+# PYROGRAM INSTANCE
 bot = Client(
-    "pdf2img",
+    "pyroPdf",
     parse_mode = "markdown",
     api_id = Config.API_ID,
     api_hash = Config.API_HASH,
@@ -78,9 +76,10 @@ if Config.CONVERT_API is not None:
 if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE"))
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
-    
+
+
 # if message is an image
-@Client.on_message(filters.private & filters.photo)
+@bot.on_message(filters.private & filters.photo)
 async def images(bot, message):
     
     try:
@@ -122,7 +121,7 @@ async def images(bot, message):
     
  
 # if message is a document/file
-@Client.on_message(filters.command('scan')) #& filters.document  & filters.private
+@bot.on_message(filters.command(["scan"])) #& filters.document  & filters.private
 async def documents(bot, message):
     
     try:
@@ -455,7 +454,14 @@ async def documents(bot, message):
     except Exception:
         pass
 
-@Client.on_message(filters.command('start'))   
+
+
+
+
+
+
+# REPLY TO /start COMMAND
+@bot.on_message(filters.command(["start"]))
 async def start(bot, message):
     
     try:
@@ -514,11 +520,11 @@ async def start(bot, message):
                 [
                     [
                         InlineKeyboardButton(
-                            "Case Study",
+                            "About",
                             callback_data = "strtDevEdt"
                         ),
                         InlineKeyboardButton(
-                            "Explore Bot 🎊",
+                            "Help 🎊",
                             callback_data = "imgsToPdfEdit"
                         )
                     ],
@@ -539,9 +545,10 @@ async def start(bot, message):
     except Exception:
         pass
     
-           
+    
+    
 # /deletes : Deletes current Images to pdf Queue
-@Client.on_message(filters.command('deletepdf'))
+@bot.on_message(filters.command(["deletepdf"]))
 async def cancelI2P(bot, message):
     
     try:
@@ -563,7 +570,7 @@ async def cancelI2P(bot, message):
 
 
 # cancel current pdf to image Queue
-@Client.on_message(filters.command('cancelpdf'))
+@bot.on_message(filters.command(["cancelpdf"]))
 async def cancelP2I(bot, message):
     
     try:
@@ -582,7 +589,7 @@ async def cancelP2I(bot, message):
 
        
 # if message is a /feedback
-@Client.on_message(filters.command('feedback'))
+@bot.on_message(filters.command(["feedback"]))
 async def feedback(bot, message):
     
     try:
@@ -599,7 +606,7 @@ async def feedback(bot, message):
 
 
 # If message is /generate
-@Client.on_message(filters.command('generate') & filters.private)
+@bot.on_message(filters.command(["generate"]) & filters.private)
 async def generate(bot, message):
     
     try:
@@ -682,7 +689,7 @@ async def generate(bot, message):
    
     
     
-@Client.on_message(filters.command('extract')) #& filters.user(ADMINS)
+@bot.on_message(filters.command(["extract"])) #& filters.user(ADMINS)
 async def extract(bot, message):        
     try:
         if message.chat.id in PROCESS:
@@ -1181,7 +1188,9 @@ async def extract(bot, message):
                     ]
                 )
             )
-        
+                                                
+            """except:
+                pass"""
     except Exception:
         
         try:
@@ -1191,9 +1200,9 @@ async def extract(bot, message):
         except Exception:
             pass
             
-
+            
 @bot.on_callback_query()
-async def answer(client, callbackQuery): 
+async def answer(client, callbackQuery):
     
     edit = callbackQuery.data
     
@@ -1259,7 +1268,7 @@ async def answer(client, callbackQuery):
         except Exception:
             pass
         
-    elif edit == "pdfToImgsEdit": 
+    elif edit == "pdfToImgsEdit":
         
         try:
             await callbackQuery.edit_message_text(
@@ -1294,7 +1303,7 @@ async def answer(client, callbackQuery):
         except Exception:
             pass
         
-    elif edit == "filsToPdfEdit":   
+    elif edit == "filsToPdfEdit":
         
         try:
             await callbackQuery.edit_message_text(
@@ -1329,7 +1338,7 @@ async def answer(client, callbackQuery):
         except Exception:
             pass
         
-    elif edit == "warningEdit":      
+    elif edit == "warningEdit":
         
         try:
             await callbackQuery.edit_message_text(
@@ -1360,7 +1369,8 @@ async def answer(client, callbackQuery):
         except Exception:
             pass
         
-    elif edit == "back":  
+    elif edit == "back":
+        
         try:
             await callbackQuery.edit_message_text(
                 Msgs.back2Start, disable_web_page_preview = True,
@@ -1390,12 +1400,12 @@ async def answer(client, callbackQuery):
         except Exception:
             pass
     
-    elif edit == "close": 
+    elif edit == "close":
         
         try:
             await bot.delete_messages(
-                chat_id = callbackQuery.reply_to_message.chat.id,
-                message_ids = callbackQuery.reply_to_message.message_id
+                chat_id = callbackQuery.message.chat.id,
+                message_ids = callbackQuery.message.message_id
             )
             return
         
@@ -1403,7 +1413,6 @@ async def answer(client, callbackQuery):
             pass
         
     elif edit in ["multipleImgAsImages", "multipleImgAsDocument", "asImages", "asDocument"]:
-    
         
         try:
             if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):
@@ -2034,7 +2043,6 @@ async def answer(client, callbackQuery):
                 )
                 
             except Exception:
-                pass        
-  
-bot.run()
-
+                pass
+        
+bot.run()            
