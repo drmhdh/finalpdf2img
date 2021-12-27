@@ -396,7 +396,7 @@ async def img2pdf(bot, message):
             PDF[message.chat.id] = []
         
         await message.reply_to_message.download(
-            f"{message.chat.id}/message.chat.id}.jpg"
+            f"{message.chat.id}/{message.chat.id}.jpg"
         )
         
         img = Image.open(
