@@ -111,7 +111,7 @@ async def rename_doc(bot, message):
         description = Translation.CUSTOM_CAPTION_UL_FILE
         download_location = Config.DOWNLOAD_LOCATIONS + "/"
         a = await bot.send_message(
-            chat_id=message.chat.id,
+            message_id=message.message.id,
             text=Translation.DOWNLOAD_START,
             reply_to_message_id=message.reply_to_message.message_id
         )
