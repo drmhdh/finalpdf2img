@@ -99,9 +99,9 @@ async def rename_doc(bot, message):
             revoke=True
         )
         return
-    message.reply_to_message.message_id, message.text, "rename"
+    #message.reply_to_message.message_id, message.text, "rename"
     if (" " in message.text) and (message.reply_to_message is not None):
-        cmd, file_name = message.text.split(" ", 1)
+        message, file_name = message.text.split(" ", 1)
         if len(file_name) > 64:
             ne_x = file_name[:60]+file_name[-4:]
             file_name = ne_x
@@ -113,11 +113,11 @@ async def rename_doc(bot, message):
         a = await bot.send_message(
             chat_id=message.chat.id,
             text=Translation.DOWNLOAD_START,
-            reply_to_message_id=message.message_id
+            reply_to_message_id=message.reply_to_message.message_id
         )
         c_time = time.time()
         the_real_download_location = await bot.download_media(
-            message=message.reply_to_message,
+            message_id=message.reply_to_message.message_id,
             file_name=download_location,
             progress=progress_for_pyrogram,
             progress_args=(
