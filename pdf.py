@@ -86,7 +86,7 @@ if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
 
 
-@Client.on_message(filters.command(["rename"]))
+@bot.on_message(filters.command(["rename"]))
 async def rename_doc(bot, message):
     if message.reply_to_message.from_user.id in Config.BANNED_USERS:
         await bot.delete_messages(
