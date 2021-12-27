@@ -150,7 +150,7 @@ async def savethumbnail(bot, message):
             revoke=True
         )
         return
-    #TRChatBase(update.from_user.id, update.text, "savethumbnail")
+    #TRChatBase(update.from_user.id, message.text, "savethumbnail")
     message.from_user.id, message.text, "savethumbnail"
     if message.reply_to_message.media_group_id is not None:
         # album is sent
@@ -196,7 +196,7 @@ async def delete_thumbnail(bot, message):
     await bot.send_message(
         chat_id=message.chat.id,
         text=Translation.DEL_ETED_CUSTOM_THUMB_NAIL,
-        reply_to_message_id=update.message_id
+        reply_to_message_id=message.message_id
     )
 
 @Client.on_message(filters.command(["rename"]))
