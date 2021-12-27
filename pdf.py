@@ -180,7 +180,7 @@ async def rename_doc(bot, message):
                 )
             )
             try:
-                os.remove(new_file_name)
+                #os.remove(new_file_name)
                 #os.remove(thumb_image_path)
             except:
                 pass
