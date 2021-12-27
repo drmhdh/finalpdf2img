@@ -83,7 +83,8 @@ if Config.CONVERT_API is not None:
 if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE"))
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
-
+                                     
+                                       # Rename PDF
 @bot.on_message(filters.command('rename'))
 async def rename_doc(bot, message):
     if message.from_user.id in Config.BANNED_USERS:
@@ -148,17 +149,11 @@ async def rename_doc(bot, message):
                 if metadata.has("width"):
                     width = metadata.get("width")
                 if metadata.has("height"):
-                    height = metadata.get("height")
-                # resize image
-                # ref: https://t.me/PyrogramChat/44663
-                # https://stackoverflow.com/a/21669827/4723940
+                    height = metadata.get("height")         
                 Image.open(thumb_image_path).convert("RGB").save(thumb_image_path)
                 img = Image.open(thumb_image_path)
-                # https://stackoverflow.com/a/37631799/4723940
-                # img.thumbnail((90, 90))
                 img.resize((320, height))
                 img.save(thumb_image_path, "JPEG")
-                # https://pillow.readthedocs.io/en/3.1.x/reference/Image.html#create-thumbnails
             c_time = time.time()
             await bot.send_document(
                 chat_id=message.chat.id,
@@ -176,7 +171,6 @@ async def rename_doc(bot, message):
             )
             try:
                 os.remove(new_file_name)
-                #os.remove(thumb_image_path)
             except:
                 pass
             await bot.edit_message_text(
@@ -191,8 +185,8 @@ async def rename_doc(bot, message):
             text=Translation.REPLY_TO_DOC_FOR_RENAME_FILE,
             reply_to_message_id=message.message_id
         )    
-        
 
+#progress        
 async def progress_for_pyrogram(
     current,
     total,
@@ -317,7 +311,7 @@ async def generate_custom_thumbnail(bot, message):
             text=Translation.REPLY_TO_MEDIA_ALBUM_TO_GEN_THUMB,
             reply_to_message_id=message.message_id
         )
-
+#Save Thumbnail for Renamed PDF
 @bot.on_message(filters.command(["savethumbnail"])) #filters.photo)
 async def savethumbnail(bot, message):
     if message.from_user.id in Config.BANNED_USERS:
@@ -327,7 +321,7 @@ async def savethumbnail(bot, message):
             revoke=True
         )
         return
-    #TRChatBase(message.from_user.id, message.text, "savethumbnail")
+    
     message.from_user.id, message.text, "savethumbnail"
     if message.reply_to_message.media_group_id is not None:
         # album is sent
@@ -352,7 +346,7 @@ async def savethumbnail(bot, message):
             reply_to_message_id=message.reply_to_message.message_id
         )
 
-
+#Delete Thumbnail for Renamed PDF
 @bot.on_message(filters.command(["deletethumbnail"]))
 async def delete_thumbnail(bot, message):
     if message.from_user.id in Config.BANNED_USERS:
@@ -362,7 +356,7 @@ async def delete_thumbnail(bot, message):
             revoke=True
         )
         return
-    #TRChatBase(message.from_user.id, message.text, "deletethumbnail")
+
     message.from_user.id, message.text, "deletethumbnail"
     download_location = Config.DOWNLOAD_LOCATIONS + "/" + str(message.from_user.id)
     try:
@@ -376,8 +370,8 @@ async def delete_thumbnail(bot, message):
         reply_to_message_id=message.message_id
     )
     
-    
-# if message is an image
+                                #pdf2img from Nabil Navab    
+# if message is an image Convert Image to PDF
 @bot.on_message(filters.command(["img2pdf"]) & filters.private) # & filters.photo
 async def img2pdf(bot, message):
     
@@ -417,7 +411,7 @@ async def img2pdf(bot, message):
     except Exception:
         pass
          
-# if message is a document/file
+# if message is a document/file Attempt if Convertion to PDF Possible
 @bot.on_message(filters.command(["scan"])) #& filters.document  & filters.private
 async def documents(bot, message):
     
@@ -974,7 +968,7 @@ async def generate(bot, message):
         shutil.rmtree(f"{message.chat.id}")
         print(e)
        
-# If message is /encrypt
+# If message is /encrypt Attempt to Add Passsword
 @bot.on_message(filters.command(["encrypt"]))
 async def encrypt(bot, message):
     try:        
@@ -1440,7 +1434,8 @@ async def encrypt(bot, message):
             
         except Exception:
             pass
-        
+
+#Extrct Image From PDF
 @bot.on_message(filters.command(["extract"])) #& filters.user(ADMINS)
 async def extract(bot, message):        
     try:
@@ -1784,7 +1779,7 @@ async def extract(bot, message):
             except:
                 pass
         
-        
+        #My Combination
         pageStartAndEnd = list(needPages.replace('-',':').split(':'))
             
         if len(pageStartAndEnd) > 2:
