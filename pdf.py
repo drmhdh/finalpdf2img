@@ -392,20 +392,20 @@ async def img2pdf(bot, message):
             reply_to_message_id = message.message_id
         )
         
-        if not isinstance(PDF.get(message.chat.id), list):
-            PDF[message.chat.id] = []
+        if not isinstance(PDF.get(message.reply_to_message.message_id), list):
+            PDF[message.reply_to_message.message_id] = []
         
         await message.download(
-            f"{message.chat.id}/{message.chat.id}.jpg"
+            f"{message.reply_to_message.message_id}/{message.reply_to_message.message_id}.jpg"
         )
         
         img = Image.open(
-            f"{message.chat.id}/{message.chat.id}.jpg"
+            f"{message.reply_to_message.message_id}/{message.reply_to_message.message_id}.jpg"
         ).convert("RGB")
         
-        PDF[message.chat.id].append(img)
+        PDFmessage.reply_to_message.message_id].append(img)
         await imageReply.edit(
-            Msgs.imageAdded.format(len(PDF[message.chat.id]))
+            Msgs.imageAdded.format(len(PDF[message.reply_to_message.message_id]))
         )
         
     except Exception:
