@@ -25,7 +25,6 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 from pyrogram.types import InputMediaPhoto, InputMediaDocument
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from helper_funcs.display_progress import progress_for_pyrogram
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image
