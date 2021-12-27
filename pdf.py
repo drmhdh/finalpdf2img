@@ -1032,7 +1032,8 @@ async def encrypt(bot, message):
          
         
         
-        
+            except:
+                pass
         
         password = message.text.replace('/encrypt ', '')
         
