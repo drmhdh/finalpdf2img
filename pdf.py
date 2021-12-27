@@ -10,6 +10,7 @@
 
 
 import os
+import time
 import fitz
 import shutil
 import logging
@@ -22,6 +23,12 @@ from pyrogram.types import ForceReply
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from pyrogram.types import InputMediaPhoto, InputMediaDocument
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+from translation import Translation
+from helper_funcs.display_progress import progress_for_pyrogram
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
+from PIL import 
 
 logger = logging.getLogger(__name__)
 
