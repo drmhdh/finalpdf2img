@@ -11,6 +11,7 @@
 
 import os
 import time
+import math
 import fitz
 import shutil
 import logging
