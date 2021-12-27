@@ -887,7 +887,7 @@ async def feedback(bot, message):
         pass
 
 # If message is /generate
-@bot.on_message(filters.command(["generate"]) & filters.private)
+@bot.on_message(filters.command(["generate"])) # & filters.private)
 async def generate(bot, message):
     
     try:
