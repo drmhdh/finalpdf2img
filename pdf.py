@@ -1540,12 +1540,13 @@ async def extract(bot, message):
                         )
                 
                         await message.reply_to_message.download(
-                            f"{message.reply_to_message.message_id}/pdftoimage.pdf"
+                            f"{message.message_id}/pdftoimage.pdf"
                         )
                 
-                        doc = fitz.open(f'{message.reply_to_message.message_id}/pdftoimage.pdf')
+                        doc = fitz.open(f'{message.message_id}/pdftoimage.pdf')
                         noOfPages = doc.pageCount
-                
+                        
+                        PDFINPUT = message.reply_to_message
                         PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
                         PDF2IMGPGNO[message.chat.id] = noOfPages
                 
@@ -1566,14 +1567,14 @@ async def extract(bot, message):
                         )
                    
                         doc.close()
-                        shutil.rmtree(f'{message.reply_to_message.message_id}')
+                        shutil.rmtree(f'{message.message_id}')
              
                     except Exception as e:
                 
                         try:
-                            PROCESS.remove(message.reply_to_message.chat.id)
+                            PROCESS.remove(message.chat.id)
                             doc.close()
-                            shutil.rmtree(f'{message.reply_to_message.message_id}')
+                            shutil.rmtree(f'{message.message_id}')
                     
                             await pdfMsgId.edit(
                                 Msgs.errorEditMsg.format(e)
@@ -1601,8 +1602,8 @@ async def extract(bot, message):
                             "`Downloading your file..⏳`",
                         )
                 
-                        await message.download(
-                            f"{message.reply_to_message.message_id}/{isPdfOrImg}"
+                        await message.reply_to_message.download(
+                            f"{message.message_id}/{isPdfOrImg}"
                         )
                 
                         await pdfMsgId.edit(
@@ -1610,14 +1611,14 @@ async def extract(bot, message):
                         )
                 
                         Document = fitz.open(
-                            f"{message.reply_to_message.message_id}/{isPdfOrImg}"
+                            f"{message.message_id}/{isPdfOrImg}"
                         )
                 
                         b = Document.convert_to_pdf()
                 
                         pdf = fitz.open("pdf", b)
                         pdf.save(
-                            f"{message.reply_to_message.message_id}/{fileNm}.pdf",
+                            f"{message.message_id}/{fileNm}.pdf",
                             garbage = 4,
                             deflate = True,
                         )
@@ -1628,7 +1629,7 @@ async def extract(bot, message):
                         )
                 
                         sendfile = open(
-                            f"{message.reply_to_message.message_id}/{fileNm}.pdf", "rb"
+                            f"{message.message_id}/{fileNm}.pdf", "rb"
                         )
                 
                         await bot.send_document(
@@ -1641,7 +1642,7 @@ async def extract(bot, message):
                             "`Uploading Completed..❤️`"
                         )
                 
-                        shutil.rmtree(f"{message.reply_to_message.message_id}")
+                        shutil.rmtree(f"{message.message_id}")
                 
                         sleep(5)
                         await bot.send_chat_action(
@@ -1655,7 +1656,7 @@ async def extract(bot, message):
                     except Exception as e:
                 
                         try:
-                            shutil.rmtree(f"{message.reply_to_message.message_id}")
+                            shutil.rmtree(f"{message.message_id}")
                             await pdfMsgId.edit(
                                 Msgs.errorEditMsg.format(e)
                             )
@@ -1739,15 +1740,15 @@ async def extract(bot, message):
                                 "`Uploading Completed..`🏌️"
                             )
                     
-                            shutil.rmtree(f"{message.reply_to_message.message_id}")
+                            shutil.rmtree(f"{message.message_id}")
                     
                             sleep(5)
                             await bot.send_chat_action(
-                                message.reply_to_message.chat.id, "typing"
+                                message.chat.id, "typing"
                             )
                             sleep(5)
                             await bot.send_message(
-                                message.reply_to_message.chat.id, Msgs.feedbackMsg,
+                                message.chat.id, Msgs.feedbackMsg,
                                 disable_web_page_preview = True
                             )
                 
