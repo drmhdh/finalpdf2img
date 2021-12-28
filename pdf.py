@@ -1451,11 +1451,11 @@ async def extract(bot, message):
         
         if message.chat.id not in PDF2IMG:
             try:
-                mypdfmod = message.reply_to_message
+                
                 await bot.send_chat_action(
                     message.chat.id, "typing"
                 )
-                
+                mypdfmod = message.reply_to_message
                 isPdfOrImg = message.reply_to_message.document.file_name
                 fileSize = message.reply_to_message.document.file_size
                 fileNm, fileExt = os.path.splitext(isPdfOrImg)
@@ -1489,13 +1489,13 @@ async def extract(bot, message):
                         imageDocReply = await bot.send_message(
                             message.chat.id,
                             "`Downloading your Image..⏳`",
-                            reply_to_message_id = message.message_id
+                            reply_to_message_id = mypdfmod
                         )
                 
                         if not isinstance(PDF.get(message.chat.id), list):
                             PDF[message.chat.id] = []
                 
-                        await message.download(
+                        await mypdfmod.download(
                             f"{message.chat.id}/{message.chat.id}.jpg"
                         )
                 
