@@ -2166,22 +2166,22 @@ async def answer(client, callbackQuery):
                 return
             
             PROCESS.append(callbackQuery.message.chat.id)
-            download_location = Config.DOWNLOAD_LOCATION + "/"
-            a = await bot.edit_message_text(
+            #download_location = Config.DOWNLOAD_LOCATION + "/"
+            await bot.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
                 message_id = callbackQuery.message.message_id,
                 text = "`Downloading your pdf..⏳`"
             )
             #Try to add Progress
-            """a = await bot.send_message(
+            a = await bot.send_message(
                 chat_id=message.chat.id,
                 text=Translation.DOWNLOAD_START,
-                reply_to_message_id=update.message_id
+                reply_to_message_id=message.reply_to_message..message_id
             )
             c_time = time.time()
             the_real_download_location = await bot.download_media(
                 message=message.reply_to_message,
-                file_name=download_location,
+                #file_name=download_location,
                 progress=progress_for_pyrogram,
                 progress_args=(
                     Translation.DOWNLOAD_START,
@@ -2199,7 +2199,7 @@ async def answer(client, callbackQuery):
                     a,
                     c_time
                 )
-            )
+            )"""
             if the_real_download_location is not None:
                 try:
                     await bot.edit_message_text(
