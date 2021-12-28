@@ -987,7 +987,7 @@ async def encrypt(bot, message):
                 await bot.send_chat_action(
                     message.chat.id, "typing"
                 )
-            
+                mypdfmod = message.reply_to_message
                 isPdfOrImg = message.reply_to_message.document.file_name
                 fileSize = message.reply_to_message.document.file_size
                 fileNm, fileExt = os.path.splitext(isPdfOrImg)
@@ -1091,7 +1091,7 @@ async def encrypt(bot, message):
                             message.chat.id, "typing"
                         )
                 
-                        pdfMsgId = await message.reply_to_message.reply_text(
+                        pdfMsgId = await mypdfmod.reply_text(
                             Msgs.pdfReplyMsg.format(noOfPages) , 
                             #text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}`:",
                             #reply_markup = ForceReply(),
@@ -1451,7 +1451,7 @@ async def extract(bot, message):
         
         if message.chat.id not in PDF2IMG:
             try:
-                mypdfmod = message.reply_to_message.message_id
+                mypdfmod = message.reply_to_message
                 await bot.send_chat_action(
                     message.chat.id, "typing"
                 )
@@ -1559,7 +1559,7 @@ async def extract(bot, message):
                             message.chat.id, "typing"
                         )
                 
-                        pdfMsgId = await message.reply_to_message.reply_text(
+                        pdfMsgId = await mypdfmod.reply_text(
                             Msgs.pdfReplyMsg.format(noOfPages) , 
                             #text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}`:",
                             #reply_markup = ForceReply(),
