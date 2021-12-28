@@ -2181,7 +2181,7 @@ async def answer(client, callbackQuery):
             )"""
             c_time = time.time()
             the_real_download_location = await bot.download_media(
-                message=mypdfmod,
+                message=callbackQuery.message,
                 #file_name=download_location,
                 progress=progress_for_pyrogram,
                 progress_args=(
