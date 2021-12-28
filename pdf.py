@@ -2172,11 +2172,10 @@ async def answer(client, callbackQuery):
                 message_id = callbackQuery.message.message_id,
                 text = "`Downloading your pdf..⏳`"
             )
-            
-            await bot.download_media(
-                start_time = time.time()
+            start_time = time.time()
+            await bot.download_media(                
                 PDF2IMG[callbackQuery.message.chat.id],
-                f'{callbackQuery.message.message_id}/pdf.pdf'
+                f'{callbackQuery.message.message_id}/pdf.pdf',
                 progress=progress_for_pyrogram,
                 progress_args=(
                     Translation.UPLOAD_START,
