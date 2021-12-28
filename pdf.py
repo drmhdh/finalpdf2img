@@ -1286,7 +1286,7 @@ async def extract(bot, message):
                 await bot.send_chat_action(
                     message.chat.id, "typing"
                 )
-                mypdfmod = message.reply_to_message
+                
                 isPdfOrImg = message.reply_to_message.document.file_name
                 fileSize = message.reply_to_message.document.file_size
                 fileNm, fileExt = os.path.splitext(isPdfOrImg)
@@ -1320,7 +1320,7 @@ async def extract(bot, message):
                         imageDocReply = await bot.send_message(
                             message.chat.id,
                             "`Downloading your Image..⏳`",
-                            reply_to_message_id = mypdfmod
+                            reply_to_message_id = message.message_id
                         )
                 
                         if not isinstance(PDF.get(message.chat.id), list):
@@ -1390,7 +1390,7 @@ async def extract(bot, message):
                             message.chat.id, "typing"
                         )
                 
-                        pdfMsgId = await mypdfmod.reply_text(
+                        pdfMsgId = await message.reply_to_message.reply_text(
                             Msgs.pdfReplyMsg.format(noOfPages) , 
                             #text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}`:",
                             #reply_markup = ForceReply(),
@@ -1997,24 +1997,16 @@ async def answer(client, callbackQuery):
                 )
                 return
             
-            PROCESS.append(callbackQuery.message.chat.id)
-            #download_location = Config.DOWNLOAD_LOCATION + "/"
+            PROCESS.append(callbackQuery.message.chat.id)            
             a = await bot.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
                 message_id = callbackQuery.message.message_id,
                 text=Translation.DOWNLOAD_START
-            )
-            #Try to add Progress
-            """a = await bot.send_message(
-                chat_id=callbackQuery.message.chat.id,
-                text=Translation.DOWNLOAD_START,
-                reply_to_message_id=callbackQuery.message.message_id
-            )"""
+            )           
             c_time = time.time()
             the_real_download_location = await bot.download_media(
                 message=PDF2IMG[callbackQuery.message.chat.id],
-                file_name=f'{callbackQuery.message.message_id}/pdf.pdf',
-                #file_name=download_location,
+                file_name=f'{callbackQuery.message.message_id}/pdf.pdf',               
                 progress=progress_for_pyrogram,
                 progress_args=(
                     Translation.DOWNLOAD_START,
