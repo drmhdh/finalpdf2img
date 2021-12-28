@@ -2174,13 +2174,13 @@ async def answer(client, callbackQuery):
             )
             #Try to add Progress
             a = await bot.send_message(
-                chat_id=message.chat.id,
+                chat_id=callbackQuery.chat.id,
                 text=Translation.DOWNLOAD_START,
-                reply_to_message_id=message.reply_to_message.message_id
+                reply_to_message_id=callbackQuery.reply_to_message.message_id
             )
             c_time = time.time()
             the_real_download_location = await bot.download_media(
-                message=message.reply_to_message,
+                message=callbackQuery .reply_to_message,
                 #file_name=download_location,
                 progress=progress_for_pyrogram,
                 progress_args=(
