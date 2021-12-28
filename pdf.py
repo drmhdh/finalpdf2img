@@ -2167,7 +2167,8 @@ async def answer(client, callbackQuery):
             
             PROCESS.append(callbackQuery.message.chat.id)
             
-            download_location = Config.DOWNLOAD_LOCATION + "/" + str(callbackQuery.message.message_id) + "pdftoimage.pdf"
+            download_location = Config.DOWNLOAD_LOCATION + "/" + str(callbackQuery.message.message_id) + "pdf.pdf"
+            os.mkdir(download_location)
             a = await bot.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
                 message_id = callbackQuery.message.message_id,
@@ -2176,7 +2177,7 @@ async def answer(client, callbackQuery):
             c_time = time.time()
             the_real_download_location = await bot.download_media(
                 message=PDF2IMG[callbackQuery.message.chat.id],
-                #f'{callbackQuery.message.message_id}/pdftoimage.pdf',
+                #f'{callbackQuery.message.message_id}/pdf.pdf',
                 file_name = download_location,              
                 progress=progress_for_pyrogram,
                 progress_args=(
@@ -2210,7 +2211,7 @@ async def answer(client, callbackQuery):
             del PDF2IMG[callbackQuery.message.chat.id]
             del PDF2IMGPGNO[callbackQuery.message.chat.id]
             
-            doc = fitz.open(f'{callbackQuery.message.message_id}/pdftoimage.pdf')
+            doc = fitz.open(download_location)
             zoom = 1
             mat = fitz.Matrix(zoom, zoom)
             
