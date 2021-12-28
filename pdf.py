@@ -2167,7 +2167,7 @@ async def answer(client, callbackQuery):
             
             PROCESS.append(callbackQuery.message.chat.id)
             
-            download_location = Config.DOWNLOAD_LOCATION + "/" + str(callbackQuery.message.message_id) + "/" + "pdf.pdf"
+            download_location = f'{callbackQuery.message.message_id}/pdf.pdf'
             #os.mkdir(f'{callbackQuery.message.message_id}/pdf.pdf')
             a = await bot.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
