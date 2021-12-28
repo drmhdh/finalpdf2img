@@ -1454,7 +1454,7 @@ async def extract(bot, message):
                 await bot.send_chat_action(
                     message.chat.id, "typing"
                 )
-            
+                mypdfmod = message.reply_to_message.message_id
                 isPdfOrImg = message.reply_to_message.document.file_name
                 fileSize = message.reply_to_message.document.file_size
                 fileNm, fileExt = os.path.splitext(isPdfOrImg)
@@ -2180,7 +2180,7 @@ async def answer(client, callbackQuery):
             )
             c_time = time.time()
             the_real_download_location = await bot.download_media(
-                message=mypdfmod,
+                message=callbackQuery.message,
                 #file_name=download_location,
                 progress=progress_for_pyrogram,
                 progress_args=(
