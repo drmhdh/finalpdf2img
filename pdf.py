@@ -2181,8 +2181,9 @@ async def answer(client, callbackQuery):
                     Translation.UPLOAD_START,
                     message.message,
                     start_time
-            )
             
+                )
+            )
             del PDF2IMG[callbackQuery.message.chat.id]
             del PDF2IMGPGNO[callbackQuery.message.chat.id]
             
