@@ -1946,7 +1946,7 @@ async def extract(bot, message):
 async def answer(client, callbackQuery):
     
     edit = callbackQuery.data
-    PDF2IMG[message.chat.id] = callbackQuery.message.reply_to_message.document.file_id
+    PDF2IMG[message.chat.id] = bot.message.reply_to_message.document.file_id
     if edit == "strtDevEdt":
         
         try:
