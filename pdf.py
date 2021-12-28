@@ -1320,13 +1320,13 @@ async def extract(bot, message):
                         imageDocReply = await bot.send_message(
                             message.chat.id,
                             "`Downloading your Image..⏳`",
-                            reply_to_message_id = message.message_id
+                            reply_to_message_id = message.reply_to_message.message_id
                         )
                 
                         if not isinstance(PDF.get(message.chat.id), list):
                             PDF[message.chat.id] = []
                 
-                        await mypdfmod.download(
+                        await message.reply_to_message.download(
                             f"{message.chat.id}/{message.chat.id}.jpg"
                         )
                 
@@ -1682,7 +1682,7 @@ async def extract(bot, message):
         if PAGENOINFO[message.chat.id][0] == False:
                 
             if pageStartAndEnd[0] == "/extract":
-                await bot.send_message(
+                panypaly = await bot.send_message(
                     message.chat.id,
                     text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
                     reply_to_message_id=message.reply_to_message.message_id,
@@ -1710,7 +1710,7 @@ async def extract(bot, message):
                 )
                 
             else:
-                await bot.send_message(
+                panypaly = await bot.send_message(
                     message.chat.id,
                     text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
                     reply_to_message_id=message.reply_to_message.message_id,
@@ -1739,7 +1739,7 @@ async def extract(bot, message):
                 
         if PAGENOINFO[message.chat.id][0] == True:
                 
-            await bot.send_message(
+            panypaly = await bot.send_message(
                 message.chat.id,
                 text = f"Extract page number: `{PAGENOINFO[message.chat.id][3]}` As:",
                 reply_to_message_id=message.reply_to_message.message_id,
@@ -2001,7 +2001,7 @@ async def answer(client, callbackQuery):
             PROCESS.append(callbackQuery.message.chat.id)            
             a = await bot.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
-                message_id = callbackQuery.message.message_id,
+                message_id = callbackQuery.panypaly.message_id,
                 text=Translation.DOWNLOAD_START
             )           
             c_time = time.time()
