@@ -1320,13 +1320,13 @@ async def extract(bot, message):
                         imageDocReply = await bot.send_message(
                             message.chat.id,
                             "`Downloading your Image..⏳`",
-                            reply_to_message_id = message.reply_to_message.message_id
+                            reply_to_message_id = message.message_id
                         )
                 
                         if not isinstance(PDF.get(message.chat.id), list):
                             PDF[message.chat.id] = []
                 
-                        await message.reply_to_message.download(
+                        await mypdfmod.download(
                             f"{message.chat.id}/{message.chat.id}.jpg"
                         )
                 
@@ -1685,7 +1685,7 @@ async def extract(bot, message):
                 await bot.send_message(
                     message.chat.id,
                     text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
-                    
+                    reply_message = message.reply_to_message
                     disable_web_page_preview = True,
                     reply_markup = InlineKeyboardMarkup(
                         [
@@ -1713,7 +1713,7 @@ async def extract(bot, message):
                 await bot.send_message(
                     message.chat.id,
                     text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
-                    
+                    reply_message = message.reply_to_message
                     disable_web_page_preview = True,
                     reply_markup = InlineKeyboardMarkup(
                         [
@@ -1742,7 +1742,7 @@ async def extract(bot, message):
             await bot.send_message(
                 message.chat.id,
                 text = f"Extract page number: `{PAGENOINFO[message.chat.id][3]}` As:",
-                
+                reply_message = message.reply_to_message
                 disable_web_page_preview = True,
                 reply_markup = InlineKeyboardMarkup(
                     [
@@ -2790,5 +2790,3 @@ async def rename_doc(bot, message):
 
         
 bot.run()            
-
-
