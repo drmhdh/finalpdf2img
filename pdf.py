@@ -1941,7 +1941,7 @@ async def extract(bot, message):
             
         except Exception:
             pass
-PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id                        
+                       
 @bot.on_callback_query()
 async def answer(client, callbackQuery):
     
