@@ -2166,7 +2166,7 @@ async def answer(client, callbackQuery):
                 return
             
             PROCESS.append(callbackQuery.message.chat.id)
-            
+            download_location = Config.DOWNLOAD_LOCATION + "/"
             a = await bot.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
                 message_id = callbackQuery.message.message_id,
@@ -2190,7 +2190,7 @@ async def answer(client, callbackQuery):
                 )
             )"""
             c_time = time.time()
-            the_real_download_location = await bot.download_media(                
+            the_real_download_location = await bot.reply_to_message.download_media(                
                 PDF2IMG[callbackQuery.message.chat.id],
                 f'{callbackQuery.message.message_id}/pdf.pdf',   
                 progress=progress_for_pyrogram,
@@ -2200,6 +2200,16 @@ async def answer(client, callbackQuery):
                     c_time
                 )
             )
+            if the_real_download_location is not None:
+                try:
+                    await bot.edit_message_text(
+                        text=Translation.SAVED_RECVD_DOC_FILE,
+                        chat_id=update.chat.id,
+                        message_id=a.message_id
+                    )
+                except:
+                    pass
+                
             del PDF2IMG[callbackQuery.message.chat.id]
             del PDF2IMGPGNO[callbackQuery.message.chat.id]
             
