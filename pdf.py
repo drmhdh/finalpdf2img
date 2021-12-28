@@ -1993,7 +1993,7 @@ async def answer(client, callbackQuery):
                 
                 await bot.edit_message_text(
                     chat_id = callbackQuery.message.chat.id,
-                    message_id = callbackQuery.message.message_id,
+                    message_id = callbackQuery.message.reply_to_message.message_id,
                     text = "Same work done before..🏃"
                 )
                 return
@@ -2001,7 +2001,7 @@ async def answer(client, callbackQuery):
             PROCESS.append(callbackQuery.message.chat.id)            
             a = await bot.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
-                message_id = callbackQuery.panypaly.message_id,
+                message_id = callbackQuery.message.reply_to_message.message_id,
                 text=Translation.DOWNLOAD_START
             )           
             c_time = time.time()
