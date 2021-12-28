@@ -1682,7 +1682,7 @@ async def extract(bot, message):
         if PAGENOINFO[message.chat.id][0] == False:
                 
             if pageStartAndEnd[0] == "/extract":
-                panypaly = await bot.send_message(
+                await bot.send_message(
                     message.chat.id,
                     text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
                     reply_to_message_id=message.reply_to_message.message_id,
@@ -1710,7 +1710,7 @@ async def extract(bot, message):
                 )
                 
             else:
-                panypaly = await bot.send_message(
+                await bot.send_message(
                     message.chat.id,
                     text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
                     reply_to_message_id=message.reply_to_message.message_id,
@@ -1739,7 +1739,7 @@ async def extract(bot, message):
                 
         if PAGENOINFO[message.chat.id][0] == True:
                 
-            panypaly = await bot.send_message(
+            await bot.send_message(
                 message.chat.id,
                 text = f"Extract page number: `{PAGENOINFO[message.chat.id][3]}` As:",
                 reply_to_message_id=message.reply_to_message.message_id,
@@ -1993,7 +1993,7 @@ async def answer(client, callbackQuery):
                 
                 await bot.edit_message_text(
                     chat_id = callbackQuery.message.chat.id,
-                    message_id = callbackQuery.panypaly.message_id,
+                    message_id = callbackQuery.message.message_id,
                     text = "Same work done before..🏃"
                 )
                 return
@@ -2001,7 +2001,7 @@ async def answer(client, callbackQuery):
             PROCESS.append(callbackQuery.message.chat.id)            
             a = await bot.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
-                message_id = callbackQuery.panypaly.message_id,
+                message_id = callbackQuery.message.message_id,
                 text=Translation.DOWNLOAD_START
             )           
             c_time = time.time()
