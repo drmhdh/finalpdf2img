@@ -2179,7 +2179,7 @@ async def answer(client, callbackQuery):
                 progress=progress_for_pyrogram,
                 progress_args=(
                     Translation.UPLOAD_START,
-                    message.message,
+                    callbackQuery.message.message_id,
                     start_time
             
                 )
