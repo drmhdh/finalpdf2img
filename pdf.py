@@ -2208,7 +2208,7 @@ async def answer(client, callbackQuery):
             del PDF2IMG[callbackQuery.message.chat.id]
             del PDF2IMGPGNO[callbackQuery.message.chat.id]
             
-            doc = fitz.open(f'{callbackQuery.message.message_id}/pdf.pdf')
+            doc = fitz.open(f'{callbackQuery.message.message_id}/pdftoimage.pdf')
             zoom = 1
             mat = fitz.Matrix(zoom, zoom)
             
