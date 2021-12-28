@@ -2167,21 +2167,37 @@ async def answer(client, callbackQuery):
             
             PROCESS.append(callbackQuery.message.chat.id)
             
-            await bot.edit_message_text(
+            a = await bot.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
                 message_id = callbackQuery.message.message_id,
                 text = "`Downloading your pdf..⏳`"
             )
-            start_time = time.time()
-            await bot.download_media(                
-                PDF2IMG[callbackQuery.message.chat.id],
-                f'{callbackQuery.message.message_id}/pdf.pdf',
+            #Try to add Progress
+            """a = await bot.send_message(
+                chat_id=message.chat.id,
+                text=Translation.DOWNLOAD_START,
+                reply_to_message_id=update.message_id
+            )
+            c_time = time.time()
+            the_real_download_location = await bot.download_media(
+                message=message.reply_to_message,
+                file_name=download_location,
                 progress=progress_for_pyrogram,
                 progress_args=(
-                    Translation.UPLOAD_START,
-                    callbackQuery.message.message_id,
-                    start_time
-            
+                    Translation.DOWNLOAD_START,
+                    a,
+                    c_time
+                )
+            )"""
+            c_time = time.time()
+            the_real_download_location = await bot.download_media(                
+                PDF2IMG[callbackQuery.message.chat.id],
+                f'{callbackQuery.message.message_id}/pdf.pdf',   
+                progress=progress_for_pyrogram,
+                progress_args=(
+                    Translation.DOWNLOAD_START,
+                    a,
+                    c_time
                 )
             )
             del PDF2IMG[callbackQuery.message.chat.id]
