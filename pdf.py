@@ -2223,7 +2223,7 @@ async def answer(client, callbackQuery):
                 for i in range(0, len(totalPgList), 10):
                     
                     pgList = totalPgList[i:i+10]
-                    os.mkdir(f'{callbackQuery.message.message_id}/pgs')
+                    os.mkdir(f'{callbackQuery.message.reply_to_message.message_id}/pgs')
                     
                     for pageNo in pgList:
                         page = doc.loadPage(pageNo-1)
@@ -2398,7 +2398,7 @@ async def answer(client, callbackQuery):
                     
                 if os.path.getsize(file) >= 1000000:
                     picture = Image.open(file)
-                    CmpImg = f'{callbackQuery.message.message_id}/pgs/temp{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpeg'
+                    CmpImg = f'{callbackQuery.message.reply_to_message.message_id}/pgs/temp{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpeg'
                     
                     picture.save(
                         CmpImg,
