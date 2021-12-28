@@ -1991,7 +1991,7 @@ async def answer(client, callbackQuery):
         try:
             if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):
                 
-                await bot.edit_message_text(
+                await callbackQuery.edit_message_text(
                     chat_id = callbackQuery.message.chat.id,
                     message_id = callbackQuery.message.message_id,
                     text = "Same work done before..🏃"
@@ -1999,7 +1999,7 @@ async def answer(client, callbackQuery):
                 return
             
             PROCESS.append(callbackQuery.message.chat.id)            
-            a = await bot.edit_message_text(
+            a = await callbackQuery.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
                 message_id = callbackQuery.message.message_id,
                 text=Translation.DOWNLOAD_START
