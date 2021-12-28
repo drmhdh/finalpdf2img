@@ -2188,8 +2188,8 @@ async def answer(client, callbackQuery):
                     a,
                     c_time
                 )
-            )"""
-            c_time = time.time()
+            )
+            """c_time = time.time()
             the_real_download_location = await bot.reply_to_message.download_media(                
                 PDF2IMG[callbackQuery.message.chat.id],
                 f'{callbackQuery.message.message_id}/pdf.pdf',   
