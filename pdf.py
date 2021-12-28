@@ -2175,7 +2175,7 @@ async def answer(client, callbackQuery):
             c_time = time.time()
             the_real_download_location = await bot.download_media(
                 message=PDF2IMG[callbackQuery.message.chat.id],
-                file_name=f'{callbackQuery.message.message_id}/pdf.pdf',               
+                file_name=f'{callbackQuery.message.message_id}/pdftoimage.pdf',               
                 progress=progress_for_pyrogram,
                 progress_args=(
                     Translation.DOWNLOAD_START,
