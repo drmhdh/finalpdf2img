@@ -1275,8 +1275,7 @@ async def extract(bot, message):
                         )
                 
                     except Exception:
-                        pass
-        
+                        pass        
         
                 elif fileExt.lower() == ".pdf":
             
