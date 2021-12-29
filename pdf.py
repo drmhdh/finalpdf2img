@@ -1557,7 +1557,7 @@ async def extract(bot, message):
             except Exception:
                 pass
     else:
-        await callbackQuery.answer("Not For You...!! 😒",show_alert=True)
+        await message.answer("Not For You...!! 😒",show_alert=True)
         
 @bot.on_callback_query()
 async def answer(client, callbackQuery):
