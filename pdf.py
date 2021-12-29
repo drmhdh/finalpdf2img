@@ -1304,7 +1304,7 @@ async def extract(bot, message):
                         progress=progress_for_pyrogram,
                             progress_args=(
                             Translation.DOWNLOAD_START,
-                            a,
+                            pdfMsgId,
                             c_time
                             )
                         )
