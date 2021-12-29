@@ -18,6 +18,13 @@ import logging
 import convertapi
 from PIL import Image
 from time import sleep
+
+import requests
+import weasyprint
+import urllib.request
+
+from bs4 import BeautifulSoup
+
 from configs import Config, Msgs, ADMINS, Translation
 from pyrogram import Client, filters
 from pyrogram.types import ForceReply
