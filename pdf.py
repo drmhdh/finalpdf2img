@@ -25,7 +25,7 @@ import urllib.request
 
 from bs4 import BeautifulSoup
 
-from configs import Config, Msgs, ADMINS, Translation
+from configs import Config, Msgs, ADMINS, Translation, Presets
 from pyrogram import Client, filters
 from pyrogram.types import ForceReply
 from PyPDF2 import PdfFileWriter, PdfFileReader
