@@ -10,3 +10,7 @@ hachoir
 numpy
 Pillow
 requests
+
+bs4
+
+weasyprint
