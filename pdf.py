@@ -97,10 +97,10 @@ if Config.MAX_FILE_SIZE:
 # --------------------------------#web2pdf Main execution fn #--------------------------------------- #
 @bot.on_message(filters.command('link2pdf') & filters.private) # & filters.text
 async def link2pdf(self, m: Message):
-    if not m.text.startswith("http"):
+    if not m.reply_to_message.text.startswith("http"):
         await m.reply_text(
-            Presets.INVALID_LINK_TXT,
-            reply_to_message_id=m.message_id,
+            text=Presets.INVALID_LINK_TXT,
+            reply_to_message_id=m.reply_to_message.message_id,
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Close", callback_data="close")]]
             )
@@ -130,7 +130,7 @@ async def link2pdf(self, m: Message):
         weasyprint.HTML(m.text).write_pdf(file_name)
     except Exception:
         await msg.edit_text(
-            Presets.ERROR_TXT,
+            text=Presets.ERROR_TXT,
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Close", callback_data="close_btn")]]
             )
@@ -141,7 +141,7 @@ async def link2pdf(self, m: Message):
     except Exception:
         pass
     await self.send_chat_action(m.chat.id, "upload_document")
-    await m.reply_document(
+    await m.reply_to_message.reply_document(
         document=file_name,
         caption=Presets.CAPTION_TXT.format(file_name),
         thumb=thumbnail
