@@ -1640,6 +1640,12 @@ async def extract(bot, message):
         )
         
 @bot.on_callback_query()
+async def close_button(self, cb: CallbackQuery):
+    await self.delete_messages(
+        cb.message.chat.id,
+        [cb.message.reply_to_message.message_id, cb.message.message_id]
+    )
+    
 async def answer(client: bot, callbackQuery: CallbackQuery):
     clicked = callbackQuery.message.from_user.id
     try:
@@ -2495,11 +2501,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
         )
 
 
-"""async def close_button(self, cb: CallbackQuery):
-    await self.delete_messages(
-        cb.message.chat.id,
-        [cb.message.reply_to_message.message_id, cb.message.message_id]
-    )"""        
+
         
         
         
