@@ -1287,7 +1287,7 @@ async def extract(bot, message):
                             )
                             return
                         
-                        download_location = Config.DOWNLOAD_LOCATION + "/" + str{message.message_id} + "/" + pdftoimage.pdf"
+                        download_location = Config.DOWNLOAD_LOCATION + "/" + str{message.message_id} + "/" + "pdftoimage.pdf"
                         pdfMsgId = await bot.send_message(
                             chat_id=message.chat.id,
                             text=Translation.DOWNLOAD_START,
