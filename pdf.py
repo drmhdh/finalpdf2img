@@ -95,7 +95,7 @@ if Config.MAX_FILE_SIZE:
                                            
 
 # --------------------------------#web2pdf Main execution fn #--------------------------------------- #
-@bot.on_message(filters.command('link2pdf') & filters.private) # & filters.text
+@bot.on_message(filters.command('link2pdf')) # & filters.private) # & filters.text
 async def link2pdf(self, m: Message):
     if not m.reply_to_message.text.startswith("http"):
         await m.reply_text(
@@ -146,7 +146,7 @@ async def link2pdf(self, m: Message):
     await self.send_chat_action(m.chat.id, "upload_document")
     await m.reply_to_message.reply_document(
         document=file_name,
-        caption=f"{file_name}\n\n😉Credits:@dent_tech_for_books",
+        caption=f"{file_name}\n\nCredits:@dent_tech_for_books",
         #Presets.CAPTION_TXT.format(file_name),
         thumb=thumbnail
     )
