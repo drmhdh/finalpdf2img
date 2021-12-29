@@ -92,11 +92,11 @@ if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE"))
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
                             
-#we2pdf
+                                           
 
-# -------------------------------- Main execution fn --------------------------------------- #
-@bot.on_message(filters.private & filters.text)
-async def link_extract(self, m: Message):
+# --------------------------------#web2pdf Main execution fn #--------------------------------------- #
+@bot.on_message(filters.command('link2pdf') & filters.private) # & filters.text
+async def link2pdf(self, m: Message):
     if not m.text.startswith("http"):
         await m.reply_text(
             Presets.INVALID_LINK_TXT,
