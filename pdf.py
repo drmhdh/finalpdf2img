@@ -1300,15 +1300,11 @@ async def extract(bot, message):
                                 chat_id=message.chat.id,
                                 text=Translation.DOWNLOAD_START,
                                 reply_to_message_id=message.message_id
-                            )    
-                                #message.chat.id,
-                                #"`Processing.. 🚶`"
-                            #)
+                            )                                 
                             c_time = time.time()
                             the_real_download_location = await bot.download_media(
                             message=message.reply_to_message,   
-                            file_name = f"{message.message_id}/pdftoimage.pdf",
-                            #file_name=download_location,
+                            file_name = f"{message.message_id}/pdftoimage.pdf",                            
                             progress=progress_for_pyrogram,
                                 progress_args=(
                                 Translation.DOWNLOAD_START,
@@ -1570,7 +1566,7 @@ async def answer(client, callbackQuery):
     try:
         typed = callbackQuery.message.reply_to_message.from_user.id
     except:
-        typed = callbackQuery.from_user.id
+        typed = callbackQuery.message.from_user.id
         pass
     if (clicked == typed) or (clicked in ADMINS):   
 
