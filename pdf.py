@@ -144,7 +144,7 @@ async def link2pdf(self, m: Message):
     except Exception:
         pass
     await self.send_chat_action(m.chat.id, "upload_document")
-    await m.mesage.reply_to_message.reply_document(
+    await m.reply_to_message.reply_document(
         document=file_name,
         caption="{file_name}\n\n😉Credits:@dent_tech_for_books"
         #Presets.CAPTION_TXT.format(file_name),
