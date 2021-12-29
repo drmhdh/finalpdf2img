@@ -2503,5 +2503,5 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
         
         
         
-print(f"\n\nBot Started Successfully !\n\n")      
+print(f"\n\n🌟Bot Started Successfully !🌟\n\n")      
 bot.run()            
