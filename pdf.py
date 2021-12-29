@@ -102,7 +102,7 @@ async def link2pdf(self, m: Message):
             Presets.INVALID_LINK_TXT,
             reply_to_message_id=m.message_id,
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Close", callback_data="close_btn")]]
+                [[InlineKeyboardButton("Close", callback_data="close")]]
             )
         )
         return
@@ -2495,11 +2495,11 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
         )
 
 
-async def close_button(self, cb: CallbackQuery):
+"""async def close_button(self, cb: CallbackQuery):
     await self.delete_messages(
         cb.message.chat.id,
         [cb.message.reply_to_message.message_id, cb.message.message_id]
-    )        
+    )"""        
         
         
         
