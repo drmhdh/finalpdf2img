@@ -2414,5 +2414,6 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
             show_alert=True,
             cache_time = 0
         )
-    
+
+print(f"\n\nBot Started Successfully !\n\n")      
 bot.run()            
