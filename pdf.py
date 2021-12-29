@@ -1286,15 +1286,37 @@ async def extract(bot, message):
                                 '`Doing Some other Work.. 🥵`'
                             )
                             return
-                
+                        
+                        download_location = Config.DOWNLOAD_LOCATION + "/" + f"{message.message_id}/pdftoimage.pdf"
                         pdfMsgId = await bot.send_message(
-                            message.chat.id,
-                            "`Processing.. 🚶`"
+                            chat_id=message.chat.id,
+                            text=Translation.DOWNLOAD_START,
+                            reply_to_message_id=update.message_id
+                        )    
+                            #message.chat.id,
+                            #"`Processing.. 🚶`"
+                        #)
+                        c_time = time.time()
+                        the_real_download_location = await message.reply_to_message.download(
+                        message=message.reply_to_message,   
+                        #file_name = f"{message.message_id}/pdftoimage.pdf",
+                        file_name=download_location,
+                        progress=progress_for_pyrogram,
+                            progress_args=(
+                            Translation.DOWNLOAD_START,
+                            a,
+                            c_time
+                            )
                         )
-                
-                        await message.reply_to_message.download(
-                            f"{message.message_id}/pdftoimage.pdf"
-                        )
+                        if the_real_download_location is not None:
+                            try:
+                                await bot.edit_message_text(
+                                    text=Translation.SAVED_RECVD_DOC_FILE,
+                                    chat_id=update.chat.id,
+                                    message_id=a.message_id
+                                )
+                            except:
+                                pass
                 
                         doc = fitz.open(f'{message.message_id}/pdftoimage.pdf')
                         noOfPages = doc.pageCount
