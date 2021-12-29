@@ -1924,7 +1924,7 @@ async def answer(client, callbackQuery):
                     
                         if edit == "multipleImgAsImages":
                         
-                           if callbackQuery.message.chat.id not in PROCESS:
+                            if callbackQuery.message.chat.id not in PROCESS:
                             
                                 try:
                                     shutil.rmtree(f'{callbackQuery.message.message_id}')
@@ -1933,7 +1933,7 @@ async def answer(client, callbackQuery):
                             
                                 except Exception:
                                     return
-                        
+                            
                             await bot.send_chat_action(
                                 callbackQuery.message.chat.id, "upload_photo"
                             )
