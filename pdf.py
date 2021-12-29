@@ -1732,11 +1732,12 @@ async def extract(bot, message):
             
         except Exception:
             pass
-                       
+                                                       
 @bot.on_callback_query()
 async def answer(client, callbackQuery):
     
-    edit = callbackQuery.data    
+    edit = callbackQuery.data
+    
     if edit == "strtDevEdt":
         
         try:
@@ -1957,39 +1958,7 @@ async def answer(client, callbackQuery):
             
             PROCESS.append(callbackQuery.message.chat.id)
             
-            download_location = Config.DOWNLOAD_LOCATIONS +  "/" 
-            #os.mkdir(f'{callbackQuery.message.message_id}/pdftoimage.pdf')
-            a = await bot.edit_message_text(
-                chat_id = callbackQuery.message.chat.id,
-                message_id = callbackQuery.message.message_id,
-                text=Translation.DOWNLOAD_START
-            )           
-            c_time = time.time()
-            if not os.path.isdir(download_location):
-                os.makedirs(download_location)
-            the_real_download_location = await bot.download_media(
-                message=PDF2IMG[callbackQuery.message.chat.id],
-                file_name = f'{callbackQuery.message.message_id}/pdftoimage.pdf',
-                #file_name = download_location,              
-                progress=progress_for_pyrogram,
-                progress_args=(
-                    Translation.DOWNLOAD_START,
-                    a,
-                    c_time
-                )
-            )
-            
-            if the_real_download_location is not None:
-                try:
-                    await bot.edit_message_text(
-                        text=Translation.SAVED_RECVD_DOC_FILE,
-                        chat_id=callbackQuery.message.chat.id,
-                        message_id=a.message_id
-                    )
-                except:
-                    pass
-                
-            """await bot.edit_message_text(
+            await bot.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
                 message_id = callbackQuery.message.message_id,
                 text = "`Downloading your pdf..⏳`"
@@ -1998,12 +1967,12 @@ async def answer(client, callbackQuery):
             await bot.download_media(
                 PDF2IMG[callbackQuery.message.chat.id],
                 f'{callbackQuery.message.message_id}/pdf.pdf'
-            )"""
+            )
             
             del PDF2IMG[callbackQuery.message.chat.id]
             del PDF2IMGPGNO[callbackQuery.message.chat.id]
             
-            doc = fitz.open(f'{callbackQuery.message.message_id}/pdftoimage.pdf')
+            doc = fitz.open(f'{callbackQuery.message.message_id}/pdf.pdf')
             zoom = 1
             mat = fitz.Matrix(zoom, zoom)
             
