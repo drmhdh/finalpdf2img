@@ -1761,9 +1761,9 @@ async def answer(client, callbackQuery):
     
     
     elif edit == ""alertmessage"": 
-        grp_id = query.message.chat.id
-        i = query.data.split(":")[1]
-        keyword = query.data.split(":")[2]
+        grp_id = callbackQuery.message.chat.id
+        i = edit.split(":")[1]
+        keyword = edit.split(":")[2]
         reply_text, btn, alerts, fileid = await find_filter(grp_id, keyword)
         if alerts is not None:
             alerts = ast.literal_eval(alerts)
