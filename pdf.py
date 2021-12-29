@@ -1760,7 +1760,7 @@ async def answer(client, callbackQuery):
     
     
     
-    elif edit == ""alertmessage"": 
+    elif edit == "alertmessage": 
         grp_id = callbackQuery.message.chat.id
         i = edit.split(":")[1]
         keyword = edit.split(":")[2]
