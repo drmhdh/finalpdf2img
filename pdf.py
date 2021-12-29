@@ -1482,47 +1482,6 @@ async def extract(bot, message):
                     except Exception:
                         pass
         
-                elif fileExt.lower() in suprtedFile:
-            
-                    try:
-                        imageDocReply = await bot.send_message(
-                            message.chat.id,
-                            "`Downloading your Image..⏳`",
-                            reply_to_message_id = message.message_id
-                        )
-                
-                        if not isinstance(PDF.get(message.chat.id), list):
-                            PDF[message.chat.id] = []
-                
-                        await message.download(
-                            f"{message.chat.id}/{message.chat.id}.jpg"
-                        )
-                
-                        img = Image.open(
-                            f"{message.chat.id}/{message.chat.id}.jpg"
-                        ).convert("RGB")
-                
-                        PDF[message.chat.id].append(img)
-                        await imageDocReply.edit(
-                            Msgs.imageAdded.format(len(PDF[message.chat.id]))
-                        )
-            
-                    except Exception as e:
-                
-                        await imageDocReply.edit(
-                            Msgs.errorEditMsg.format(e)
-                        )
-                
-                        sleep(5)
-                        await bot.delete_messages(
-                            chat_id = message.chat.id,
-                            message_ids = imageDocReply.message_id
-                        )
-                
-                        await bot.delete_messages(
-                            chat_id = message.chat.id,
-                            message_ids = message.message_id
-                        )
         
                 elif fileExt.lower() == ".pdf":
             
@@ -1561,11 +1520,7 @@ async def extract(bot, message):
                 
                         pdfMsgId = await message.reply_to_message.reply_text(
                             Msgs.pdfReplyMsg.format(noOfPages) , 
-                            #text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}`:",
-                            #reply_markup = ForceReply(),
-                            #parse_mode = "md" 
-                        )
-                   
+                                             
                         doc.close()
                         shutil.rmtree(f'{message.message_id}')
              
@@ -1590,170 +1545,7 @@ async def extract(bot, message):
                             )
                 
                         except Exception:
-                            pass
-        
-                elif fileExt.lower() in suprtedPdfFile:
-            
-                    try:
-                        await bot.send_chat_action(
-                            message.chat.id, "typing"
-                        )
-                        pdfMsgId = await message.reply_to_message.reply_text(
-                            "`Downloading your file..⏳`",
-                        )
-                
-                        await message.reply_to_message.download(
-                            f"{message.message_id}/{isPdfOrImg}"
-                        )
-                
-                        await pdfMsgId.edit(
-                            "`Creating pdf..`💛"
-                        )
-                
-                        Document = fitz.open(
-                            f"{message.message_id}/{isPdfOrImg}"
-                        )
-                
-                        b = Document.convert_to_pdf()
-                
-                        pdf = fitz.open("pdf", b)
-                        pdf.save(
-                            f"{message.message_id}/{fileNm}.pdf",
-                            garbage = 4,
-                            deflate = True,
-                        )
-                        pdf.close()
-                
-                        await pdfMsgId.edit(
-                            "`Started Uploading..`🏋️"
-                        )
-                
-                        sendfile = open(
-                            f"{message.message_id}/{fileNm}.pdf", "rb"
-                        )
-                
-                        await bot.send_document(
-                            chat_id = message.chat.id,
-                            document = sendfile,
-                            thumb = Config.PDF_THUMBNAIL,
-                            caption = f"`Converted: {fileExt} to pdf`"
-                        )
-                        await pdfMsgId.edit(
-                            "`Uploading Completed..❤️`"
-                        )
-                
-                        shutil.rmtree(f"{message.message_id}")
-                
-                        sleep(5)
-                        await bot.send_chat_action(
-                            message.chat.id, "typing"
-                        )
-                        await bot.send_message(
-                            message.chat.id, Msgs.feedbackMsg,
-                            disable_web_page_preview = True
-                        )
-            
-                    except Exception as e:
-                
-                        try:
-                            shutil.rmtree(f"{message.message_id}")
-                            await pdfMsgId.edit(
-                                Msgs.errorEditMsg.format(e)
-                            )
-                            sleep(15)
-                            await bot.delete_messages(
-                                chat_id = message.chat.id,
-                                message_ids = pdfMsgId.message_id
-                            )
-                            await bot.delete_messages(
-                                chat_id = message.chat.id,
-                                message_ids = message.message_id
-                            )
-                    
-                        except Exception:
-                            pass
-        
-                elif fileExt.lower() in suprtedPdfFile2:
-            
-                    if os.getenv("CONVERT_API") is None:
-                
-                        pdfMsgId = await message.reply_text(
-                            "`Owner Forgot to add ConvertAPI.. contact Owner 😒`",
-                        )
-                        sleep(15)
-                        await bot.delete_messages(
-                            chat_id = message.chat.id,
-                            message_ids = pdfMsgId.message_id
-                        )
-            
-                    else:
-                
-                        try:
-                            await bot.send_chat_action(
-                                message.chat.id, "typing"
-                            )
-                            pdfMsgId = await message.reply_text(
-                                "`Downloading your file..⏳`",
-                            )
-                    
-                            await message.download(
-                                f"{message.message_id}/{isPdfOrImg}"
-                            )
-                    
-                            await pdfMsgId.edit(
-                                "`Creating pdf..`💛"
-                            )
-                    
-                            try:
-                                await convertapi.convert(
-                                    "pdf",
-                                    {
-                                        "File": f"{message.message_id}/{isPdfOrImg}"
-                                    },
-                                    from_format = fileExt[1:],
-                                ).save_files(
-                                    f"{message.message_id}/{fileNm}.pdf"
-                                )
-                        
-                            except Exception:
-                        
-                                try:
-                                    shutil.rmtree(f"{message.message_id}")
-                                    await pdfMsgId.edit(
-                                        "ConvertAPI limit reaches.. contact Owner"
-                                    )
-                            
-                                except Exception:
-                                    pass
-                    
-                            sendfile = open(
-                                f"{message.message_id}/{fileNm}.pdf", "rb"
-                            )
-                            await bot.send_document(
-                                chat_id = message.chat.id,
-                                Document = sendfile,
-                                thumb = Config.PDF_THUMBNAIL,
-                               caption = f"`Converted: {fileExt} to pdf`",
-                            )
-                            sleep(5)
-                            await pdfMsgId.edit(
-                                "`Uploading Completed..`🏌️"
-                            )
-                    
-                            shutil.rmtree(f"{message.message_id}")
-                    
-                            sleep(5)
-                            await bot.send_chat_action(
-                                message.chat.id, "typing"
-                            )
-                            sleep(5)
-                            await bot.send_message(
-                                message.chat.id, Msgs.feedbackMsg,
-                                disable_web_page_preview = True
-                            )
-                
-                        except Exception:
-                            pass
+                            pass                       
           
                 else:
             
@@ -1931,9 +1723,7 @@ async def extract(bot, message):
                     ]
                 )
             )
-                                                
-            """except:
-                pass"""
+ 
     except Exception:
         
         try:
@@ -2168,7 +1958,7 @@ async def answer(client, callbackQuery):
             PROCESS.append(callbackQuery.message.chat.id)
             
             download_location = Config.DOWNLOAD_LOCATIONS +  "/" 
-            #os.mkdir(f'{callbackQuery.message.message_id}/pdf.pdf')
+            #os.mkdir(f'{callbackQuery.message.message_id}/pdftoimage.pdf')
             a = await bot.edit_message_text(
                 chat_id = callbackQuery.message.chat.id,
                 message_id = callbackQuery.message.message_id,
@@ -2179,7 +1969,7 @@ async def answer(client, callbackQuery):
                 os.makedirs(download_location)
             the_real_download_location = await bot.download_media(
                 message=PDF2IMG[callbackQuery.message.chat.id],
-                file_name = f'{callbackQuery.message.message_id}/pdf.pdf',
+                file_name = f'{callbackQuery.message.message_id}/pdftoimage.pdf',
                 #file_name = download_location,              
                 progress=progress_for_pyrogram,
                 progress_args=(
@@ -2213,7 +2003,7 @@ async def answer(client, callbackQuery):
             del PDF2IMG[callbackQuery.message.chat.id]
             del PDF2IMGPGNO[callbackQuery.message.chat.id]
             
-            doc = fitz.open(f'{callbackQuery.message.message_id}/pdf.pdf')
+            doc = fitz.open(f'{callbackQuery.message.message_id}/pdftoimage.pdf')
             zoom = 1
             mat = fitz.Matrix(zoom, zoom)
             
