@@ -140,7 +140,7 @@ async def link2pdf(self, m: Message):
         )
         return
     try:
-        await msg.edit(`"Uploading your file..🤹"`)
+        await msg.edit("`Uploading your file..🤹`")
     except Exception:
         pass
     await self.send_chat_action(m.chat.id, "upload_document")
