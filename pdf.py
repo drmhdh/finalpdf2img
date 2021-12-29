@@ -130,10 +130,10 @@ async def link2pdf(self, m: Message):
         for title in soup.find_all('title'):
             file_name = str(title.get_text()) + '.pdf'
         # Creating the pdf file
-        weasyprint.HTML(m.text).write_pdf(file_name)
+        weasyprint.HTML(m.reply_to_message.text).write_pdf(file_name)
     except Exception:
         await msg.edit_text(
-            text=Presets.ERROR_TXT,
+            text=f"<b>URL Error</b>\n\n<i>🤭Unable to create a Pdf with this URL.\nTry again with a valid one..🥵</i>",
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Close", callback_data="close_btn")]]
             )
