@@ -1555,7 +1555,9 @@ async def extract(bot, message):
             
             except Exception:
                 pass
-                                                       
+     else:
+        await callbackQuery.answer("Not For You...!! 😒",show_alert=True)
+        
 @bot.on_callback_query()
 async def answer(client, callbackQuery):
     
@@ -1755,8 +1757,21 @@ async def answer(client, callbackQuery):
         except Exception:
             pass
     
-    elif edit == "close":
-        
+    
+    
+    
+    elif edit == ""alertmessage"": 
+        grp_id = query.message.chat.id
+        i = query.data.split(":")[1]
+        keyword = query.data.split(":")[2]
+        reply_text, btn, alerts, fileid = await find_filter(grp_id, keyword)
+        if alerts is not None:
+            alerts = ast.literal_eval(alerts)
+            alert = alerts[int(i)]
+            alert = alert.replace("\\n", "\n").replace("\\t", "\t")
+            await query.answer(alert,show_alert=True)   
+                      
+    elif edit == "close":        
         try:
             await bot.delete_messages(
                 chat_id = callbackQuery.message.chat.id,
