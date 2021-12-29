@@ -2407,6 +2407,6 @@ async def answer(client, callbackQuery):
                 except Exception:
                     pass
     else:
-        await callbackQuery.answer("It Will Not Work for You, as It was Not Requested by You 😒",show_alert=True)
-                
+        await callbackQuery.answer("Thats not for you 😒!!",show_alert=True)  
+    
 bot.run()            
