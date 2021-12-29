@@ -1557,7 +1557,12 @@ async def extract(bot, message):
             except Exception:
                 pass
     else:
-        await callbackQuery.answer("Not For You...!! 😒",show_alert=True)
+        await bot.answer_callback_query(
+            callbackQuery.id,
+            text = "Thats not for you 😒!!",
+            show_alert=True,
+            cache_time = 0
+        )
         
 @bot.on_callback_query()
 async def answer(client, callbackQuery):
@@ -2407,6 +2412,11 @@ async def answer(client, callbackQuery):
                 except Exception:
                     pass
     else:
-        await callbackQuery.answer("Thats not for you 😒!!",show_alert=True)  
+        await bot.answer_callback_query(
+            callbackQuery.id,
+            text = "Thats not for you 😒!!",
+            show_alert=True,
+            cache_time = 0
+        )
     
 bot.run()            
