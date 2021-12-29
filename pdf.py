@@ -1567,7 +1567,7 @@ async def answer(client, callbackQuery):
     except:
         typed = callbackQuery.from_user.id
         pass
-    if (clicked == typed) or (clicked in AUTH_USERS) or (clicked in ADMINS):   
+    if (clicked == typed) or (clicked in ADMINS):   
 
         edit = callbackQuery.data
     
