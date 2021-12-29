@@ -1557,15 +1557,15 @@ async def extract(bot, message):
             except Exception:
                 pass
     else:
-        await message.answer("Not For You...!! 😒",show_alert=True)
+        await callbackQuery.answer("Not For You...!! 😒",show_alert=True)
         
 @bot.on_callback_query()
 async def answer(client, callbackQuery):
-    clicked = query.from_user.id
+    clicked = callbackQuery.from_user.id
     try:
-        typed = query.message.reply_to_message.from_user.id
+        typed = callbackQuery.message.reply_to_message.from_user.id
     except:
-        typed = query.from_user.id
+        typed = callbackQuery.from_user.id
         pass
     if (clicked == typed) or (clicked in AUTH_USERS) or (clicked in ADMINS):   
 
@@ -2406,5 +2406,7 @@ async def answer(client, callbackQuery):
                 
                 except Exception:
                     pass
-        
+    else:
+        await callbackQuery.answer("It Will Not Work for You, as It was Not Requested by You 😒",show_alert=True)
+                
 bot.run()            
