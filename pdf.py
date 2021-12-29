@@ -99,7 +99,7 @@ if Config.MAX_FILE_SIZE:
 async def link2pdf(self, m: Message):
     if not m.reply_to_message.text.startswith("http"):
         await m.reply_text(
-            text=Presets.INVALID_LINK_TXT,
+            text="<b>Invalid link</b>\n\n<i>Please send me a valid link😰</i>",
             reply_to_message_id=m.reply_to_message.message_id,
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Close", callback_data="close")]]
