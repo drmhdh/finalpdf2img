@@ -111,7 +111,7 @@ async def link2pdf(self, m: Message):
     thumb_path = os.path.join(os.getcwd(), "img")
     if not os.path.isdir(thumb_path):
         os.makedirs(thumb_path)
-        urllib.request.urlretrieve(Presets.THUMB_URL, os.path.join(thumb_path, "thumbnail.png"))
+        urllib.request.urlretrieve("https://telegra.ph/file/60706bd59c0829ed2f76f.jpg", os.path.join(thumb_path, "thumbnail.png"))
     else:
         pass
     #
