@@ -99,7 +99,7 @@ if Config.MAX_FILE_SIZE:
 async def link2pdf(self, m: Message):
     if not m.reply_to_message.text.startswith("http"):
         await m.reply_text(
-            text=f"`<b>❌Invalid link</b>\n\n<i>Please send me a valid link😰</i>`",
+            text="`❌Invalid link</b>\n\nPlease send me a valid link😰`",
             reply_to_message_id=m.reply_to_message.message_id,
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Close", callback_data="close")]]
@@ -133,20 +133,21 @@ async def link2pdf(self, m: Message):
         weasyprint.HTML(m.reply_to_message.text).write_pdf(file_name)
     except Exception:
         await msg.edit_text(
-            text=f"<b>URL Error</b>\n\n<i>🤭Unable to create a Pdf with this URL.\nTry again with a valid one..🥵</i>",
+            text="`URL Error\n\n🤭Unable to create a Pdf with this URL.\nTry again with a valid one..🥵`",
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Close", callback_data="close_btn")]]
             )
         )
         return
     try:
-        await msg.edit(Presets.UPLOAD_TXT)
+        await msg.edit(`"Uploading your file..🤹"`)
     except Exception:
         pass
     await self.send_chat_action(m.chat.id, "upload_document")
     await m.mesage.reply_to_message.reply_document(
         document=file_name,
-        caption=Presets.CAPTION_TXT.format(file_name),
+        caption="{file_name}\n\n<b>😉Credits:<a href=https://t.me/dent_tech_for_books>Dent Tech Reference Room"
+        Presets.CAPTION_TXT.format(file_name),
         thumb=thumbnail
     )
     print(
