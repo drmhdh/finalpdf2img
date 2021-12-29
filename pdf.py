@@ -1297,7 +1297,7 @@ async def extract(bot, message):
                             #"`Processing.. 🚶`"
                         #)
                         c_time = time.time()
-                        the_real_download_location = await message.reply_to_message.download(
+                        the_real_download_location = await bot.download_media(
                         message=message.reply_to_message,   
                         file_name = f"{message.message_id}/pdftoimage.pdf",
                         #file_name=download_location,
