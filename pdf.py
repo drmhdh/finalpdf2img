@@ -1287,11 +1287,11 @@ async def extract(bot, message):
                             )
                             return
                         
-                        download_location = Config.DOWNLOAD_LOCATION + "/" + str{message.message_id} + "/" + "pdftoimage.pdf"
+                        download_location = Config.DOWNLOAD_LOCATION + "/" 
                         pdfMsgId = await bot.send_message(
                             chat_id=message.chat.id,
                             text=Translation.DOWNLOAD_START,
-                            reply_to_message_id=update.message_id
+                            reply_to_message_id=message.message_id
                         )    
                             #message.chat.id,
                             #"`Processing.. 🚶`"
@@ -1299,7 +1299,7 @@ async def extract(bot, message):
                         c_time = time.time()
                         the_real_download_location = await message.reply_to_message.download(
                         message=message.reply_to_message,   
-                        #file_name = f"{message.message_id}/pdftoimage.pdf",
+                        file_name = f"{message.message_id}/pdftoimage.pdf",
                         file_name=download_location,
                         progress=progress_for_pyrogram,
                             progress_args=(
@@ -1312,7 +1312,7 @@ async def extract(bot, message):
                             try:
                                 await bot.edit_message_text(
                                     text=Translation.SAVED_RECVD_DOC_FILE,
-                                    chat_id=update.chat.id,
+                                    chat_id=message.chat.id,
                                     message_id=a.message_id
                                 )
                             except:
