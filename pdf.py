@@ -118,7 +118,10 @@ async def link2pdf(self, m: Message):
     thumbnail = os.path.join(os.getcwd(), "img", "thumbnail.png")
     #
     await self.send_chat_action(m.chat.id, "typing")
-    msg = await m.reply_to_message.reply_text(text = Processing your link..🤧, reply_to_message_id=m.reply_to_message.message_id)
+    msg = await m.reply_to_message.reply_text(
+        text = "Processing your link..🤧", 
+        reply_to_message_id=m.reply_to_message.message_id
+    )
     try:
         req = requests.get(m.reply_to_message.text)
         # using the BeautifulSoup module
