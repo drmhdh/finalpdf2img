@@ -99,7 +99,7 @@ if Config.MAX_FILE_SIZE:
 async def link2pdf(self, m: Message):
     if not m.reply_to_message.text.startswith("http"):
         await m.reply_text(
-            text=f"❌Invalid link\n\nPlease send me a valid link😰",
+            text=f"<b>❌Invalid link</b>\n\n<i>Please send me a valid link😰</i>",
             reply_to_message_id=m.reply_to_message.message_id,
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Close", callback_data="close")]]
@@ -119,7 +119,7 @@ async def link2pdf(self, m: Message):
     #
     await self.send_chat_action(m.chat.id, "typing")
     msg = await m.reply_to_message.reply_text(
-        text = f"Processing your link..🤧", 
+        text = f"<code>Processing your link..🤧</code>"  , 
         reply_to_message_id=m.reply_to_message.message_id
     )
     try:
