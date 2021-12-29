@@ -1566,7 +1566,7 @@ async def extract(bot, message):
         
 @bot.on_callback_query()
 async def answer(client, callbackQuery):
-    clicked = callbackQuery.from_user.id
+    clicked = callbackQuery.message.from_user.id
     try:
         typed = callbackQuery.message.reply_to_message.from_user.id
     except:
