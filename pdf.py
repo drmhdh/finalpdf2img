@@ -23,7 +23,7 @@ from pyrogram import Client, filters
 from pyrogram.types import ForceReply
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from pyrogram.types import InputMediaPhoto, InputMediaDocument
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
