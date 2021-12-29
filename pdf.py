@@ -146,8 +146,8 @@ async def link2pdf(self, m: Message):
     await self.send_chat_action(m.chat.id, "upload_document")
     await m.mesage.reply_to_message.reply_document(
         document=file_name,
-        caption="{file_name}\n\n<b>😉Credits:<a href=https://t.me/dent_tech_for_books>Dent Tech Reference Room"
-        Presets.CAPTION_TXT.format(file_name),
+        caption="{file_name}\n\n😉Credits:@dent_tech_for_books"
+        #Presets.CAPTION_TXT.format(file_name),
         thumb=thumbnail
     )
     print(
