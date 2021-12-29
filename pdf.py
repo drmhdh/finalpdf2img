@@ -99,7 +99,7 @@ if Config.MAX_FILE_SIZE:
 async def link2pdf(self, m: Message):
     if not m.reply_to_message.text.startswith("http"):
         await m.reply_text(
-            text="<b>Invalid link</b>\n\n<i>Please send me a valid link😰</i>",
+            text="Invalid link\n\nPlease send me a valid link😰",
             reply_to_message_id=m.reply_to_message.message_id,
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Close", callback_data="close")]]
@@ -118,9 +118,9 @@ async def link2pdf(self, m: Message):
     thumbnail = os.path.join(os.getcwd(), "img", "thumbnail.png")
     #
     await self.send_chat_action(m.chat.id, "typing")
-    msg = await m.reply_text(Presets.PROCESS_TXT, reply_to_message_id=m.reply_to_message.message_id)
+    msg = await m.reply_to_message.reply_text(text = Processing your link..🤧, reply_to_message_id=m.reply_to_message.message_id)
     try:
-        req = requests.get(m.text)
+        req = requests.get(m.reply_to_message.text)
         # using the BeautifulSoup module
         soup = BeautifulSoup(req.text, 'html.parser')
         # extracting the title frm the link
