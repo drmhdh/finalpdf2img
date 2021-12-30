@@ -936,7 +936,7 @@ async def documents(bot, message):
 
 # REPLY TO /start COMMAND
 @bot.on_message(filters.command(["startpdf" or "start"]))
-async def ("startpdf" or "start")(bot, message):
+async def startpdf(bot, message):
     
     try:
         await bot.send_chat_action(
