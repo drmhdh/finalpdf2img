@@ -2493,12 +2493,13 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 except Exception:
                     pass
     else:
-        await bot.answer_callback_query(
+        pass
+        """await bot.answer_callback_query(
             callbackQuery.id,
             text = "Thats not for you 😒!!",
             show_alert=True,
             cache_time = 0
-        )
+        )"""
 
 
 
