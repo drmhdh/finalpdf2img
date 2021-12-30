@@ -96,12 +96,7 @@ if Config.MAX_FILE_SIZE:
     
 @Client.on_message(filters.private & filters.document)
 
-async def get_size(path_to_file):
-    file_path = str()
-    for file in os.listdir(path_to_file):
-        file_path = path_to_file + str(file)
-    size = naturalsize(os.path.getsize(file_path))
-    return size, file_path
+
 
 async def compress_pdf(c, m: Message):
     msg = await m.reply_text(Presets.WAIT_MESSAGE, reply_to_message_id=m.message_id)
@@ -1729,7 +1724,15 @@ async def extract(bot, message):
         )
         
 @bot.on_callback_query()
-
+    
+async def get_size(path_to_file):
+    file_path = str()
+    for file in os.listdir(path_to_file):
+        file_path = path_to_file + str(file)
+    size = naturalsize(os.path.getsize(file_path))
+    return size, file_path
+        
+        
 async def answer(client: bot, callbackQuery: CallbackQuery):
     clicked = callbackQuery.message.from_user.id
     try:
