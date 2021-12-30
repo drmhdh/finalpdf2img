@@ -168,8 +168,8 @@ async def compress_pdf(bot, m: Message):
         document=size_path[1],
         reply_to_message_id=m.reply_to_message.message_id,
         #document=file_name,
-        caption=m.reply_to_message.caption if m.reply_to_message.caption else file_name\n\n\
-                Presets.FINISHED_JOB.format(initial_size, compressed_size)\n\n\
+        caption=m.reply_to_message.caption if m.reply_to_message.caption else file_name\n
+                Presets.FINISHED_JOB.format(initial_size, compressed_size)\n
                 Credits:@dent_tech_for_books
                 ),
         #caption=f"{file_name}\n\nCredits:@dent_tech_for_books",
