@@ -182,7 +182,8 @@ async def compress_pdf(bot, m: Message):
             current_time
         )
     )    
-    await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size),
+    await msg.delete()
+    #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size),
                    disable_web_page_preview=True,
                    
                    )    
