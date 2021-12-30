@@ -99,13 +99,13 @@ if Config.MAX_FILE_SIZE:
 
 
 
-async def compress_pdf(bot, m: Message):
-    msg = await m.reply_text(Presets.WAIT_MESSAGE, reply_to_message_id=m.reply_to_message.message_id)
-    if not str(m.reply_to_message.document.file_name).lower().endswith('.pdf'):
+async def compress_pdf(bot, message):
+    msg = await bot send_message(Presets.WAIT_MESSAGE, reply_to_message_id=m.reply_to_message.message_id)
+    if not str(message.reply_to_message.document.file_name).lower().endswith('.pdf'):
         await msg.edit(Presets.INVALID_FORMAT)
         return
     #
-    dl_location = os.getcwd() + '/' + "downloads" + '/' + str(m.from_user.id) + '/'
+    dl_location = os.getcwd() + '/' + "downloads" + '/' + str(message.from_user.id) + '/'
     if not os.path.isdir(dl_location):
         os.makedirs(dl_location)
     else:
@@ -118,7 +118,7 @@ async def compress_pdf(bot, m: Message):
     await asyncio.sleep(2)
     await msg.edit(Presets.DOWNLOAD_MSG)
     current_time = time.time()
-    await m.reply_to_message.download(
+    await message.reply_to_message.download(
         file_name=dl_location,
         progress=progress_for_pyrogram,
         progress_args=(
@@ -164,9 +164,9 @@ async def compress_pdf(bot, m: Message):
     message = await msg.edit(Presets.UPLOAD_MSG)
     current_time = time.time()
     #
-    await m.reply_to_message.reply_document(
+    await message.reply_to_message.reply_document(
         document=size_path[1],
-        reply_to_message_id=m.reply_to_message.message_id,
+        reply_to_message_id=message.reply_to_message.message_id,
         #file_name=m.reply_to_message.document.file_name,
         caption=Presets.FINISHED_JOB.format(initial_size, compressed_size) ,
         #(m.reply_to_message.caption if m.reply_to_message.caption else m.reply_to_message.document.file_name 
