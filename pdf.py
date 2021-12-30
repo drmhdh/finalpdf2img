@@ -98,7 +98,7 @@ if Config.MAX_FILE_SIZE:
 
 
 
-async def compress_pdf(c, m: Message):
+async def compress_pdf(bot, m: Message):
     msg = await m.reply_text(Presets.WAIT_MESSAGE, reply_to_message_id=m.message_id)
     if not str(m.document.file_name).lower().endswith('.pdf'):
         await msg.edit(Presets.INVALID_FORMAT)
