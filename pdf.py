@@ -22,7 +22,7 @@ from time import sleep
 import requests
 import weasyprint
 import urllib.request
-
+from humanize import naturalsize
 from bs4 import BeautifulSoup
 from PDFNetPython3.PDFNetPython import *
 from configs import Config, Msgs, ADMINS, Translation, Presets
