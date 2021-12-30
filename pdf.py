@@ -102,7 +102,7 @@ async def link2pdf(self, m: Message):
             text="`❌Invalid link</b>\n\nPlease send me a valid link😰`",
             reply_to_message_id=m.reply_to_message.message_id,
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Close", callback_data="close")]]
+                [[InlineKeyboardButton("Close", callback_data="close_button")]]
             )
         )
         return
