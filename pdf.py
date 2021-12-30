@@ -1644,14 +1644,7 @@ async def extract(bot, message):
         )
         
 @bot.on_callback_query()
-async def close_button(self, cb: CallbackQuery):
-    try:
-        await self.delete_messages(
-            cb.message.chat.id,
-            [cb.message.message_id]
-        )
-    except:
-        pass
+
 async def answer(client: bot, callbackQuery: CallbackQuery):
     clicked = callbackQuery.message.from_user.id
     try:
