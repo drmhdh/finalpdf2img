@@ -100,7 +100,7 @@ if Config.MAX_FILE_SIZE:
 
 
 async def compress_pdf(bot, message):
-    msg = await bot send_message(
+    msg = await bot.send_message(
         chat_id=message.chat.id,
         text=Presets.WAIT_MESSAGE, 
         reply_to_message_id=message.reply_to_message.message_id
