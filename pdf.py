@@ -1864,6 +1864,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                       
         elif edit == "close":        
             try:
+                await calbackQuery.message.delete()
                 await bot.delete_messages(
                     chat_id = callbackQuery.message.chat.id,
                     message_ids = [callbackQuery.message.message_id, callbackQuery.message.reply_to_message.message_id]
