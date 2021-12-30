@@ -105,7 +105,7 @@ async def compress_pdf(bot, m: Message):
         await msg.edit(Presets.INVALID_FORMAT)
         return
     #
-    dl_location = os.getcwd() + '/' + "downloads" + '/' + str(m.reply_to_message.user.id) + '/'
+    dl_location = os.getcwd() + '/' + "downloads" + '/' + str(m.from_user.id) + '/'
     if not os.path.isdir(dl_location):
         os.makedirs(dl_location)
     else:
