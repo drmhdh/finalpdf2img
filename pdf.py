@@ -95,7 +95,7 @@ if Config.MAX_FILE_SIZE:
                
                          #pdf Compression
     
-@bot.on_message(filters.command('compresspdf') & filters.private) #& filters.document
+@bot.on_message(filters.command('compresspdf')) # & filters.private) #& filters.document
 
 
 
@@ -174,17 +174,19 @@ async def compress_pdf(bot, m: Message):
             message,
             current_time
         )
-    )
+    )    
+    await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size),
+                   disable_web_page_preview=True,
+                   
+                   )    
+    
     #
     try:
         os.remove(size_path[1])
     except Exception:
         pass
     #
-    await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size),
-                   disable_web_page_preview=True,
-                   reply_markup=close_button
-                   )    
+
                                            
 
 # --------------------------------#web2pdf Main execution fn #--------------------------------------- #
