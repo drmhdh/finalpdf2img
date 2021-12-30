@@ -100,7 +100,11 @@ if Config.MAX_FILE_SIZE:
 
 
 async def compress_pdf(bot, message):
-    msg = await bot send_message(Presets.WAIT_MESSAGE, reply_to_message_id=message.reply_to_message.message_id)
+    msg = await bot send_message(
+        chat_id=message.chat.id,
+        text=Presets.WAIT_MESSAGE, 
+        reply_to_message_id=message.reply_to_message.message_id
+        )
     if not str(message.reply_to_message.document.file_name).lower().endswith('.pdf'):
         await msg.edit(Presets.INVALID_FORMAT)
         return
@@ -931,8 +935,8 @@ async def documents(bot, message):
         pass
 
 # REPLY TO /start COMMAND
-@bot.on_message(filters.command(["startpdf"]))
-async def startpdf(bot, message):
+@bot.on_message(filters.command(["startpdf" or "start"]))
+async def ("startpdf" or "start")(bot, message):
     
     try:
         await bot.send_chat_action(
