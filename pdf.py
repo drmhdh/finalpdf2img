@@ -95,7 +95,7 @@ if Config.MAX_FILE_SIZE:
                
                          #pdf Compression
     
-@bot.on_message(filters.command('compresspdf')) # & filters.private) #& filters.document
+@bot.on_message(filters.command('compresspdf') & filters.user(ADMINS)) # & filters.private) #& filters.document
 
 
 
