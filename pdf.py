@@ -1735,12 +1735,8 @@ async def extract(bot, message):
         
 @bot.on_callback_query()
     
-async def get_size(path_to_file):
-    file_path = str()
-    for file in os.listdir(path_to_file):
-        file_path = path_to_file + str(file)
-    size = naturalsize(os.path.getsize(file_path))
-    return size, file_path
+
+   
         
         
 async def answer(client: bot, callbackQuery: CallbackQuery):
