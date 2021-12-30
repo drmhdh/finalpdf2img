@@ -220,25 +220,25 @@ Please short your file name and try again!"""
 
 #For Web2PDF    
 class Presets(object):
-    START_TXT = """<b>Hello.. {}</b> 👋\n\n<i>Send me any valid link to convert to Pdf</i>"""
-    PROCESS_TXT = """<code>Processing your link..🤧</code>"""
-    INVALID_LINK_TXT = """<b>Invalid link</b>\n\n<i>Please send me a valid link😰</i>"""
-    UPLOAD_TXT = """<b>Uploading your file..🤹</b>"""
-    ERROR_TXT = """<b>URL Error</b>\n\n<i>Unable to create a Pdf with this URL.\nTry again with a valid one..🥵</i>"""
-    CAPTION_TXT = """{}\n\n<b>😉Credits:</b><a href='https://t.me/dent_tech_for_books'><b> Dent Tech Reference Room</b></a>"""
+    START_TXT = """Hello.. {} 👋\n\nSend me any valid link to convert to Pdf"""
+    PROCESS_TXT = """Processing your link..🤧"""
+    INVALID_LINK_TXT = """Invalid link\n\nPlease send me a valid link😰"""
+    UPLOAD_TXT = """Uploading your file..🤹"""
+    ERROR_TXT = """URL Error\n\nUnable to create a Pdf with this URL.\nTry again with a valid one..🥵"""
+    CAPTION_TXT = """{}\n\n😉Credits:@dent_tech_for_books"""
     THUMB_URL = """https://telegra.ph/file/60706bd59c0829ed2f76f.jpg"""   
     
-    WELCOME_TXT = "<b>Hello.. {}</b>\n<i>I can compress the size of pdf docs. Send me a pdf document to see " \
-                  "the magic !</i> "
-    INVALID_FORMAT = "<b>Error:</b>\n<i>I can only compress pdf documents. Please make it sure, you have given me a " \
-                     "valid document. Try again...</i>"
-    WAIT_MESSAGE = "⌛️ <b>Processing</b> ⌛"
-    DOWNLOAD_MSG = "⌛️ <b>Downloading</b> ⌛"
-    UPLOAD_MSG = "⌛️ <b>Uploading</b> ⌛"
+    WELCOME_TXT = "Hello.. {}\nI can compress the size of pdf docs. Send me a pdf document to see " \
+                  "the magic ! "
+    INVALID_FORMAT = "Error:\nI can only compress pdf documents. Please make it sure, you have given me a " \
+                     "valid document. Try again..."
+    WAIT_MESSAGE = "⌛️ Processing ⌛"
+    DOWNLOAD_MSG = "⌛️ Downloading ⌛"
+    UPLOAD_MSG = "⌛️ Uploading ⌛"
     FINISHED_BAR = "◼️"
     UN_FINISHED_BAR = "◻️"
-    FINISHED_DL = "<b>Success !</b>\n<i>Document downloaded successfully.</i>"
-    START_COMPRESSING = "⌛️ <b>Processing</b>  ⌛\n<i>Trying to compress the document.</i>"
-    FINISHED_JOB = "<b>Success</b> ✅ \n\n<i>Size before job: {}\nSize after job: {}\n\nCredits: </i><a " \
-                   "href='https://github.com/m4mallu'><b> @M4Mallu</b></a> "
-    JOB_ERROR = "<b>Error:</b>\n<i>Something went wrong ! Process exited</i>"
+    FINISHED_DL = "Success !\nDocument downloaded successfully."
+    START_COMPRESSING = "⌛️ Processing  ⌛\nTrying to compress the document."
+    FINISHED_JOB = "Success ✅ \n\nSize before job: {}\nSize after job: {}\n\nCredits:@dent_tech_for_books"
+                    
+    JOB_ERROR = "Error:\nSomething went wrong ! Process exited"
