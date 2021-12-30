@@ -98,7 +98,7 @@ if Config.MAX_FILE_SIZE:
 @bot.on_message(filters.command('link2pdf')) # & filters.private) # & filters.text
 async def link2pdf(bot, m: Message):
     if not m.reply_to_message.text.startswith("http"):
-        await m.reply_text(
+        await m.reply_to_message.reply_text(
             text="`❌Invalid link</b>\n\nPlease send me a valid link😰`",
             reply_to_message_id=m.reply_to_message.message_id
             
