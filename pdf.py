@@ -104,7 +104,7 @@ async def compress_pdf(bot, message):
         chat_id=message.chat.id,
         text=Presets.WAIT_MESSAGE, 
         reply_to_message_id=message.reply_to_message.message_id
-        )
+    )
     if not str(message.reply_to_message.document.file_name).lower().endswith('.pdf'):
         await msg.edit(Presets.INVALID_FORMAT)
         return
