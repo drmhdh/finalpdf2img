@@ -94,7 +94,7 @@ if Config.MAX_FILE_SIZE:
                
                          #pdf Compression
     
-@Client.on_message(filters.private & filters.document)
+@bot.on_message(filters.private & filters.document)
 
 
 
