@@ -1648,7 +1648,7 @@ async def close_button(self, cb: CallbackQuery):
     try:
         await self.delete_messages(
             cb.message.chat.id,
-            [cb.message.reply_to_message.message_id, cb.message.message_id]
+            [cb.message.message_id]
         )
     except:
         pass
