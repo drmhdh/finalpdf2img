@@ -96,7 +96,7 @@ if Config.MAX_FILE_SIZE:
 
 # --------------------------------#web2pdf Main execution fn #--------------------------------------- #
 @bot.on_message(filters.command('link2pdf')) # & filters.private) # & filters.text
-async def link2pdf(self, m: Message):
+async def link2pdf(bot, m: Message):
     if not m.reply_to_message.text.startswith("http"):
         await m.reply_text(
             text="`❌Invalid link</b>\n\nPlease send me a valid link😰`",
@@ -117,7 +117,7 @@ async def link2pdf(self, m: Message):
     #
     thumbnail = os.path.join(os.getcwd(), "img", "thumbnail.png")
     #
-    await self.send_chat_action(m.chat.id, "typing")
+    await bot.send_chat_action(m.chat.id, "typing")
     msg = await m.reply_to_message.reply_text(
         text ="`Processing your link..🤧`", 
         reply_to_message_id=m.reply_to_message.message_id
@@ -143,7 +143,7 @@ async def link2pdf(self, m: Message):
         await msg.edit("`Uploading your file..🤹`")
     except Exception:
         pass
-    await self.send_chat_action(m.chat.id, "upload_document")
+    await bot.send_chat_action(m.chat.id, "upload_document")
     await m.reply_to_message.reply_document(
         document=file_name,
         caption=f"{file_name}\n\nCredits:@dent_tech_for_books",
@@ -1874,6 +1874,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
         
             except Exception:
                 pass
+       
         
         elif edit in ["multipleImgAsImages", "multipleImgAsDocument", "asImages", "asDocument"]:
         
