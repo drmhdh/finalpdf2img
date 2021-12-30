@@ -100,10 +100,8 @@ async def link2pdf(bot, m: Message):
     if not m.reply_to_message.text.startswith("http"):
         await m.reply_text(
             text="`❌Invalid link</b>\n\nPlease send me a valid link😰`",
-            reply_to_message_id=m.reply_to_message.message_id,
-            """reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Close", callback_data="close")]]
-            )"""
+            reply_to_message_id=m.reply_to_message.message_id
+            
         )
         return
     file_name = str()
