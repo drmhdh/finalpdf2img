@@ -1278,7 +1278,8 @@ async def extract(bot, message):
                                 await message.reply_text(
                                     '`Doing Some other Work.. 🥵`'
                                 )
-                                return    
+                                return   
+                            PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
                             await bot.send_message(
                                 message.chat.id,
                                 text = "Conversion Going to Initiate..!!",
