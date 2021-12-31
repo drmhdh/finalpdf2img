@@ -1562,10 +1562,10 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     text=Translation.DOWNLOAD_START           
                 )   
                 c_time = time.time()
-                download_location = Config.DOWNLOAD_LOCATIONS + "/" + str(callbackQuery.message.message_id) + "pdf.pdf"
+                download_location = Config.DOWNLOAD_LOCATION + "/" + str(callbackQuery.message.message_id) + "pdf.pdf"
                 the_real_download_location = await bot.download_media(
                 message=PDF2IMG[callbackQuery.message.chat.id],
-                file_name = f'{callbackQuery.message.message_id}/pdf.pdf',
+                file_name = download_location,
                 progress=progress_for_pyrogram,
                     progress_args=(
                     Translation.DOWNLOAD_START,
@@ -1583,19 +1583,19 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     except:
                         pass             
                 
-                doc = fitz.open(f'{callbackQuery.message.message_id}/pdf.pdf')
+                doc = fitz.open(f'{download_location')
                 noOfPages = doc.pageCount                        
-                PDFINPUT = callbackQuery.message.reply_to_message
-                PDF2IMG[callbackQuery.message.chat.id] = callbackQuery.message.reply_to_message.document.file_id
+                PDFINPUT = callbackQuery.message.message_id
+                PDF2IMG[callbackQuery.message.chat.id] = callbackQuery.message.document.file_id
                 PDF2IMGPGNO[callbackQuery.message.chat.id] = noOfPages                
                 await bot.delete_messages(
-                    chat_id = callbackQuery.message.reply_to_message.chat.id,
+                    chat_id = callbackQuery.message.chat.id,
                     message_ids = pdfMsgId.message_id
                 )                
                 await bot.send_chat_action(
                      callbackQuery.message.chat.id, "typing"
                 )                
-                pdfMsgId = await callbackQuery.message.reply_to_message.reply_text(
+                pdfMsgId = await callbackQuery.message.reply_text(
                     Msgs.pdfReplyMsg.format(noOfPages)
                 )                     
                 #doc.close()
