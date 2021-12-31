@@ -1288,7 +1288,7 @@ async def extract(bot, message):
                             await bot.send_message(
                                 message.chat.id,
                                 text = "⚙️Conversion Going to Initiate..!!",
-                                reply_to_message_id=message.message_id,
+                                
                                 disable_web_page_preview = True,
                                 reply_markup = InlineKeyboardMarkup(
                                     [
