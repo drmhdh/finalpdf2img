@@ -167,7 +167,7 @@ async def compress_pdf(bot, message):
         document=size_path[1],
         reply_to_message_id=message.reply_to_message.message_id,
         caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
-        #caption=m.reply_to_message.caption if m.reply_to_message.caption else '',
+        #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
         progress=progress_for_pyrogram,
         progress_args=(
             Presets.UPLOAD_MSG,
