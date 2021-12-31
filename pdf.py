@@ -1570,7 +1570,10 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     message_id = callbackQuery.message.message_id,                                      
                     text=Translation.DOWNLOAD_START         
                 )  
-                await bot.download_media(message=callbackQuery.message.reply_to_message)
+                await bot.download_media(
+                    message=callbackQuery.message,
+                    f"{callbackQuery.message.message_id}/pdf.pdf
+                )
                 #await bot.download_media(
                 #callbackQuery.message.reply_to_message,
                 #PDF2IMG[callbackQuery.message.chat.id],
@@ -1603,10 +1606,10 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     except:
                         pass"""             
                 
-                doc = fitz.open(f"{callbackQuery.message.reply_to_message.message_id}/pdf.pdf")
+                doc = fitz.open(f"{callbackQuery.message.message_id}/pdf.pdf")
                 noOfPages = doc.pageCount                        
-                PDFINPUT = callbackQuery.messag.ereply_to_message.message_id
-                PDF2IMG[callbackQuery.message.chat.id] = callbackQuery.message.reply_to_message.document.file_id
+                PDFINPUT = callbackQuery.messag.message_id
+                PDF2IMG[callbackQuery.message.chat.id] = callbackQuery.message.document.file_id
                 PDF2IMGPGNO[callbackQuery.message.chat.id] = noOfPages                
                 await bot.delete_messages(
                     chat_id = callbackQuery.message.chat.id,
