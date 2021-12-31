@@ -1570,7 +1570,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     message_id = callbackQuery.message.message_id,                                      
                     text=Translation.DOWNLOAD_START         
                 )  
-                await callbackquery.message.reply_to_message.download(
+                await callbackQuery.message.reply_to_message.download(
                 #await bot.download_media(
                 #callbackQuery.message.reply_to_message,
                 #PDF2IMG[callbackQuery.message.chat.id],
