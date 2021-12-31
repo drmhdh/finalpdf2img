@@ -665,10 +665,10 @@ async def documents(bot, message):
                 try:
                     PROCESS.remove(message.chat.id)
                     doc.close()
-                    shutil.rmtree(f'{message.reply_to_message.message_id}')
-                    
+                    shutil.rmtree(f'{message.reply_to_message.message_id}')                    
                     await pdfMsgId.edit(
-                        Msgs.errorEditMsg.format(e)                    
+                        Msgs.errorEditMsg.format(e)  
+                    )    
                     sleep(15)
                     await bot.delete_messages(
                         chat_id = message.chat.id,
