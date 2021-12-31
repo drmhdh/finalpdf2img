@@ -1709,8 +1709,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 zoom = 1
                 mat = fitz.Matrix(zoom, zoom)            
                 if edit == "multipleImgAsImages" or edit == "multipleImgAsDocument":                
-                    if int(int(PAGENOINFO[callbackQuery.message.chat.id][2])+1 - int(PAGENOINFO[callbackQuery.message.chat.id][1])) >= 11:
-                           
+                    #if int(int(PAGENOINFO[callbackQuery.message.chat.id][2])+1 - int(PAGENOINFO[callbackQuery.message.chat.id][1])) >= 11:                           
                     percNo = 0
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
