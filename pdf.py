@@ -1572,7 +1572,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 )  
                 await bot.download_media(
                     message=callbackQuery.message,
-                    f"{callbackQuery.message.message_id}/pdf.pdf"
+                    "pdf.pdf"
                 )
                 #await bot.download_media(
                 #callbackQuery.message.reply_to_message,
