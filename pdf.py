@@ -1281,12 +1281,12 @@ async def extract(bot, message):
                                     '`Doing Some other Work.. 🥵`'
                                 )
                                 return   
-                            await message.reply_text(
+                            pdfwork=await message.reply_text(
                                 text='`Analysing Your PDF...🤹`',
                                 reply_to_message_id=message.reply_to_message.message_id
                             )
                             message.reply_to_message
-                            await bot.send_message(
+                            pdfwork = await bot.send_message(
                                 message.chat.id,
                                 text = "⚙️Conversion Going to Initiate..!!",
                                 
@@ -1570,10 +1570,11 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     message_id = callbackQuery.message.message_id,                                      
                     text=Translation.DOWNLOAD_START         
                 )  
-                await bot.download_media(
-                callbackQuery.message.reply_to_message,
+                await callbackquery.message.reply_to_message.download(
+                #await bot.download_media(
+                #callbackQuery.message.reply_to_message,
                 #PDF2IMG[callbackQuery.message.chat.id],
-                f"{callbackQuery.message.message_id}/pdf.pdf",
+                f"{callbackQuery.message.reply_to_message.message_id}/pdf.pdf",
                 )
                 """c_time = time.time()
                 #download_location = Config.DOWNLOAD_LOCATION + "/" 
@@ -1602,10 +1603,10 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     except:
                         pass"""             
                 
-                doc = fitz.open(f"{callbackQuery.message.message_id}/pdf.pdf")
+                doc = fitz.open(f"{callbackQuery.message.reply_to_message.message_id}/pdf.pdf")
                 noOfPages = doc.pageCount                        
-                PDFINPUT = callbackQuery.message.message_id
-                #PDF2IMG[callbackQuery.message.chat.id] = callbackQuery.message.reply_to_message.document.file_id
+                PDFINPUT = callbackQuery.messag.ereply_to_message.message_id
+                PDF2IMG[callbackQuery.message.chat.id] = callbackQuery.message.reply_to_message.document.file_id
                 PDF2IMGPGNO[callbackQuery.message.chat.id] = noOfPages                
                 await bot.delete_messages(
                     chat_id = callbackQuery.message.chat.id,
