@@ -1571,7 +1571,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     text=Translation.DOWNLOAD_START         
                 )  
                 await bot.download_media(
-                callbackQuery.message.reply_to_message,
+                callbackQuery.message,
                 #PDF2IMG[callbackQuery.message.chat.id],
                 f"{callbackQuery.message.message_id}/pdf.pdf",
                 )
@@ -1887,9 +1887,9 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         callbackQuery.message.chat.id, Msgs.feedbackMsg,
                         disable_web_page_preview = True
                     )  
-            except:
+            
                 
-            """except Exception as e:            
+            except Exception as e:            
                 try:
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
@@ -1900,7 +1900,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     PROCESS.remove(callbackQuery.message.chat.id)
                     doc.close()            
                 except Exception:
-                    pass"""
+                    pass
                                                  
         elif edit == "multipleImgAsPdfError":        
             try:
