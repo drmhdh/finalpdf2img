@@ -10,44 +10,40 @@
 
 import re
 import os
-import asyncio
 import time
 import math
 import fitz
+import numpy
 import shutil
+import asyncio
 import logging
+import requests
 import convertapi
+import weasyprint
+from PIL import Image
+import urllib.request
 from PIL import Image
 from time import sleep
-
-import requests
-import weasyprint
-import urllib.request
-from support.file_size import get_size
 from bs4 import BeautifulSoup
-from PDFNetPython3.PDFNetPython import *
-from configs import Config, Msgs, ADMINS, Translation, Presets
 from pyrogram import Client, filters
 from pyrogram.types import ForceReply
+from support.file_size import get_size
+from hachoir.parser import createParser
+from PDFNetPython3.PDFNetPython import *
+from hachoir.metadata import extractMetadata
 from PyPDF2 import PdfFileWriter, PdfFileReader
+from configs import Config, Msgs, ADMINS, Translation, Presets
 from pyrogram.types import InputMediaPhoto, InputMediaDocument
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery, Message
 
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
-from PIL import Image
-import numpy
-
 logger = logging.getLogger(__name__)
 # LOGGING INFO
-# logging.basicConfig(level=logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
-
+#
 if __name__ == "__main__" :
     # create download directory, if not exist
     if not os.path.isdir(Config.DOWNLOAD_LOCATION):
         os.makedirs(Config.DOWNLOAD_LOCATION)   
-
 # PYROGRAM INSTANCE
 bot = Client(
     "pyroPdf",
@@ -56,7 +52,6 @@ bot = Client(
     api_hash = Config.API_HASH,
     bot_token = Config.API_TOKEN
 )
-
 # GLOBAL VARIABLES
 PDF = {}            # save images for generating pdf 
 media = {}          # sending group images(pdf 2 img)
@@ -65,7 +60,6 @@ PROCESS = []        # to check current process
 mediaDoc = {}       # sending group document(pdf 2 img)
 PAGENOINFO = {}     # saves no.of pages that user send last
 PDF2IMGPGNO = {}    # more info about pdf file(for extraction)
-
 # SUPPORTED FILES
 suprtedFile = [
     ".jpg", ".jpeg", ".png"
@@ -88,17 +82,12 @@ suprtedPdfFile2 = [
 # CREATING ConvertAPI INSTANCE
 if Config.CONVERT_API is not None:
     convertapi.api_secret = os.getenv("CONVERT_API")
-
 if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE"))
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
                
-                         #pdf Compression
-    
+# ------------------------------------------------------PDF Compression ------------------------------------------------------#
 @bot.on_message(filters.command('compresspdf') & filters.user(ADMINS)) # & filters.private) #& filters.document
-
-
-
 async def compress_pdf(bot, message):
     msg = await bot.send_message(
         chat_id=message.chat.id,
@@ -171,13 +160,7 @@ async def compress_pdf(bot, message):
     await message.reply_to_message.reply_document(
         document=size_path[1],
         reply_to_message_id=message.reply_to_message.message_id,
-        #file_name=m.reply_to_message.document.file_name,
-        caption=Presets.FINISHED_JOB.format(initial_size, compressed_size) ,
-        #(m.reply_to_message.caption if m.reply_to_message.caption else m.reply_to_message.document.file_name 
-                #Presets.FINISHED_JOB.format(initial_size, compressed_size) 
-                #"Credits:@dent_tech_for_books"),
-                
-        #caption=f"{file_name}\n\nCredits:@dent_tech_for_books",
+        caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
         #caption=m.reply_to_message.caption if m.reply_to_message.caption else '',
         progress=progress_for_pyrogram,
         progress_args=(
@@ -187,28 +170,20 @@ async def compress_pdf(bot, message):
         )
     )    
     await msg.delete()
-    #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size),
-                 #  disable_web_page_preview=True,
-                   
-                  # )    
+    #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)
     
-    #
     try:
         os.remove(size_path[1])
     except Exception:
         pass
-    #
 
-                                           
-
-# --------------------------------#web2pdf Main execution fn #--------------------------------------- #
+#  ------------------------------------------------------#WEB2PDF Main execution fn# ------------------------------------------------------#
 @bot.on_message(filters.command('link2pdf')) # & filters.private) # & filters.text
 async def link2pdf(bot, m: Message):
     if not m.reply_to_message.text.startswith("http"):
         await m.reply_to_message.reply_text(
             text="`❌Invalid link</b>\n\nPlease send me a valid link😰`",
-            reply_to_message_id=m.reply_to_message.message_id
-            
+            reply_to_message_id=m.reply_to_message.message_id            
         )
         return
     file_name = str()
@@ -265,15 +240,8 @@ async def link2pdf(bot, m: Message):
     except Exception:
         pass
     await msg.delete()
-
-        
-        
-        
-        
-        
-        
-        
-                                       # Rename PDF
+                                                  
+#  ------------------------------------------------------#Rename PDF#------------------------------------------------------#
 @bot.on_message(filters.command('rename'))
 async def rename_doc(bot, message):
     if message.from_user.id in Config.BANNED_USERS:
@@ -348,8 +316,7 @@ async def rename_doc(bot, message):
                 chat_id=message.chat.id,
                 document=new_file_name,
                 thumb=thumb_image_path,
-                caption=description,
-                # reply_markup=reply_markup,
+                caption=description,                
                 reply_to_message_id=HAMID,
                 progress=progress_for_pyrogram,
                 progress_args=(
@@ -454,9 +421,8 @@ async def generate_custom_thumbnail(bot, message):
             revoke=True
         )
         return
-    #TRChatBase(message.from_user.id, message.text, "generatecustomthumbnail")
-    if message.reply_to_message is not None (message.from_user.id, message.text, "generatecustomthumbnail"):
-       
+    
+    if message.reply_to_message is not None (message.from_user.id, message.text, "generatecustomthumbnail"):       
         reply_message = message.reply_to_message
         if reply_message.media_group_id is not None:
             download_location = Config.DOWNLOAD_LOCATIONS + "/" + str(message.from_user.id) + "/" + str(reply_message.media_group_id) + "/"
@@ -500,7 +466,7 @@ async def generate_custom_thumbnail(bot, message):
             text=Translation.REPLY_TO_MEDIA_ALBUM_TO_GEN_THUMB,
             reply_to_message_id=message.message_id
         )
-#Save Thumbnail for Renamed PDF
+# ------------------------------------------------------Save Thumbnail for Renamed PDF ------------------------------------------------------#
 @bot.on_message(filters.command(["savethumbnail"])) #filters.photo)
 async def savethumbnail(bot, message):
     if message.from_user.id in Config.BANNED_USERS:
@@ -535,7 +501,7 @@ async def savethumbnail(bot, message):
             reply_to_message_id=message.reply_to_message.message_id
         )
 
-#Delete Thumbnail for Renamed PDF
+# ------------------------------------------------------Delete Thumbnail for Renamed PDF ------------------------------------------------------#
 @bot.on_message(filters.command(["deletethumbnail"]))
 async def delete_thumbnail(bot, message):
     if message.from_user.id in Config.BANNED_USERS:
@@ -559,7 +525,7 @@ async def delete_thumbnail(bot, message):
         reply_to_message_id=message.message_id
     )
     
-                                #pdf2img from Nabil Navab    
+# ------------------------------------------------------pdf2img from Nabil Navab ------------------------------------------------------#    
 # if message is an image Convert Image to PDF
 @bot.on_message(filters.command(["img2pdf"])) # & filters.private) # & filters.photo
 async def img2pdf(bot, message):
@@ -573,182 +539,137 @@ async def img2pdf(bot, message):
             check = await forceSub(message.chat.id)
             
             if check == "notSubscribed":
-                return
-        
+                return        
         imageReply = await bot.send_message(
             message.chat.id,
             "`Downloading your Image..⏳`",
             reply_to_message_id = message.reply_to_message.message_id
-        )
-        
+        )        
         if not isinstance(PDF.get(message.chat.id), list):
-            PDF[message.chat.id] = []
-        
+            PDF[message.chat.id] = []        
         await message.reply_to_message.download(
             f"{message.chat.id}/{message.chat.id}.jpg"
-        )
-        
+        )        
         img = Image.open(
             f"{message.chat.id}/{message.chat.id}.jpg"
-        ).convert("RGB")
-        
+        ).convert("RGB")        
         PDF[message.chat.id].append(img)
         await imageReply.edit(
             Msgs.imageAdded.format(len(PDF[message.chat.id]))
-        )
-        
+        )        
     except Exception:
         pass
          
-# if message is a document/file Attempt if Convertion to PDF Possible
+#  -----------------------------if message is a document/file Attempt if Convertion to PDF Possible ---------------------------#
 @bot.on_message(filters.command(["scan"])) #& filters.document  & filters.private
-async def documents(bot, message):
-    
+async def documents(bot, message):    
     try:
         await bot.send_chat_action(
             message.chat.id, "typing"
-        )
-        
+        )        
         if Config.UPDATE_CHANNEL:
-            check = await forceSub(message.chat.id)
-            
+            check = await forceSub(message.chat.id)            
             if check == "notSubscribed":
-                return
-        
+                return        
         isPdfOrImg = message.reply_to_message.document.file_name
         fileSize = message.reply_to_message.document.file_size
-        fileNm, fileExt = os.path.splitext(isPdfOrImg)
-        
-        if Config.MAX_FILE_SIZE and fileSize >= int(MAX_FILE_SIZE_IN_kiB):
-            
+        fileNm, fileExt = os.path.splitext(isPdfOrImg)        
+        if Config.MAX_FILE_SIZE and fileSize >= int(MAX_FILE_SIZE_IN_kiB):            
             try:
                 bigFileUnSupport = await bot.send_message(
                     message.chat.id,
                     Msgs.bigFileUnSupport.format(Config.MAX_FILE_SIZE, Config.MAX_FILE_SIZE)
-                )
-                
-                sleep(5)
-                
+                )                
+                sleep(5)                
                 await bot.delete_messages(
                     chat_id = message.chat.id,
                     message_ids = message.message_id
-                )
-                
+                )                
                 await bot.delete_messages(
                     chat_id = message.chat.id,
                     message_ids = bigFileUnSupport.message_id
-                )
-                
+                )                
             except Exception:
                 pass
-        elif fileExt.lower() in suprtedFile:
-            
+        elif fileExt.lower() in suprtedFile:            
             try:
                 imageDocReply = await bot.send_message(
                     message.chat.id,
                     "`Downloading your Image..⏳`",
                     reply_to_message_id = message.reply_to_message.message_id
-                )
-                
+                )                
                 if not isinstance(PDF.get(message.chat.id), list):
-                    PDF[message.chat.id] = []
-                
+                    PDF[message.chat.id] = []               
                 await message.reply_to_message.download(
                     f"{message.chat.id}/{message.chat.id}.jpg"
-                )
-                
+                )                
                 img = Image.open(
                     f"{message.chat.id}/{message.chat.id}.jpg"
-                ).convert("RGB")
-                
+                ).convert("RGB")                
                 PDF[message.chat.id].append(img)
                 await imageDocReply.edit(
                     Msgs.imageAdded.format(len(PDF[message.chat.id]))
-                )
-            
+                )          
             except Exception as e:
                 await imageDocReply.edit(
                     Msgs.errorEditMsg.format(e)
-                )
-                
+                )                
                 sleep(5)
                 await bot.delete_messages(
                     chat_id = message.chat.id,
                     message_ids = imageDocReply.message_id
-                )
-                
+                )                
                 await bot.delete_messages(
                     chat_id = message.chat.id,
                     message_ids = message.message_id
-                )
-        
-        elif fileExt.lower() == ".pdf":
-            
+                )        
+        elif fileExt.lower() == ".pdf":            
             try:
-                if message.chat.id in PROCESS:
-                    
+                if message.chat.id in PROCESS:                   
                     await message.reply_text(
                         '`Doing Some other Work.. 🥵`'
                     )
-                    return
-                
+                    return                
                 pdfMsgId = await bot.send_message(
                     message.chat.id,
                     "`Processing.. 🚶`"
-                )
-                
+                )                
                 await message.reply_to_message.download(
                     f"{message.reply_to_message.message_id}/pdftoimage.pdf"
-                )
-                
+                )                
                 doc = fitz.open(f'{message.reply_to_message.message_id}/pdftoimage.pdf')
-                noOfPages = doc.pageCount
-                
+                noOfPages = doc.pageCount                
                 PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
-                PDF2IMGPGNO[message.chat.id] = noOfPages
-                
+                PDF2IMGPGNO[message.chat.id] = noOfPages                
                 await bot.delete_messages(
                     chat_id = message.chat.id,
                     message_ids = pdfMsgId.message_id
-                )
-                
+                )                
                 await bot.send_chat_action(
                     message.chat.id, "typing"
-                )
-                
+                )                
                 pdfMsgId = await message.reply_to_message.reply_text(
                     Msgs.pdfReplyMsg.format(noOfPages),
                     reply_markup = ForceReply(),
                     parse_mode = "md"
-                )
-                
+                )                
                 doc.close()
-                shutil.rmtree(f'{message.message_id}')
-            
-            except Exception as e:
-                
+                shutil.rmtree(f'{message.message_id}')           
+            except Exception as e:               
                 try:
                     PROCESS.remove(message.chat.id)
                     doc.close()
                     shutil.rmtree(f'{message.reply_to_message.message_id}')
                     
                     await pdfMsgId.edit(
-                        Msgs.errorEditMsg.format(e)
-                    )
-                    """sleep(15)
-                    await bot.delete_messages(
-                        chat_id = message.chat.id,
-                        message_ids = pdfMsgId.message_id
-                    )"""
+                        Msgs.errorEditMsg.format(e                    
                     sleep(15)
                     await bot.delete_messages(
                         chat_id = message.chat.id,
                         message_ids = message.message_id
-                    )
-                
+                    )                
                 except Exception:
-                    pass
-            
+                    pass            
         elif fileExt.lower() in suprtedPdfFile:
             try:
                 await bot.send_chat_action(
@@ -756,38 +677,30 @@ async def documents(bot, message):
                 )
                 pdfMsgId = await message.reply_text(
                     "`Downloading your file..⏳`",
-                )
-                
+                )               
                 await message.reply_to_message.download(
                     f"{message.reply_to_message.message_id}/{isPdfOrImg}"
-                )
-                
+                )                
                 await pdfMsgId.edit(
                     "`Creating pdf..`💛"
-                )
-                
+                )               
                 Document = fitz.open(
                     f"{message.reply_to_message.message_id}/{isPdfOrImg}"
-                )
-                
-                b = Document.convert_to_pdf()
-                
+                )                
+                b = Document.convert_to_pdf()                
                 pdf = fitz.open("pdf", b)
                 pdf.save(
                     f"{message.reply_to_message.message_id}/{fileNm}.pdf",
                     garbage = 4,
                     deflate = True,
                 )
-                pdf.close()
-                
+                pdf.close()               
                 await pdfMsgId.edit(
                     "`Started Uploading..`🏋️"
-                )
-                
+                )                
                 sendfile = open(
                     f"{message.reply_to_message.message_id}/{fileNm}.pdf", "rb"
-                )
-                
+                )                
                 await bot.send_document(
                     chat_id = message.chat.id,
                     document = sendfile,
@@ -796,10 +709,8 @@ async def documents(bot, message):
                 )
                 await pdfMsgId.edit(
                     "`Uploading Completed..❤️`"
-                )
-                
-                shutil.rmtree(f"{message.reply_to_message.message_id}")
-                
+                )                
+                shutil.rmtree(f"{message.reply_to_message.message_id}")                
                 sleep(5)
                 await bot.send_chat_action(
                     message.chat.id, "typing"
@@ -807,10 +718,8 @@ async def documents(bot, message):
                 await bot.send_message(
                     message.chat.id, Msgs.feedbackMsg,
                     disable_web_page_preview = True
-                )
-            
-            except Exception as e:
-                
+                )            
+            except Exception as e:                
                 try:
                     shutil.rmtree(f"{message.reply_to_message.message_id}")
                     await pdfMsgId.edit(
@@ -824,15 +733,11 @@ async def documents(bot, message):
                     await bot.delete_messages(
                         chat_id = message.chat.id,
                         message_ids = message.message_id
-                    )
-                    
+                    )                    
                 except Exception:
-                    pass
-        
-        elif fileExt.lower() in suprtedPdfFile2:
-            
-            if os.getenv("CONVERT_API") is None:
-                
+                    pass        
+        elif fileExt.lower() in suprtedPdfFile2:            
+            if os.getenv("CONVERT_API") is None:               
                 pdfMsgId = await message.reply_text(
                     "`Owner Forgot to add ConvertAPI.. contact Owner 😒`",
                 )
@@ -840,8 +745,7 @@ async def documents(bot, message):
                 await bot.delete_messages(
                     chat_id = message.chat.id,
                     message_ids = pdfMsgId.message_id
-                )
-            
+                )            
             else:
                 try:
                     await bot.send_chat_action(
@@ -849,16 +753,13 @@ async def documents(bot, message):
                     )
                     pdfMsgId = await message.reply_to_message.reply_text(
                         "`Downloading your file..⏳`",
-                    )
-                    
+                    )                    
                     await message.reply_to_message.download(
                         f"{message.reply_to_message.message_id}/{isPdfOrImg}"
-                    )
-                    
+                    )                    
                     await pdfMsgId.edit(
                         "`Creating pdf..`💛"
-                    )
-                    
+                    )                   
                     try:
                         await convertapi.convert(
                             "pdf",
@@ -868,19 +769,15 @@ async def documents(bot, message):
                             from_format = fileExt[1:],
                         ).save_files(
                             f"{message.reply_to_message.message_id}/{fileNm}.pdf"
-                        )
-                        
-                    except Exception:
-                        
+                        )                        
+                    except Exception:                        
                         try:
                             shutil.rmtree(f"{message.reply_to_message.message_id}")
                             await pdfMsgId.edit(
                                 "ConvertAPI limit reaches.. contact Owner"
-                            )
-                            
+                            )                            
                         except Exception:
-                            pass
-                    
+                            pass                    
                     sendfile = open(
                         f"{message.reply_to_message.message_id}/{fileNm}.pdf", "rb"
                     )
@@ -889,14 +786,11 @@ async def documents(bot, message):
                         Document = sendfile,
                         thumb = Config.PDF_THUMBNAIL,
                         caption = f"`Converted: {fileExt} to pdf`",
-                    )
-                    
+                    )                    
                     await pdfMsgId.edit(
                         "`Uploading Completed..`🏌️"
-                    )
-                    
-                    shutil.rmtree(f"{message.reply_to_message.message_id}")
-                    
+                    )                   
+                    shutil.rmtree(f"{message.reply_to_message.message_id}")                    
                     sleep(5)
                     await bot.send_chat_action(
                         message.chat.id, "typing"
@@ -904,13 +798,10 @@ async def documents(bot, message):
                     await bot.send_message(
                         message.chat.id, Msgs.feedbackMsg,
                         disable_web_page_preview = True
-                    )
-                
+                    )                
                 except Exception:
-                    pass
-        
-        else:
-            
+                    pass        
+        else:            
             try:
                 await bot.send_chat_action(
                     message.chat.id, "typing"
@@ -926,35 +817,28 @@ async def documents(bot, message):
                 await bot.delete_messages(
                     chat_id = message.chat.id,
                     message_ids = unSuprtd.message_id
-                )
-                
+                )                
             except Exception:
-                pass
-            
+                pass            
     except Exception:
         pass
 
-# REPLY TO /start COMMAND
+#  ------------------------------------------------------REPLY TO /start COMMAND ------------------------------------------------------#
 @bot.on_message(filters.command(["startpdf" or "start"]))
-async def startpdf(bot, message):
-    
+async def startpdf(bot, message)    
     try:
         await bot.send_chat_action(
             message.chat.id, "typing"
-        )
-        
-        if Config.UPDATE_CHANNEL:
-        
+        )        
+        if Config.UPDATE_CHANNEL:        
             try:
                 await bot.get_chat_member(
                     str(Config.UPDATE_CHANNEL), message.chat.id
-                )
-            
+                )            
             except Exception:
                 invite_link = await bot.create_chat_invite_link(
                     int(Config.UPDATE_CHANNEL)
-                )
-                
+                )                
                 await bot.send_message(
                     message.chat.id,
                     Msgs.forceSubMsg.format(
@@ -976,14 +860,12 @@ async def startpdf(bot, message):
                             ]
                         ]
                     )
-                )
-                
+                )                
                 await bot.delete_messages(
                     chat_id = message.chat.id,
                     message_ids = message.message_id
                 )
-                return
-        
+                return        
         await bot.send_message(
             message.chat.id,
             Msgs.welcomeMsg.format(
@@ -1014,15 +896,13 @@ async def startpdf(bot, message):
         await bot.delete_messages(
             chat_id = message.chat.id,
             message_ids = message.message_id
-        )
-        
+        )        
     except Exception:
         pass
             
-# /deletes : Deletes current Images to pdf Queue
+#  --------------------------------------/deletes : Deletes current Images to pdf Queue --------------------------------------------#
 @bot.on_message(filters.command(["deletepdf"]))
-async def cancelI2P(bot, message):
-    
+async def cancelI2P(bot, message):    
     try:
         await bot.send_chat_action(
             message.chat.id, "typing"
@@ -1040,11 +920,9 @@ async def cancelI2P(bot, message):
             reply_to_message_id = message.message_id
         )
 
-
 # cancel current pdf to image Queue
 @bot.on_message(filters.command(["cancelpdf"]))
-async def cancelP2I(bot, message):
-    
+async def cancelP2I(bot, message):    
     try:
         PROCESS.remove(message.chat.id)
         await bot.send_chat_action(
@@ -1052,17 +930,15 @@ async def cancelP2I(bot, message):
         )
         await bot.send_message(
             message.chat.id, '`Canceled current work..`🤧'
-        )
-    
+        )    
     except Exception:
         await bot.send_message(
             message.chat.id, '`Nothing to cancel..`🏃'
         )
        
-# if message is a /feedback
+#  ------------------------------------------------------if message is a /feedback ------------------------------------------------------#
 @bot.on_message(filters.command(["feedback"]))
-async def feedback(bot, message):
-    
+async def feedback(bot, message):    
     try:
         await bot.send_chat_action(
             message.chat.id, "typing"
@@ -1070,23 +946,19 @@ async def feedback(bot, message):
         await bot.send_message(
             message.chat.id, Msgs.feedbackMsg,
             disable_web_page_preview = True
-        )
-        
+        )        
     except Exception:
         pass
 
-# If message is /generate
+#  ------------------------------------------------------If message is /generate ------------------------------------------------------#
 @bot.on_message(filters.command(["generate"])) # & filters.private)
-async def generate(bot, message):
-    
+async def generate(bot, message):    
     try:
         newName = str(message.text.replace("/generate", ""))
-        images = PDF.get(message.chat.id)
-        
+        images = PDF.get(message.chat.id)       
         if isinstance(images, list):
             pgnmbr = len(PDF[message.chat.id])
-            del PDF[message.chat.id]
-        
+            del PDF[message.chat.id]        
         if not images:
             await bot.send_chat_action(
                 message.chat.id, "typing"
@@ -1100,35 +972,26 @@ async def generate(bot, message):
                 chat_id = message.chat.id,
                 message_ids = imagesNotFounded.message_id
             )
-            return
-        
+            return        
         gnrtMsgId = await bot.send_message(
             message.chat.id, f"`Generating pdf..`💚"
-        )
-        
+        )        
         if newName == " name":
-            fileName = f"{message.from_user.first_name}" + ".pdf"
-        
+            fileName = f"{message.from_user.first_name}" + ".pdf"       
         elif len(newName) > 1 and len(newName) <= 15:
-            fileName = f"{newName}" + ".pdf"
-        
+            fileName = f"{newName}" + ".pdf"        
         elif len(newName) > 15:
-            fileName = f"{message.from_user.first_name}" + ".pdf"
-        
+            fileName = f"{message.from_user.first_name}" + ".pdf"        
         else:
-            fileName = f"{message.chat.id}" + ".pdf"
-        
-        images[0].save(fileName, save_all = True, append_images = images[1:])
-        
+            fileName = f"{message.chat.id}" + ".pdf"        
+        images[0].save(fileName, save_all = True, append_images = images[1:])       
         await gnrtMsgId.edit(
             "`Uploading pdf.. `🏋️",
         )
         await bot.send_chat_action(
             message.chat.id, "upload_document"
-        )
-        
-        with open(fileName, "rb") as sendfile:
-            
+        )        
+        with open(fileName, "rb") as sendfile:            
             await bot.send_document(
                 chat_id = message.chat.id,
                 document = sendfile,
@@ -1138,11 +1001,9 @@ async def generate(bot, message):
         
         await gnrtMsgId.edit(
             "`Successfully Uploaded.. `🤫",
-        )
-        
+        )        
         os.remove(fileName)
-        shutil.rmtree(f"{message.chat.id}")
-        
+        shutil.rmtree(f"{message.chat.id}")        
         sleep(5)
         await bot.send_chat_action(
             message.chat.id, "typing"
@@ -1150,111 +1011,87 @@ async def generate(bot, message):
         await bot.send_message(
             message.chat.id, Msgs.feedbackMsg,
             disable_web_page_preview = True
-        )
-        
+        )        
     except Exception as e:
         os.remove(fileName)
         shutil.rmtree(f"{message.chat.id}")
         print(e)
        
-# If message is /encrypt Attempt to Add Passsword
+#  -----------------------------------------If message is /encrypt Attempt to Add Passsword -------------------------------------------#
 @bot.on_message(filters.command(["encrypt"]))
 async def encrypt(bot, message):
     try:        
-        if message.chat.id in PROCESS:
-            
+        if message.chat.id in PROCESS:            
             await bot.send_chat_action(
                 message.chat.id, "typing"
             )
             await message.reply_text(
                 "`Doing Some Work..🥵`"
             )
-            return
-                  
+            return                  
         if message.chat.id not in PDF2IMG:
             try:
                 await bot.send_chat_action(
                     message.chat.id, "typing"
-                )
-            
+                )            
                 isPdfOrImg = message.reply_to_message.document.file_name
                 fileSize = message.reply_to_message.document.file_size
-                fileNm, fileExt = os.path.splitext(isPdfOrImg)
-        
-                if Config.MAX_FILE_SIZE and fileSize >= int(MAX_FILE_SIZE_IN_kiB):
-            
+                fileNm, fileExt = os.path.splitext(isPdfOrImg)        
+                if Config.MAX_FILE_SIZE and fileSize >= int(MAX_FILE_SIZE_IN_kiB):            
                     try:
                         bigFileUnSupport = await bot.send_message(
                             message.chat.id,
                             Msgs.bigFileUnSupport.format(Config.MAX_FILE_SIZE, Config.MAX_FILE_SIZE)
-                        )
-                
-                        sleep(5)
-                
+                        )               
+                        sleep(5)                
                         await bot.delete_messages(
                             chat_id = message.chat.id,
                             message_ids = message.message_id
-                        )
-                
+                        )                
                         await bot.delete_messages(
                             chat_id = message.chat.id,
                             message_ids = bigFileUnSupport.message_id
-                        )
-                
+                        )               
                     except Exception:
-                        pass                        
-        
-                elif fileExt.lower() == ".pdf":
-            
+                        pass                                
+                elif fileExt.lower() == ".pdf":          
                     try:
-                        if message.chat.id in PROCESS:
-                    
+                        if message.chat.id in PROCESS:                    
                             await message.reply_text(
                                 '`Doing Some other Work.. 🥵`'
                             )
-                            return
-                
+                            return                
                         pdfMsgId = await bot.send_message(
                             message.chat.id,
                             "`Processing.. 🚶`"
-                        )
-                
+                        )                
                         await message.reply_to_message.download(
                             f"{message.reply_to_message.message_id}/pdftoimage.pdf"
-                        )
-                
+                        )                
                         doc = fitz.open(f'{message.reply_to_message.message_id}/pdftoimage.pdf')
-                        noOfPages = doc.pageCount
-                
+                        noOfPages = doc.pageCount              
                         PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
-                        PDF2IMGPGNO[message.chat.id] = noOfPages
-                
+                        PDF2IMGPGNO[message.chat.id] = noOfPages                
                         await bot.delete_messages(
                             chat_id = message.reply_to_message.chat.id,
                             message_ids = pdfMsgId.message_id
-                        )
-                
+                        )                
                         await bot.send_chat_action(
                             message.chat.id, "typing"
-                        )
-                
+                        )                
                         pdfMsgId = await message.reply_to_message.reply_text(
                             Msgs.pdfReplyMsg.format(noOfPages) , 
                             #text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}`:",
                             #reply_markup = ForceReply(),
                             #parse_mode = "md" 
-                        )
-                   
+                        )                   
                         doc.close()
-                        shutil.rmtree(f'{message.reply_to_message.message_id}')
-             
-                    except Exception as e:
-                
+                        shutil.rmtree(f'{message.reply_to_message.message_id}')             
+                    except Exception as e:                
                         try:
                             PROCESS.remove(message.reply_to_message.chat.id)
                             doc.close()
-                            shutil.rmtree(f'{message.reply_to_message.message_id}')
-                    
+                            shutil.rmtree(f'{message.reply_to_message.message_id}')                    
                             await pdfMsgId.edit(
                                 Msgs.errorEditMsg.format(e)
                             )
@@ -1266,13 +1103,10 @@ async def encrypt(bot, message):
                             await bot.delete_messages(
                                 chat_id = message.chat.id,
                                 message_ids = message.message_id
-                            )
-                
+                            )              
                         except Exception:
-                            pass                        
-          
-                else:
-            
+                            pass                                  
+                else:            
                     try:
                         await bot.send_chat_action(
                             message.chat.id, "typing"
@@ -1288,94 +1122,72 @@ async def encrypt(bot, message):
                         await bot.delete_messages(
                             chat_id = message.chat.id,
                             message_ids = unSuprtd.message_id
-                        )
-                
+                        )                
                     except Exception:
-                        pass        
-                
+                        pass                        
             except:
-                pass
-        
-        password = message.text.replace('/encrypt ', '')
-        
-        if password == '/encrypt':
-            
+                pass       
+        password = message.text.replace('/encrypt ', '')        
+        if password == '/encrypt':            
             await bot.send_message(
                 message.chat.id,
                 "`can't find a password..`🐹"
             )
-            return
-        
-        PROCESS.append(message.chat.id)
-        
+            return        
+        PROCESS.append(message.chat.id)        
         await bot.send_chat_action(
             message.chat.id, "typing"
         )
         pdfMsgId = await bot.send_message(
             message.chat.id,
             "`Downloading your pdf..`🕐"
-        )
-        
+        )        
         await bot.download_media(
             PDF2IMG[message.chat.id],
             f"{message.message_id}/pdf.pdf"
-        )
-        
+        )        
         await pdfMsgId.edit(
             "`Encrypting pdf.. `🔐"
-        )
-                
+        )                
         outputFileObj = PdfFileWriter()
         inputFile = PdfFileReader(
             f"{message.message_id}/pdf.pdf"
         )
-        pgNmbr = inputFile.numPages
-        
+        pgNmbr = inputFile.numPages        
         if pgNmbr > 150:
             await bot.send_message(
                 message.chat.id,
                 f"send me a pdf less than 150pgs..👀"
             )
-            return
-        
-        for i in range(pgNmbr):
-            
+            return        
+        for i in range(pgNmbr):           
             if pgNmbr >= 50:
                 if i % 10 == 0:
                     await pdfMsgId.edit(
                         f"`Encrypted {i}/{pgNmbr} pages..`🔑",
-                    )
-            
+                    )            
             page = inputFile.getPage(i)
-            outputFileObj.addPage(page)
-            
-        outputFileObj.encrypt(password)
-        
+            outputFileObj.addPage(page)            
+        outputFileObj.encrypt(password)       
         await pdfMsgId.edit(
             text = "`Started Uploading..`🏋️",
-        )
-        
+        )        
         with open(
             f"{message.message_id}/Encrypted.pdf", "wb"
         ) as f:
-            outputFileObj.write(f)
-        
+            outputFileObj.write(f)        
         if message.chat.id not in PROCESS:
             try:
                 shutil.rmtree(f'{message.message_id}')
-                return
-            
+                return            
             except Exception:
-                return
-        
+                return        
         await bot.send_chat_action(
             message.chat.id, "upload_document"
-        )
-        
+        )        
         with open(
             f"{message.message_id}/Encrypted.pdf", "rb"
-        ) as sendfile:
-            
+        ) as sendfile:            
             await bot.send_document(
                 chat_id = message.chat.id,
                 document = sendfile,
@@ -1383,17 +1195,13 @@ async def encrypt(bot, message):
                 caption = Msgs.encryptedFileCaption.format(
                     pgNmbr, password
                 )
-            )
-        
+            )        
         await pdfMsgId.edit(
             "`Uploading Completed..`🏌️",
-        )
-        
-        shutil.rmtree(f"{message.message_id}")
-        
+        )       
+        shutil.rmtree(f"{message.message_id}")        
         del PDF2IMG[message.chat.id]
-        PROCESS.remove(message.chat.id)
-        
+        PROCESS.remove(message.chat.id)        
         sleep(5)
         await bot.send_chat_action(
             message.chat.id, "typing"
@@ -1401,25 +1209,21 @@ async def encrypt(bot, message):
         await bot.send_message(
             message.chat.id, Msgs.feedbackMsg,
             disable_web_page_preview=True
-        )
-       
-    except Exception as e:
-        
+        )       
+    except Exception as e:        
         try:
             await pdfMsgId.edit(
                 Msgs.errorEditMsg.format(e)
             )
             PROCESS.remove(message.chat.id)
-            shutil.rmtree(f"{message.message_id}")
-            
+            shutil.rmtree(f"{message.message_id}")            
             await pdfMsgId.edit(
                 Msgs.errorEditMsg.format(e),
-            )
-            
+            )            
         except Exception:
             pass
 
-#Extrct Image From PDF
+# ------------------------------------------------Extrct Image From PDF ----------------------------------------------------#
 @bot.on_message(filters.command(["extract"])) #& filters.user(ADMINS)
 async def extract(bot, message): 
     clicked = message.from_user.id
@@ -1430,59 +1234,45 @@ async def extract(bot, message):
         pass
     if (clicked == typed) or (clicked in ADMINS):    
         try:
-            if message.chat.id in PROCESS:
-            
+            if message.chat.id in PROCESS:            
                 await bot.send_chat_action(
                     message.chat.id, "typing"
                 )
                 await message.reply_text("`Doing Some Work..🥵`", quote=True)
-                return
-        
-            needPages = message.text.replace('/extract ', '')
-        
+                return        
+            needPages = message.text.replace('/extract ', '')        
             if message.chat.id not in PDF2IMG:
                 try:
                     await bot.send_chat_action(
                         message.chat.id, "typing"
-                    )
-            
+                    )            
                     isPdfOrImg = message.reply_to_message.document.file_name
                     fileSize = message.reply_to_message.document.file_size
-                    fileNm, fileExt = os.path.splitext(isPdfOrImg)
-        
-                    if Config.MAX_FILE_SIZE and fileSize >= int(MAX_FILE_SIZE_IN_kiB):
-            
+                    fileNm, fileExt = os.path.splitext(isPdfOrImg)       
+                    if Config.MAX_FILE_SIZE and fileSize >= int(MAX_FILE_SIZE_IN_kiB):            
                         try:
                             bigFileUnSupport = await bot.send_message(
                                 message.chat.id,
                                 Msgs.bigFileUnSupport.format(Config.MAX_FILE_SIZE, Config.MAX_FILE_SIZE)
-                            )
-                
-                            sleep(5)
-                
+                            )                
+                            sleep(5)                
                             await bot.delete_messages(
                                 chat_id = message.chat.id,
                                 message_ids = message.message_id
-                            )
-                
+                            )                
                             await bot.delete_messages(
                                 chat_id = message.chat.id,
                                 message_ids = bigFileUnSupport.message_id
-                            )
-                
+                            )                
                         except Exception:
-                            pass        
-        
-                    elif fileExt.lower() == ".pdf":
-            
+                            pass               
+                    elif fileExt.lower() == ".pdf":            
                         try:
-                            if message.chat.id in PROCESS:
-                    
+                            if message.chat.id in PROCESS:                    
                                 await message.reply_text(
                                     '`Doing Some other Work.. 🥵`'
                                 )
-                                return
-                        
+                                return                        
                             #download_location = Config.DOWNLOAD_LOCATION + "/" + str(message.message_id) + "pdftoimage" + ".pdf"
                             pdfMsgId = await bot.send_message(
                                 chat_id=message.chat.id,
@@ -1508,37 +1298,29 @@ async def extract(bot, message):
                                         message_id=a.message_id
                                     )
                                 except:
-                                    pass
-                
+                                    pass                
                             doc = fitz.open(f'{message.message_id}/pdftoimage.pdf')
-                            noOfPages = doc.pageCount
-                        
+                            noOfPages = doc.pageCount                        
                             PDFINPUT = message.reply_to_message
                             PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
-                            PDF2IMGPGNO[message.chat.id] = noOfPages
-                
+                            PDF2IMGPGNO[message.chat.id] = noOfPages                
                             await bot.delete_messages(
                                 chat_id = message.reply_to_message.chat.id,
                                 message_ids = pdfMsgId.message_id
-                            )
-                
+                            )                
                             await bot.send_chat_action(
                                 message.chat.id, "typing"
-                            )
-                
+                            )                
                             pdfMsgId = await message.reply_to_message.reply_text(
                                 Msgs.pdfReplyMsg.format(noOfPages)
                             )                     
                             doc.close()
-                            shutil.rmtree(f'{message.message_id}')
-             
-                        except Exception as e:
-                
+                            shutil.rmtree(f'{message.message_id}')             
+                        except Exception as e:                
                             try:
                                 PROCESS.remove(message.chat.id)
                                 doc.close()
-                                shutil.rmtree(f'{message.message_id}')
-                    
+                                shutil.rmtree(f'{message.message_id}')                    
                                 await pdfMsgId.edit(
                                     Msgs.errorEditMsg.format(e)
                                 )
@@ -1550,13 +1332,10 @@ async def extract(bot, message):
                                 await bot.delete_messages(
                                     chat_id = message.chat.id,
                                     message_ids = message.message_id
-                                )
-                
+                                )                
                             except Exception:
-                                pass                       
-          
-                    else:
-            
+                                pass                                 
+                    else:            
                         try:
                             await bot.send_chat_action(
                                 message.chat.id, "typing"
@@ -1572,33 +1351,25 @@ async def extract(bot, message):
                             await bot.delete_messages(
                                 chat_id = message.chat.id,
                                 message_ids = unSuprtd.message_id
-                            )
-                
+                            )                
                         except Exception:
-                            pass
-         
+                            pass        
                 except:
-                    pass
-        
+                    pass        
             #My Combination
-            pageStartAndEnd = list(needPages.replace('-',':').split(':'))
-            
-            if len(pageStartAndEnd) > 2:
-                
+            pageStartAndEnd = list(needPages.replace('-',':').split(':'))            
+            if len(pageStartAndEnd) > 2:                
                 await bot.send_message(
                     message.chat.id,
                     "`I just asked you starting & ending 😅`"
                 )
-                return
-            
+                return            
             elif len(pageStartAndEnd) == 2:
-                try:
-                    
-                    if (1 <= int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]):
-                        
+                try:                    
+                    if (1 <= int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]):                        
                         if (int(pageStartAndEnd[0]) < int(pageStartAndEnd[1]) <= PDF2IMGPGNO[message.chat.id]):
-                            PAGENOINFO[message.chat.id] = [False, int(pageStartAndEnd[0]), int(pageStartAndEnd[1]), None]    #elmnts in list (is singlePage, start, end, if single pg number)
-                            
+                            PAGENOINFO[message.chat.id] = [False, int(pageStartAndEnd[0]), int(pageStartAndEnd[1]), None]    
+                            #elmnts in list (is singlePage, start, end, if single pg number)                            
                         else:
                             await bot.send_message(
                                 message.chat.id,
@@ -1611,45 +1382,35 @@ async def extract(bot, message):
                             "`Syntax Error: errorInStartingPageNumber 😅`"
                         )
                         return                               
-                except:
-                    
+                except:                    
                     await bot.send_message(
                         message.chat.id,
                         "`Syntax Error: noSuchPageNumbers 🤭`"
                     )
-                    return
-                            
-            elif len(pageStartAndEnd) == 1:
-                
-                if pageStartAndEnd[0] == "/extract":
-                    
+                    return                            
+            elif len(pageStartAndEnd) == 1:                
+                if pageStartAndEnd[0] == "/extract":                    
                     if (PDF2IMGPGNO[message.chat.id]) == 1:
                         PAGENOINFO[message.chat.id] = [True, None, None, 1]
-                        #elmnts in list (is singlePage, start, end, if single pg number)
-                    
+                        #elmnts in list (is singlePage, start, end, if single pg number)                    
                     else:
                         PAGENOINFO[message.chat.id] = [False, 1, PDF2IMGPGNO[message.chat.id], None]
-                        #elmnts in list (is singlePage, start, end, if single pg number)
-                    
+                        #elmnts in list (is singlePage, start, end, if single pg number)                    
                 elif 0 < int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]:
-                    PAGENOINFO[message.chat.id] = [True, None, None, pageStartAndEnd[0]]
-                
+                    PAGENOINFO[message.chat.id] = [True, None, None, pageStartAndEnd[0]]                
                 else:
                     await bot.send_message(
                         message.chat.id,
                         '`Syntax Error: noSuchPageNumber 🥴`'
                     )
-                    return
-            
+                    return            
             else:
                 await bot.send_message(
                     message.chat.id,
                     "`Syntax Error: pageNumberMustBeAnIntiger 🧠`"
                 )
-                return
-            
-            if PAGENOINFO[message.chat.id][0] == False:
-                
+                return            
+            if PAGENOINFO[message.chat.id][0] == False:                
                 if pageStartAndEnd[0] == "/extract":
                     await bot.send_message(
                         message.chat.id,
@@ -1675,8 +1436,7 @@ async def extract(bot, message):
                                 ]
                             ]
                         )
-                    )
-                
+                    )                
                 else:
                     await bot.send_message(
                         message.chat.id,
@@ -1702,10 +1462,8 @@ async def extract(bot, message):
                                 ]
                             ]
                         )
-                    )
-                
-            if PAGENOINFO[message.chat.id][0] == True:
-                
+                    )                
+            if PAGENOINFO[message.chat.id][0] == True:                
                 await bot.send_message(
                     message.chat.id,
                     text = f"Extract page number: `{PAGENOINFO[message.chat.id][3]}` As:",
@@ -1730,14 +1488,11 @@ async def extract(bot, message):
                             ]
                         ]
                     )
-                )
- 
-        except Exception:
-        
+                ) 
+        except Exception:        
             try:
                 del PAGENOINFO[message.chat.id]
-                PROCESS.remove(message.chat.id)
-            
+                PROCESS.remove(message.chat.id)            
             except Exception:
                 pass
     else:
@@ -1748,12 +1503,7 @@ async def extract(bot, message):
             cache_time = 0
         )
         
-@bot.on_callback_query()
-    
-
-   
-        
-        
+@bot.on_callback_query()                      
 async def answer(client: bot, callbackQuery: CallbackQuery):
     clicked = callbackQuery.message.from_user.id
     try:
@@ -1762,11 +1512,8 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
         typed = callbackQuery.message.from_user.id
         pass
     if (clicked == typed) or (clicked in ADMINS):   
-
-        edit = callbackQuery.data
-    
-        if edit == "strtDevEdt":
-        
+        edit = callbackQuery.data    
+        if edit == "strtDevEdt":        
             try:
                 await callbackQuery.edit_message_text(
                     Msgs.aboutDev, disable_web_page_preview = True,
@@ -1791,13 +1538,11 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         ]
                     )
                 )
-                return
-        
+                return        
             except Exception:
-                pass
-        
-        elif edit == "imgsToPdfEdit":
-        
+                pass      
+                                                 
+        elif edit == "imgsToPdfEdit":        
             try:
                 await callbackQuery.edit_message_text(
                     Msgs.I2PMsg, disable_web_page_preview = True,
@@ -1822,13 +1567,11 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         ]
                     )
                 )
-                return
-        
+                return        
             except Exception:
                 pass
         
-        elif edit == "pdfToImgsEdit":
-        
+        elif edit == "pdfToImgsEdit":        
             try:
                 await callbackQuery.edit_message_text(
                     Msgs.P2IMsg, disable_web_page_preview = True,
@@ -1857,13 +1600,11 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         ]
                     )
                 )
-                return
-        
+                return        
             except Exception:
                 pass
         
-        elif edit == "filsToPdfEdit":
-        
+        elif edit == "filsToPdfEdit":        
             try:
                 await callbackQuery.edit_message_text(
                     Msgs.F2PMsg, disable_web_page_preview = True,
@@ -1892,13 +1633,11 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         ]
                     )
                 )
-                return
-        
+                return        
             except Exception:
                 pass
         
-        elif edit == "warningEdit":
-        
+        elif edit == "warningEdit":        
             try:
                 await callbackQuery.edit_message_text(
                     Msgs.warningMessage, disable_web_page_preview = True,
@@ -1923,13 +1662,11 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         ]
                     )
                 )
-                return
-        
+                return        
             except Exception:
                 pass
         
-        elif edit == "back":
-        
+        elif edit == "back":       
             try:
                 await callbackQuery.edit_message_text(
                     Msgs.back2Start, disable_web_page_preview = True,
@@ -1954,14 +1691,10 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         ]
                     )
                 )
-                return
-        
+                return        
             except Exception:
                 pass
-    
-    
-    
-    
+                
         elif edit == "alertmessage": 
             grp_id = callbackQuery.message.chat.id
             i = edit.split(":")[1]
@@ -1980,54 +1713,42 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     chat_id = callbackQuery.message.chat.id,
                     message_ids = callbackQuery.message.message_id
                 )
-                return
-        
+                return        
             except Exception:
                 pass
-       
-        
-        elif edit in ["multipleImgAsImages", "multipleImgAsDocument", "asImages", "asDocument"]:
-        
+               
+        elif edit in ["multipleImgAsImages", "multipleImgAsDocument", "asImages", "asDocument"]:        
             try:
-                if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):
-                
+                if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):                
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
                         message_id = callbackQuery.message.message_id,
                         text = "Same work done before..🏃"
                     )
-                    return
-            
-                PROCESS.append(callbackQuery.message.chat.id)
-            
+                    return            
+                PROCESS.append(callbackQuery.message.chat.id)           
                 await bot.edit_message_text(
                     chat_id = callbackQuery.message.chat.id,
                     message_id = callbackQuery.message.message_id,
                     text = "`Downloading your pdf..⏳`"
-                )
-            
+                )            
                 await bot.download_media(
                     PDF2IMG[callbackQuery.message.chat.id],
                     f'{callbackQuery.message.message_id}/pdf.pdf'
-                )
-            
+                )            
                 del PDF2IMG[callbackQuery.message.chat.id]
-                del PDF2IMGPGNO[callbackQuery.message.chat.id]
-            
+                del PDF2IMGPGNO[callbackQuery.message.chat.id]            
                 doc = fitz.open(f'{callbackQuery.message.message_id}/pdf.pdf')
                 zoom = 1
-                mat = fitz.Matrix(zoom, zoom)
-            
-                if edit == "multipleImgAsImages" or edit == "multipleImgAsDocument":
-                
+                mat = fitz.Matrix(zoom, zoom)            
+                if edit == "multipleImgAsImages" or edit == "multipleImgAsDocument":                
                     if int(int(PAGENOINFO[callbackQuery.message.chat.id][2])+1 - int(PAGENOINFO[callbackQuery.message.chat.id][1])) >= 11:
                         """await bot.pin_chat_message(
                             chat_id = callbackQuery.message.chat.id,
                             message_id = callbackQuery.message.message_id,
                             disable_notification = True,
                             both_sides = True
-                        )"""
-                
+                        )"""                
                     percNo = 0
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
@@ -2037,18 +1758,15 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     totalPgList = range(int(PAGENOINFO[callbackQuery.message.chat.id][1]), int(PAGENOINFO[callbackQuery.message.chat.id][2] + 1))
                 
                     cnvrtpg = 0
-                    for i in range(0, len(totalPgList), 10):
-                    
+                    for i in range(0, len(totalPgList), 10):                    
                         pgList = totalPgList[i:i+10]
-                        os.mkdir(f'{callbackQuery.message.message_id}/pgs')
-                    
+                        os.mkdir(f'{callbackQuery.message.message_id}/pgs')                    
                         for pageNo in pgList:
                             page = doc.loadPage(pageNo-1)
                             pix = page.getPixmap(matrix = mat)
                             cnvrtpg += 1                                              
                         
-                            if callbackQuery.message.chat.id not in PROCESS:
-                            
+                            if callbackQuery.message.chat.id not in PROCESS:                            
                                 try:
                                     await bot.edit_message_text(
                                         chat_id = callbackQuery.message.chat.id,
@@ -2057,43 +1775,33 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                                     )
                                     shutil.rmtree(f'{callbackQuery.message.message_id}')
                                     doc.close()
-                                    return
-                            
+                                    return                            
                                 except Exception:
-                                    return
-                        
+                                    return                        
                             with open(
                                 f'{callbackQuery.message.message_id}/pgs/{pageNo}.jpg','wb'
                             ):
-                                pix.writePNG(f'{callbackQuery.message.message_id}/pgs/{pageNo}.jpg')
-                        
+                                pix.writePNG(f'{callbackQuery.message.message_id}/pgs/{pageNo}.jpg')                      
                         await bot.edit_message_text(
                             chat_id = callbackQuery.message.chat.id,
                             message_id = callbackQuery.message.message_id,
-                            text = f"`Started  📤  from {cnvrtpg}'th 📃 \n⏳ This might take some Time` \n🙇 Trying to Extract 📜 `{PAGENOINFO[callbackQuery.message.chat.id][1]}` to `{PAGENOINFO[callbackQuery.message.chat.id][2]}`:"
-                               
+                            text = f"`Started  📤  from {cnvrtpg}'th 📃 \n⏳ This might take some Time` \n🙇 Trying to Extract 📜 `{PAGENOINFO[callbackQuery.message.chat.id][1]}` to `{PAGENOINFO[callbackQuery.message.chat.id][2]}`:"                               
                         )                   
                         directory = f'{callbackQuery.message.message_id}/pgs'
                         imag = [os.path.join(directory, file) for file in os.listdir(directory)]
-                        imag.sort(key=os.path.getctime)
-                    
+                        imag.sort(key=os.path.getctime)                    
                         percNo = percNo + len(imag)
                         media[callbackQuery.message.chat.id] = []
                         mediaDoc[callbackQuery.message.chat.id] = []
-                        LrgFileNo = 1
-                    
+                        LrgFileNo = 1                    
                         for file in imag:
-                            if os.path.getsize(file) >= 1000000:
-                            
+                            if os.path.getsize(file) >= 1000000:                            
                                 picture = Image.open(file)
                                 CmpImg = f'{callbackQuery.message.message_id}/pgs/temp{LrgFileNo}.jpeg'
-                                picture.save(CmpImg, "JPEG", optimize=True, quality = 50) 
-                            
-                                LrgFileNo += 1
-                            
+                                picture.save(CmpImg, "JPEG", optimize=True, quality = 50)                             
+                                LrgFileNo += 1                            
                                 if os.path.getsize(CmpImg) >= 1000000:
-                                    continue
-                            
+                                    continue                            
                                 else:
                                     media[
                                         callbackQuery.message.chat.id
@@ -2105,8 +1813,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                                     ].append(
                                         InputMediaDocument(media = file)
                                     )
-                                    continue
-                        
+                                    continue                        
                             media[
                                 callbackQuery.message.chat.id
                             ].append(
@@ -2116,50 +1823,38 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                                 callbackQuery.message.chat.id
                             ].append(
                                 InputMediaDocument(media = file)
-                            )
-                    
-                        if edit == "multipleImgAsImages":
-                        
-                            if callbackQuery.message.chat.id not in PROCESS:
-                            
+                            )                    
+                        if edit == "multipleImgAsImages":                       
+                            if callbackQuery.message.chat.id not in PROCESS:                           
                                 try:
                                     shutil.rmtree(f'{callbackQuery.message.message_id}')
                                     doc.close()
-                                    return
-                            
+                                    return                          
                                 except Exception:
-                                    return
-                            
+                                    return                           
                             await bot.send_chat_action(
                                 callbackQuery.message.chat.id, "upload_photo"
-                            )
-                        
+                            )                        
                             try:
                                 await bot.send_media_group(
                                     callbackQuery.message.chat.id,
                                     media[callbackQuery.message.chat.id],
                                     #reply_to_message_id=callbackQuery.message.message_id
-                                )
-                            
+                                )                            
                             except Exception:
                                 del media[callbackQuery.message.chat.id]
-                                del mediaDoc[callbackQuery.message.chat.id]
-                        
-                        if edit == "multipleImgAsDocument":
-                        
+                                del mediaDoc[callbackQuery.message.chat.id]                        
+                        if edit == "multipleImgAsDocument":                       
                             if callbackQuery.message.chat.id not in PROCESS:
                                 try:
                                     shutil.rmtree(f'{callbackQuery.message.message_id}')
                                     doc.close()
-                                    return
-                            
+                                    return                          
                                 except Exception:
-                                    return
-                        
+                                    return                        
                             await bot.send_chat_action(
                                 callbackQuery.message.chat.id, "upload_document"
-                            )
-                        
+                            )                        
                             try:
                                 await bot.send_media_group(
                                     callbackQuery.message.chat.id,
@@ -2167,16 +1862,12 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                                 )
                             except Exception:
                                 del mediaDoc[callbackQuery.message.chat.id]
-                                del media[callbackQuery.message.chat.id]
-                        
-                        shutil.rmtree(f'{callbackQuery.message.message_id}/pgs')
-                
+                                del media[callbackQuery.message.chat.id]                        
+                        shutil.rmtree(f'{callbackQuery.message.message_id}/pgs')                
                     PROCESS.remove(callbackQuery.message.chat.id)
                     del PAGENOINFO[callbackQuery.message.chat.id]
-                    doc.close()
-             
-                    shutil.rmtree(f'{callbackQuery.message.message_id}')
-                
+                    doc.close()            
+                    shutil.rmtree(f'{callbackQuery.message.message_id}')                
                     sleep(2)
                     await bot.send_chat_action(
                         callbackQuery.message.chat.id, "typing"
@@ -2188,50 +1879,42 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         disable_web_page_preview=True
                     )
             
-                if edit == "asImages" or edit == "asDocument":
-                
+                if edit == "asImages" or edit == "asDocument":                
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
                         message_id = callbackQuery.message.message_id,
                         text = f"`Fetching page Number:{PAGENOINFO[callbackQuery.message.chat.id][3]} 🤧`"
-                    )
-                
+                    )                
                     page = doc.loadPage(int(PAGENOINFO[callbackQuery.message.chat.id][3])-1)
                     pix = page.getPixmap(matrix = mat)
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
                         message_id = callbackQuery.message.message_id,
                         text = f"`Successfully Converted your page..✌️`"
-                    )
-                
-                    os.mkdir(f'{callbackQuery.message.message_id}/pgs')
-                
+                    )                
+                    os.mkdir(f'{callbackQuery.message.message_id}/pgs')                
                     with open(
                         f'{callbackQuery.message.message_id}/pgs/{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpg','wb'
                     ):
-                        pix.writePNG(f'{callbackQuery.message.message_id}/pgs/{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpg')
-                
+                        pix.writePNG(f'{callbackQuery.message.message_id}/pgs/{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpg')                
                     file = f'{callbackQuery.message.message_id}/pgs/{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpg'
                     
                     if os.path.getsize(file) >= 1000000:
                         picture = Image.open(file)
-                        CmpImg = f'{callbackQuery.message.message_id}/pgs/temp{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpeg'
-                    
+                        CmpImg = f'{callbackQuery.message.message_id}/pgs/temp{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpeg'                    
                         picture.save(
                             CmpImg,
                             "JPEG",
                             optimize = True,
                             quality = 50
                         )
-                        file = CmpImg
-                    
+                        file = CmpImg                    
                         if os.path.getsize(CmpImg) >= 1000000:
                             await bot.send_message(
                                 callbackQuery.message.chat.id,
                                 '`too high resolution.. 🙄`'
                             )
-                            return
-                    
+                            return                    
                     if edit == "asImages":
                         await bot.send_chat_action(
                             callbackQuery.message.chat.id, "upload_photo"
@@ -2240,8 +1923,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         await bot.send_photo(
                             callbackQuery.message.chat.id,
                             sendfile
-                        )
-                    
+                        )                    
                     if edit == "asDocument":
                         await bot.send_chat_action(
                             callbackQuery.message.chat.id, "upload_document"
@@ -2251,20 +1933,16 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                             callbackQuery.message.chat.id,
                             thumb = Config.PDF_THUMBNAIL,
                             document = sendfile
-                        )
-                    
+                        )                    
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
                         message_id = callbackQuery.message.message_id,
                         text = f'`Uploading Completed.. `🏌️'
-                    )
-                
+                    )                
                     PROCESS.remove(callbackQuery.message.chat.id)
                     del PAGENOINFO[callbackQuery.message.chat.id]
-                    doc.close()
-                
-                    shutil.rmtree(f'{callbackQuery.message.message_id}')
-                
+                    doc.close()                
+                    shutil.rmtree(f'{callbackQuery.message.message_id}')                
                     sleep(5)
                     await bot.send_chat_action(
                         callbackQuery.message.chat.id, "typing"
@@ -2272,10 +1950,8 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     await bot.send_message(
                         callbackQuery.message.chat.id, Msgs.feedbackMsg,
                         disable_web_page_preview = True
-                    )
-                
-            except Exception as e:
-            
+                    )                
+            except Exception as e:            
                 try:
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
@@ -2284,105 +1960,82 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     )
                     shutil.rmtree(f'{callbackQuery.message.message_id}')
                     PROCESS.remove(callbackQuery.message.chat.id)
-                    doc.close()
-            
+                    doc.close()            
                 except Exception:
                     pass
-            
-        elif edit == "multipleImgAsPdfError":
-        
+                                                 
+        elif edit == "multipleImgAsPdfError":        
             try:
                 await bot.answer_callback_query(
                     callbackQuery.id,
                     text = Msgs.fullPdfSplit,
                     show_alert = True,
                     cache_time = 0
-                )
-            
+                )            
             except Exception:
                 pass
-        
-        elif edit in ["multipleImgAsPdf", "asPdf"]:
-        
+                                                 
+        elif edit in ["multipleImgAsPdf", "asPdf"]:        
             try:
-                if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):
-                
+                if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):                
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
                         message_id = callbackQuery.message.message_id,
                         text = "Same work done before..🏃"
                     )
-                    return
-            
-                PROCESS.append(callbackQuery.message.chat.id)
-            
+                    return            
+                PROCESS.append(callbackQuery.message.chat.id)            
                 await bot.edit_message_text(
                     chat_id = callbackQuery.message.chat.id,
                     message_id = callbackQuery.message.message_id,
                     text = "`Downloading your pdf..🤹`"
-                )
-            
+                )            
                 await bot.download_media(
                     PDF2IMG[callbackQuery.message.chat.id],
                     f'{callbackQuery.message.message_id}/pdf.pdf'
-                )
-            
+                )            
                 del PDF2IMG[callbackQuery.message.chat.id]
-                del PDF2IMGPGNO[callbackQuery.message.chat.id]
-            
+                del PDF2IMGPGNO[callbackQuery.message.chat.id]            
                 try:
-                    if edit == "multipleImgAsPdf":
-                    
+                    if edit == "multipleImgAsPdf":                    
                         splitInputPdf = PdfFileReader(f'{callbackQuery.message.message_id}/pdf.pdf')
-                        splitOutput = PdfFileWriter()
-                    
+                        splitOutput = PdfFileWriter()                    
                         for i in range(int(PAGENOINFO[callbackQuery.message.chat.id][1])-1, int(PAGENOINFO[callbackQuery.message.chat.id][2])):
                             splitOutput.addPage(
                                 splitInputPdf.getPage(i)
-                            )
-                        
+                            )                       
                         file_path = f"{callbackQuery.message.message_id}/split.pdf"
                         with open(file_path, "wb") as output_stream:
-                            splitOutput.write(output_stream)
-                        
+                            splitOutput.write(output_stream)                        
                         await bot.send_document(
                             chat_id = callbackQuery.message.chat.id,
                             thumb = Config.PDF_THUMBNAIL,
                             document = f"{callbackQuery.message.message_id}/split.pdf"
-                        )
-                
-                    if edit == "asPdf":
-                    
+                        )                
+                    if edit == "asPdf":                    
                         splitInputPdf = PdfFileReader(f'{callbackQuery.message.message_id}/pdf.pdf')
-                        splitOutput = PdfFileWriter()
-                    
+                        splitOutput = PdfFileWriter()                   
                         splitOutput.addPage(
                             splitInputPdf.getPage(
                                 int(PAGENOINFO[callbackQuery.message.chat.id][3])-1
                             )
-                        )
-                    
+                        )                    
                         with open(f"{callbackQuery.message.message_id}/split.pdf", "wb") as output_stream:
-                            splitOutput.write(output_stream)
-                        
+                            splitOutput.write(output_stream)                        
                         await bot.send_document(
                             chat_id = callbackQuery.message.chat.id,
                             thumb = Config.PDF_THUMBNAIL,
                             document = f"{callbackQuery.message.message_id}/split.pdf"
-                        )
-                
+                        )                
                     shutil.rmtree(f"{callbackQuery.message.message_id}")
                     PROCESS.remove(callbackQuery.message.chat.id)
-                    del PAGENOINFO[callbackQuery.message.chat.id]
-                
+                    del PAGENOINFO[callbackQuery.message.chat.id]                
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
                         message_id = callbackQuery.message.message_id,
                         text = "`Uploading Completed..🤞`"
-                    )
-            
-                except Exception as e:
-                
+                    )           
+                except Exception as e:                
                     try:
                         await bot.edit_message_text(
                             chat_id = callbackQuery.message.chat.id,
@@ -2394,10 +2047,8 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         del PAGENOINFO[callbackQuery.message.chat.id]
                 
                     except Exception:
-                        pass
-        
-            except Exception as e:
-            
+                        pass        
+            except Exception as e:            
                 try:
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
@@ -2406,140 +2057,110 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     )
                     shutil.rmtree(f"{callbackQuery.message.message_id}")
                     PROCESS.remove(callbackQuery.message.chat.id)
-                    del PAGENOINFO[callbackQuery.message.chat.id]
-                
+                    del PAGENOINFO[callbackQuery.message.chat.id]                
                 except Exception:
                     pass
         
-        elif edit in ["txtFile", "txtMsg", "txtHtml", "txtJson"]:
-        
+        elif edit in ["txtFile", "txtMsg", "txtHtml", "txtJson"]:        
             try:
-                if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):
-                
+                if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):                
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
                         message_id = callbackQuery.message.message_id,
                         text = "Same work done before..🏃"
                     )
-                    return
-                
-                PROCESS.append(callbackQuery.message.chat.id)
-            
+                    return                
+                PROCESS.append(callbackQuery.message.chat.id)            
                 await bot.edit_message_text(
                     chat_id = callbackQuery.message.chat.id,
                     message_id = callbackQuery.message.message_id,
                     text = "`Downloading your pdf..🪴`"
-                )
-            
+                )            
                 await bot.download_media(
                     PDF2IMG[callbackQuery.message.chat.id],
                     f'{callbackQuery.message.message_id}/pdf.pdf'
-                )
-            
+                )            
                 del PDF2IMG[callbackQuery.message.chat.id]
-                del PDF2IMGPGNO[callbackQuery.message.chat.id]
-            
+                del PDF2IMGPGNO[callbackQuery.message.chat.id]            
                 doc = fitz.open(f'{callbackQuery.message.message_id}/pdf.pdf') # open document
             
-                if edit == "txtFile":
-                
+                if edit == "txtFile":                
                     out = open(f'{callbackQuery.message.message_id}/pdf.txt', "wb") # open text output
                     for page in doc:                               # iterate the document pages
                         text = page.get_text().encode("utf8")      # get plain text (is in UTF-8)
                         out.write(text)                            # write text of page()
                         out.write(bytes((12,)))                    # write page delimiter (form feed 0x0C)
-                    out.close()
-                
+                    out.close()                
                     await bot.send_chat_action(
                         callbackQuery.message.chat.id, "upload_document"
-                    )
-                
+                    )               
                     sendfile = open(f"{callbackQuery.message.message_id}/pdf.txt",'rb')
                     await bot.send_document(
                         chat_id = callbackQuery.message.chat.id,
                         thumb = Config.PDF_THUMBNAIL,
                         document = sendfile
-                    )
-                
+                    )                
                     sendfile.close()
             
-                if edit == "txtMsg":
-                
+                if edit == "txtMsg":                
                     for page in doc:                                     # iterate the document pages
                         pdfText = page.get_text().encode("utf8")            # get plain text (is in UTF-8)
-                        if 1 <= len(pdfText) <= 1048:
-                        
-                            if callbackQuery.message.chat.id not in PROCESS:
-                            
+                        if 1 <= len(pdfText) <= 1048:                      
+                            if callbackQuery.message.chat.id not in PROCESS:                            
                                 try:
                                     await bot.send_chat_action(
                                         callbackQuery.message.chat.id, "typing"
                                     )
                                     await bot.send_message(
                                         callbackQuery.message.chat.id, pdfText
-                                    )
-                                
+                                    )                               
                                 except Exception:
                                     return
             
-                if edit == "txtHtml":
-                
-                    out = open(f'{callbackQuery.message.message_id}/pdf.html', "wb") # open text output
-                
+                if edit == "txtHtml":                
+                    out = open(f'{callbackQuery.message.message_id}/pdf.html', "wb") # open text output                
                     for page in doc:                                     # iterate the document pages
                         text = page.get_text("html").encode("utf8")      # get plain text as html(is in UTF-8)
                         out.write(text)                                  # write text of page()
                         out.write(bytes((12,)))                          # write page delimiter (form feed 0x0C)
-                    out.close()
-                
+                    out.close()               
                     await bot.send_chat_action(
                         callbackQuery.message.chat.id, "upload_document"
-                    )
-                
-                    sendfile = open(f"{callbackQuery.message.message_id}/pdf.html",'rb')
-                
+                    )                
+                    sendfile = open(f"{callbackQuery.message.message_id}/pdf.html",'rb')                
                     await bot.send_document(
                         chat_id = callbackQuery.message.chat.id,
                         thumb = Config.PDF_THUMBNAIL,
                         document = sendfile
-                    )
-                
+                    )                
                     sendfile.close()
             
-                if edit == "txtJson":
-                
-                    out = open(f'{callbackQuery.message.message_id}/pdf.json', "wb") # open text output
-                
+                if edit == "txtJson":               
+                    out = open(f'{callbackQuery.message.message_id}/pdf.json', "wb") # open text output                
                     for page in doc:                                    # iterate the document pages
                         text = page.get_text("json").encode("utf8")     # get plain text as html(is in UTF-8)
                         out.write(text)                                 # write text of page()
                         out.write(bytes((12,)))                         # write page delimiter (form feed 0x0C)
-                    out.close()
-                
+                    out.close()                
                     await bot.send_chat_action(
                         callbackQuery.message.chat.id, "upload_document"
-                    )
-                
+                    )                
                     sendfile = open(f"{callbackQuery.message.message_id}/pdf.json", 'rb')
                     await bot.send_document(
                         chat_id = callbackQuery.message.chat.id,
                         thumb = Config.PDF_THUMBNAIL,
                         document = sendfile
-                    )
-                
-                    sendfile.close()
-            
+                    )                
+                    sendfile.close()            
                 await bot.edit_message_text(
                     chat_id = callbackQuery.message.chat.id,
                     message_id = callbackQuery.message.message_id,
                     text = "`Completed my task..😉`"
-                )
-            
+                )            
                 PROCESS.remove(callbackQuery.message.chat.id)
                 shutil.rmtree(f'{callbackQuery.message.message_id}')
             
-            except Exception as e:
-            
+            except Exception as e:            
                 try:
                     await bot.send_message(
                         callbackQuery.message.chat.id,
@@ -2547,19 +2168,16 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     )
                     shutil.rmtree(f'{callbackQuery.message.message_id}')
                     PROCESS.remove(callbackQuery.message.chat.id)
-                    doc.close()
-            
+                    doc.close()            
                 except Exception:
                     pass
            
-        elif edit == "refresh":
-        
+        elif edit == "refresh":        
             try:
                 await bot.get_chat_member(
                     str(Config.UPDATE_CHANNEL),
                     callbackQuery.message.chat.id
-                )
-            
+                )            
                 await bot.edit_message_text(
                     chat_id = callbackQuery.message.chat.id,
                     message_id = callbackQuery.message.message_id,
@@ -2588,18 +2206,15 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                             ]
                         ]
                     )
-                )
-            
-            except Exception:
-            
+                )            
+            except Exception:           
                 try:
                     await bot.answer_callback_query(
                         callbackQuery.id,
                         text = Msgs.foolRefresh,
                         show_alert = True,
                         cache_time = 0
-                    )
-                
+                    )                
                 except Exception:
                     pass
     else:
@@ -2610,11 +2225,6 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
             show_alert=True,
             cache_time = 0
         )"""
-
-
-
-        
-        
-        
+                      
 print(f"\n\n🌟Bot Started Successfully !🌟\n\n")      
 bot.run()            
