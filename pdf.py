@@ -1575,7 +1575,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 #callbackQuery.message.reply_to_message,
                 #PDF2IMG[callbackQuery.message.chat.id],
                 #f"{callbackQuery.message.reply_to_message.message_id}/pdf.pdf",
-                )
+                #)
                 """c_time = time.time()
                 #download_location = Config.DOWNLOAD_LOCATION + "/" 
                 #download_location = Config.DOWNLOAD_LOCATION + "/" + str(callbackQuery.message.message_id) + "pdf.pdf"
