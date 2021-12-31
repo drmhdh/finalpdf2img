@@ -1278,9 +1278,32 @@ async def extract(bot, message):
                                 await message.reply_text(
                                     '`Doing Some other Work.. 🥵`'
                                 )
-                                return                        
+                                return    
+                            await bot.send_message(
+                                message.chat.id,
+                                    text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
+                                    disable_web_page_preview = True,
+                                    reply_markup = InlineKeyboardMarkup(
+                                        [
+                                            [
+                                                InlineKeyboardButton("Images 🖼️️", callback_data ="multipleImgAsImages")
+                                            ],[
+                                                InlineKeyboardButton("Document 📁", callback_data ="multipleImgAsDocument")
+                                            ],[
+                                                InlineKeyboardButton("PDF 🎭", callback_data ="multipleImgAsPdfError")
+                                            ]                                   
+                                        ]
+                                    )
+                                ) 
+                               
+                            
+                            
                             #download_location = Config.DOWNLOAD_LOCATION + "/" + str(message.message_id) + "pdftoimage" + ".pdf"
-                            pdfMsgId = await bot.send_message(
+                  #needto change  
+                
+                            
+                            )                  
+                            """pdfMsgId = await bot.send_message(
                                 chat_id=message.chat.id,
                                 text=Translation.DOWNLOAD_START,
                                 reply_to_message_id=message.reply_to_message.message_id
@@ -1377,7 +1400,7 @@ async def extract(bot, message):
                                     message.chat.id,
                                     "`Syntax Error: pageNumberMustBeAnIntiger 🧠`"
                                 )
-                                return            
+                                return         
                             if PAGENOINFO[message.chat.id][0] == False:                
                                 if pageStartAndEnd[0] == "/extract":
                                     await bot.send_message(
@@ -1455,7 +1478,7 @@ async def extract(bot, message):
                                 message_ids = unSuprtd.message_id
                             )                
                         except Exception:
-                            pass
+                            pass"""
                 except:
                     pass  
             else:
@@ -1694,18 +1717,115 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     )
                     return            
                 PROCESS.append(callbackQuery.message.chat.id)           
-                await bot.edit_message_text(
-                    chat_id = callbackQuery.message.chat.id,
+                pdfMsgId = await bot.edit_message_text(
+                    #chat_id = callbackQuery.message.chat.id,
                     message_id = callbackQuery.message.message_id,
-                    text = "`Processinging your pdf..⏳`"
-                )            
-                """await bot.download_media(
-                    PDF2IMG[callbackQuery.message.chat.id],
-                    f'{callbackQuery.message.message_id}/pdf.pdf'
-                )"""            
+                    #text = "`Processinging your pdf..⏳`"
+                    
+                    chat_id=callbackQuery.message.chat.id,
+                    text=Translation.DOWNLOAD_START,
+                    #reply_to_message_id=callbackQuery.message.reply_to_message.message_id
+                )   
+                c_time = time.time()
+                the_real_download_location = await bot.download_media(
+                message=PDF2IMG[callbackQuery.message.chat.id],
+                file_name = f'{callbackQuery.message.message_id}/pdf.pdf',
+                progress=progress_for_pyrogram,
+                    progress_args=(
+                    Translation.DOWNLOAD_START,
+                    pdfMsgId,
+                    c_time
+                    )
+                )   
+                if the_real_download_location is not None:
+                    try:
+                        await bot.edit_message_text(
+                             text=Translation.SAVED_RECVD_DOC_FILE,
+                             chat_id=message.chat.id,
+                             message_id=a.message_id
+                        )
+                    except:
+                        pass             
+                
+                doc = fitz.open(f'{callbackQuery.message.message_id}/pdf.pdf')
+                noOfPages = doc.pageCount                        
+                PDFINPUT = callbackQuery.message.reply_to_message
+                PDF2IMG[callbackQuery.message.chat.id] = callbackQuery.message.reply_to_message.document.file_id
+                PDF2IMGPGNO[callbackQuery.message.chat.id] = noOfPages                
+                await bot.delete_messages(
+                    chat_id = callbackQuery.message.reply_to_message.chat.id,
+                    message_ids = pdfMsgId.message_id
+                )                
+                await bot.send_chat_action(
+                     callbackQuery.message.chat.id, "typing"
+                )                
+                pdfMsgId = await callbackQuery.message.reply_to_message.reply_text(
+                    Msgs.pdfReplyMsg.format(noOfPages)
+                )                     
+                #doc.close()
+                #shutil.rmtree(f'{message.message_id}')   
+                            
+                #Magic                         
+                pageStartAndEnd = list(needPages.replace('-',':').split(':'))            
+                if len(pageStartAndEnd) > 2:                
+                     await bot.send_message(
+                          callbackQuery.message.chat.id,
+                          "`I just asked you starting & ending 😅`"
+                     )
+                     return                        
+                elif len(pageStartAndEnd) == 2:
+                    try:                                                            
+                        if (1 <= int(pageStartAndEnd[0]) <= PDF2IMGPGNO[callbackQuery.message.chat.id]):                        
+                            if (int(pageStartAndEnd[0]) < int(pageStartAndEnd[1]) <= PDF2IMGPGNO[callbackQuery.message.chat.id]):
+                                PAGENOINFO[callbackQuery.message.chat.id] = [False, int(pageStartAndEnd[0]), int(pageStartAndEnd[1]), None]    
+                                #elmnts in list (is singlePage, start, end, if single pg number)                            
+                            else:
+                                await bot.send_message(
+                                    callbackQuery.message.chat.id,
+                                    "`Syntax Error: errorInEndingPageNumber 😅`"
+                                )
+                                return                       
+                        else:
+                            await bot.send_message(
+                                callbackQuery.message.chat.id,
+                                "`Syntax Error: errorInStartingPageNumber 😅`"
+                            )
+                            return                               
+                    except:                    
+                        await bot.send_message(
+                            callbackQuery.message.chat.id,
+                            "`Syntax Error: noSuchPageNumbers 🤭`"
+                        )
+                         return    
+                elif len(pageStartAndEnd) == 1:                
+                    if pageStartAndEnd[0] == "/extract":                    
+                        if (PDF2IMGPGNO[callbackQuery.message.chat.id]) == 1:
+                            PAGENOINFO[callbackQuery.message.chat.id] = [True, None, None, 1]
+                            #elmnts in list (is singlePage, start, end, if single pg number)                    
+                        else:
+                            PAGENOINFO[callbackQuery.message.chat.id] = [False, 1, PDF2IMGPGNO[callbackQuery.message.chat.id], None]
+                            #elmnts in list (is singlePage, start, end, if single pg number)                    
+                    elif 0 < int(pageStartAndEnd[0]) <= PDF2IMGPGNO[callbackQuery.message.chat.id]:
+                        PAGENOINFO[callbackQuery.message.chat.id] = [True, None, None, pageStartAndEnd[0]]                
+                    else:
+                        await bot.send_message(
+                            callbackQuery.message.chat.id,
+                            '`Syntax Error: noSuchPageNumber 🥴`'
+                        )
+                        return            
+                else:
+                    await bot.send_message(
+                        callbackQuery.message.chat.id,
+                        "`Syntax Error: pageNumberMustBeAnIntiger 🧠`"
+                    )
+                    return        
+                 
+               
+                
+          #continue      
                 del PDF2IMG[callbackQuery.message.chat.id]
                 del PDF2IMGPGNO[callbackQuery.message.chat.id]            
-                doc = fitz.open(f'{callbackQuery.message.message_id}/pdftoimage.pdf')
+                doc = fitz.open(f'{callbackQuery.message.message_id}pdf.pdf')
                 zoom = 1
                 mat = fitz.Matrix(zoom, zoom)            
                 if edit == "multipleImgAsImages" or edit == "multipleImgAsDocument":                
