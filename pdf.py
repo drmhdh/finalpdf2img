@@ -1583,7 +1583,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     except:
                         pass             
                 
-                doc = fitz.open(f'{download_location')
+                doc = fitz.open(f'{download_location}')
                 noOfPages = doc.pageCount                        
                 PDFINPUT = callbackQuery.message.message_id
                 PDF2IMG[callbackQuery.message.chat.id] = callbackQuery.message.document.file_id
