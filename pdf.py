@@ -1285,6 +1285,7 @@ async def extract(bot, message):
                                 text='`Analysing Your PDF...🤹`',
                                 reply_to_message_id=message.reply_to_message.message_id
                             )
+                            KUNTHAM= message.reply_to_message.message_id
                             await bot.send_message(
                                 message.chat.id,
                                 text = "⚙️Conversion Going to Initiate..!!",
@@ -1302,7 +1303,7 @@ async def extract(bot, message):
                                     ]
                                 )
                             ) 
-                            PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
+                            KUNTHAM[message.chat.id] = message.reply_to_message.document.file_id
                             
                             
                         
@@ -1574,7 +1575,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 #if not os.path.isdir(download_location):
                 #os.makedirs(download_location)
                 the_real_download_location = await bot.download_media(
-                PDF2IMG[callbackQuery.message.chat.id],
+                KUNTHAM[message.chat.id] = message.reply_to_message.document.file_id[callbackQuery.message.chat.id],
                 f"{callbackQuery.message.message_id}/pdf.pdf",
                 )
                 progress=progress_for_pyrogram,
