@@ -1705,7 +1705,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 )"""            
                 del PDF2IMG[callbackQuery.message.chat.id]
                 del PDF2IMGPGNO[callbackQuery.message.chat.id]            
-                doc = fitz.open(f'{message.message_id}/pdftoimage.pdf')
+                doc = fitz.open(f'{callbackQuery.message.message_id}/pdftoimage.pdf')
                 zoom = 1
                 mat = fitz.Matrix(zoom, zoom)            
                 if edit == "multipleImgAsImages" or edit == "multipleImgAsDocument":                
