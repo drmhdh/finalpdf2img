@@ -1577,7 +1577,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     pdfMsgId,
                     c_time
                     )
-                )   
+                
                 if the_real_download_location is not None:
                     try:
                         await callbackQuery.edit_message_text(
