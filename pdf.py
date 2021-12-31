@@ -1279,7 +1279,7 @@ async def extract(bot, message):
                                     '`Doing Some other Work.. 🥵`'
                                 )
                                 return   
-                            PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
+                            
                             await bot.send_message(
                                 message.chat.id,
                                 text = "Conversion Going to Initiate..!!",
@@ -1296,7 +1296,7 @@ async def extract(bot, message):
                                     ]
                                 )
                             ) 
-                               
+                            PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id   
                             
                             
                         
@@ -1563,10 +1563,10 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     text=Translation.DOWNLOAD_START           
                 )   
                 c_time = time.time()
-                download_location = Config.DOWNLOAD_LOCATION + "/" + str(callbackQuery.message.message_id) + "pdf.pdf"
+                #download_location = Config.DOWNLOAD_LOCATION + "/" + str(callbackQuery.message.message_id) + "pdf.pdf"
                 the_real_download_location = await bot.download_media(
                 message=PDF2IMG[callbackQuery.message.chat.id],
-                file_name = download_location,
+                file_name = f'{callbackQuery.message.message_id}/pdf.pdf',
                 progress=progress_for_pyrogram,
                     progress_args=(
                     Translation.DOWNLOAD_START,
