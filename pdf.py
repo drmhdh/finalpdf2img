@@ -1697,25 +1697,20 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 await bot.edit_message_text(
                     chat_id = callbackQuery.message.chat.id,
                     message_id = callbackQuery.message.message_id,
-                    text = "`Downloading your pdf..⏳`"
+                    text = "`Processinging your pdf..⏳`"
                 )            
-                await bot.download_media(
+                """await bot.download_media(
                     PDF2IMG[callbackQuery.message.chat.id],
                     f'{callbackQuery.message.message_id}/pdf.pdf'
-                )            
+                )"""            
                 del PDF2IMG[callbackQuery.message.chat.id]
                 del PDF2IMGPGNO[callbackQuery.message.chat.id]            
-                doc = fitz.open(f'{callbackQuery.message.message_id}/pdf.pdf')
+                doc = fitz.open(f'{message.message_id}/pdftoimage.pdf')
                 zoom = 1
                 mat = fitz.Matrix(zoom, zoom)            
                 if edit == "multipleImgAsImages" or edit == "multipleImgAsDocument":                
                     if int(int(PAGENOINFO[callbackQuery.message.chat.id][2])+1 - int(PAGENOINFO[callbackQuery.message.chat.id][1])) >= 11:
-                        """await bot.pin_chat_message(
-                            chat_id = callbackQuery.message.chat.id,
-                            message_id = callbackQuery.message.message_id,
-                            disable_notification = True,
-                            both_sides = True
-                        )"""                
+                           
                     percNo = 0
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
