@@ -1557,12 +1557,12 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
             try:
                 if (callbackQuery.message.chat.id not in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):      
                 #if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):                
-                    await bot.edit_message_text(
+                    """await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
                         message_id = callbackQuery.message.message_id,
                         text = "Same work done before..🏃"
                     )
-                    return            
+                    return"""            
                 PROCESS.append(callbackQuery.message.chat.id)           
                 pdfMsgId = await bot.edit_message_text(
                     #chat_id = callbackQuery.message.chat.id,
