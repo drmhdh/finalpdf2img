@@ -1555,7 +1555,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                
         elif edit in ["multipleImgAsImages", "multipleImgAsDocument", "asImages", "asDocument"]:        
             try:
-                if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):                     
+                #if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):                     
                 PROCESS.append(callbackQuery.message.chat.id)           
                 pdfMsgId = await bot.edit_message_text( 
                     chat_id=callbackQuery.message.chat.id,
