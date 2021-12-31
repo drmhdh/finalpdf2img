@@ -1302,7 +1302,7 @@ async def extract(bot, message):
                                     ]
                                 )
                             ) 
-                            PDF2IMG[callbackQuery.message.chat.id] = message.reply_to_message.document.file_id
+                            PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
                             
                             
                         
@@ -1566,7 +1566,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 pdfMsgId = await bot.edit_message_text( 
                     chat_id=callbackQuery.message.chat.id,
                     message_id = callbackQuery.message.message_id,                                      
-                    text=Translation.DOWNLOAD_START           
+                    text=Translation.DOWNLOAD_START         
                 )   
                 c_time = time.time()
                 #download_location = Config.DOWNLOAD_LOCATION + "/" 
