@@ -20,20 +20,19 @@ import logging
 import requests
 import convertapi
 import weasyprint
+from humanize import
 from PIL import Image
 import urllib.request
-from PIL import Image
 from time import sleep
 from bs4 import BeautifulSoup
 from pyrogram import Client, filters
-from pyrogram.types import ForceReply
 from hachoir.parser import createParser
 from PDFNetPython3.PDFNetPython import *
 from hachoir.metadata import extractMetadata
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from configs import Config, Msgs, ADMINS, Translation, Presets
-from pyrogram.types import InputMediaPhoto, InputMediaDocument
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery, Message
+from pyrogram.types import InputMediaPhoto, InputMediaDocument, CallbackQuery
+from pyrogram.types import ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
 
 logger = logging.getLogger(__name__)
 # LOGGING INFO
@@ -186,11 +185,11 @@ async def compress_pdf(bot, message):
 
 #  ------------------------------------------------------#WEB2PDF Main execution fn# ------------------------------------------------------#
 @bot.on_message(filters.command('link2pdf')) # & filters.private) # & filters.text
-async def link2pdf(bot, m: Message):
-    if not m.reply_to_message.text.startswith("http"):
-        await m.reply_to_message.reply_text(
+async def link2pdf(bot, message):
+    if not message.reply_to_message.text.startswith("http"):
+        await message.reply_to_message.reply_text(
             text="`❌Invalid link</b>\n\nPlease send me a valid link😰`",
-            reply_to_message_id=m.reply_to_message.message_id            
+            reply_to_message_id=message.reply_to_message.message_id            
         )
         return
     file_name = str()
@@ -204,20 +203,20 @@ async def link2pdf(bot, m: Message):
     #
     thumbnail = os.path.join(os.getcwd(), "img", "thumbnail.png")
     #
-    await bot.send_chat_action(m.chat.id, "typing")
-    msg = await m.reply_to_message.reply_text(
+    await bot.send_chat_action(message.chat.id, "typing")
+    msg = await message.reply_to_message.reply_text(
         text ="`Processing your link..🤧`", 
-        reply_to_message_id=m.reply_to_message.message_id
+        reply_to_message_id=message.reply_to_message.message_id
     )
     try:
-        req = requests.get(m.reply_to_message.text)
+        req = requests.get(message.reply_to_message.text)
         # using the BeautifulSoup module
         soup = BeautifulSoup(req.text, 'html.parser')
         # extracting the title frm the link
         for title in soup.find_all('title'):
             file_name = str(title.get_text()) + '.pdf'
         # Creating the pdf file
-        weasyprint.HTML(m.reply_to_message.text).write_pdf(file_name)
+        weasyprint.HTML(message.reply_to_message.text).write_pdf(file_name)
     except Exception:
         await msg.edit_text(
             text="`URL Error\n\n🤭Unable to create a Pdf with this URL.\nTry again with a valid one..🥵`",
@@ -230,15 +229,15 @@ async def link2pdf(bot, m: Message):
         await msg.edit("`Uploading your file..🤹`")
     except Exception:
         pass
-    await bot.send_chat_action(m.chat.id, "upload_document")
-    await m.reply_to_message.reply_document(
+    await bot.send_chat_action(message.chat.id, "upload_document")
+    await message.reply_to_message.reply_document(
         document=file_name,
         caption=f"{file_name}\n\nCredits:@dent_tech_for_books",
         #Presets.CAPTION_TXT.format(file_name),
         thumb=thumbnail
     )
     print(
-        '@' + m.from_user.username if m.from_user.username else m.from_user.first_name,
+        '@' + message.from_user.username if message.from_user.username else message.from_user.first_name,
         "has downloaded the file",
         file_name
     )
