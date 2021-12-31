@@ -1562,7 +1562,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 PROCESS.append(callbackQuery.message.chat.id)           
                 pdfMsgId = await bot.edit_message_text( 
                     chat_id=callbackQuery.message.chat.id,
-                    message_id = callbackQuery.message.message_id,                                      
+                    message_id = callbackQuery.message.reply_to_message.message_id,                                      
                     text=Translation.DOWNLOAD_START           
                 )   
                 c_time = time.time()
