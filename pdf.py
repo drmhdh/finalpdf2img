@@ -1456,7 +1456,8 @@ async def extract(bot, message):
                             )                
                         except Exception:
                             pass        
-               
+        except:
+            pass
     else:
         await bot.answer_callback_query(
             callbackQuery.id,
