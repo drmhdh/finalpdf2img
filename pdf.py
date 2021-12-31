@@ -87,6 +87,14 @@ if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
                
 # ------------------------------------------------------PDF Compression ------------------------------------------------------#
+@bot.on_message(filters.command('getsize'))
+async def get_size(path_to_file):
+    file_path = str()
+    for file in os.listdir(path_to_file):
+        file_path = path_to_file + str(file)
+    size = naturalsize(os.path.getsize(file_path))
+    return size, file_path
+
 @bot.on_message(filters.command('compresspdf') & filters.user(ADMINS)) # & filters.private) #& filters.document
 async def compress_pdf(bot, message):
     msg = await bot.send_message(
