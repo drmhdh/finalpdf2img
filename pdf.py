@@ -20,11 +20,11 @@ import logging
 import requests
 import convertapi
 import weasyprint
-from humanize import
 from PIL import Image
 import urllib.request
 from time import sleep
 from bs4 import BeautifulSoup
+from humanize import naturalsize
 from pyrogram import Client, filters
 from hachoir.parser import createParser
 from PDFNetPython3.PDFNetPython import *
