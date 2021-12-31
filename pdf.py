@@ -1251,7 +1251,9 @@ async def extract(bot, message):
                 try:
                     await bot.send_chat_action(
                         message.chat.id, "typing"
-                    )            
+                    )
+                    MYPDFX = message.reppy_to_message
+                    PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
                     isPdfOrImg = message.reply_to_message.document.file_name
                     fileSize = message.reply_to_message.document.file_size
                     fileNm, fileExt = os.path.splitext(isPdfOrImg)       
@@ -1296,7 +1298,7 @@ async def extract(bot, message):
                                     ]
                                 )
                             ) 
-                            PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id   
+   
                             
                             
                         
