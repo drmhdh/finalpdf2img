@@ -1436,14 +1436,7 @@ async def extract(bot, message):
                                 PROCESS.remove(message.chat.id)            
                             except Exception:
                                 pass
-                                   
-                    else:
-                        await bot.answer_callback_query(
-                            callbackQuery.id,
-                            text = "Thats not for you 😒!!",
-                            show_alert=True,
-                            cache_time = 0
-                            )            
+                                                          
             else:            
                 try:
                     await bot.send_chat_action(
@@ -1464,7 +1457,13 @@ async def extract(bot, message):
                 except Exception:
                     pass        
                
-            
+    else:
+        await bot.answer_callback_query(
+            callbackQuery.id,
+            text = "Thats not for you 😒!!",
+            show_alert=True,
+            cache_time = 0
+        )                
 
                 
                 
