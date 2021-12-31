@@ -669,7 +669,7 @@ async def documents(bot, message):
                     shutil.rmtree(f'{message.reply_to_message.message_id}')
                     
                     await pdfMsgId.edit(
-                        Msgs.errorEditMsg.format(e                    
+                        Msgs.errorEditMsg.format(e)                    
                     sleep(15)
                     await bot.delete_messages(
                         chat_id = message.chat.id,
