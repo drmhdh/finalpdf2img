@@ -1281,7 +1281,7 @@ async def extract(bot, message):
                                 return    
                             await bot.send_message(
                                 message.chat.id,
-                                text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
+                                text = "Conversion Going to Initiate..!!"
                                 disable_web_page_preview = True,
                                 reply_markup = InlineKeyboardMarkup(
                                     [
