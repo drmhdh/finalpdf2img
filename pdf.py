@@ -1888,7 +1888,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         disable_web_page_preview = True
                     )  
             except:
-                pass
+                
             """except Exception as e:            
                 try:
                     await bot.edit_message_text(
