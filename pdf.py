@@ -1443,30 +1443,27 @@ async def extract(bot, message):
                             text = "Thats not for you 😒!!",
                             show_alert=True,
                             cache_time = 0
-                            )
-            
+                            )            
             else:            
                 try:
                     await bot.send_chat_action(
                         message.chat.id, "typing"
                     )
-                     unSuprtd = await bot.send_message(
-                         message.chat.id, "`unsupported file..🙄`"
-                     )
-                     sleep(15)
-                     await bot.delete_messages(
-                         chat_id = message.chat.id,
-                          message_ids = message.message_id
-                     )
-                     await bot.delete_messages(
-                         chat_id = message.chat.id,
-                         message_ids = unSuprtd.message_id
-                     )                
+                    unSuprtd = await bot.send_message(
+                        message.chat.id, "`unsupported file..🙄`"
+                    )
+                    sleep(15)
+                    await bot.delete_messages(
+                        chat_id = message.chat.id,
+                        message_ids = message.message_id
+                    )
+                    await bot.delete_messages(
+                        chat_id = message.chat.id,
+                        message_ids = unSuprtd.message_id
+                    )                
                 except Exception:
                     pass        
-                except:
-                    pass         
-            
+               
             
 
                 
