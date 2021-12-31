@@ -670,7 +670,7 @@ async def documents(bot, message):
                     
                     await pdfMsgId.edit(
                         Msgs.errorEditMsg.format(e                    
-                    sleep(15)
+                        sleep(15)
                     await bot.delete_messages(
                         chat_id = message.chat.id,
                         message_ids = message.message_id
