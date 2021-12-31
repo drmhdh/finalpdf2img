@@ -1588,8 +1588,8 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     try:
                         await bot.edit_message_text(
                              text=Translation.SAVED_RECVD_DOC_FILE,
-                             chat_id=message.chat.id,
-                             message_id=a.message_id
+                             chat_id=callbackQuery.message.chat.id,
+                             message_id=pdfMsgId.message_id
                         )
                     except:
                         pass             
