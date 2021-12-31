@@ -1323,7 +1323,7 @@ async def extract(bot, message):
                             #doc.close()
                             #shutil.rmtree(f'{message.message_id}')   
                             
-                 #Magic                         
+                            #Magic                         
                             
                             pageStartAndEnd = list(needPages.replace('-',':').split(':'))            
                             if len(pageStartAndEnd) > 2:                
@@ -1455,7 +1455,11 @@ async def extract(bot, message):
                                 message_ids = unSuprtd.message_id
                             )                
                         except Exception:
-                            pass        
+                            pass
+                except:
+                    pass  
+            else:
+                pass
         except:
             pass
     else:
