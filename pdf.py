@@ -1281,20 +1281,20 @@ async def extract(bot, message):
                                 return    
                             await bot.send_message(
                                 message.chat.id,
-                                    text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
-                                    disable_web_page_preview = True,
-                                    reply_markup = InlineKeyboardMarkup(
+                                text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
+                                disable_web_page_preview = True,
+                                reply_markup = InlineKeyboardMarkup(
+                                    [
                                         [
-                                            [
-                                                InlineKeyboardButton("Images 🖼️️", callback_data ="multipleImgAsImages")
-                                            ],[
-                                                InlineKeyboardButton("Document 📁", callback_data ="multipleImgAsDocument")
-                                            ],[
-                                                InlineKeyboardButton("PDF 🎭", callback_data ="multipleImgAsPdfError")
-                                            ]                                   
-                                        ]
-                                    )
-                                ) 
+                                            InlineKeyboardButton("Images 🖼️️", callback_data ="multipleImgAsImages")
+                                        ],[
+                                            InlineKeyboardButton("Document 📁", callback_data ="multipleImgAsDocument")
+                                        ],[
+                                            InlineKeyboardButton("PDF 🎭", callback_data ="multipleImgAsPdfError")
+                                        ]                                   
+                                    ]
+                                )
+                            ) 
                                
                             
                             
