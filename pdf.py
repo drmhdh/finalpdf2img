@@ -1252,7 +1252,7 @@ async def extract(bot, message):
                     await bot.send_chat_action(
                         message.chat.id, "typing"
                     )
-                    MYPDFX = message.reppy_to_message
+                    
                     PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
                     isPdfOrImg = message.reply_to_message.document.file_name
                     fileSize = message.reply_to_message.document.file_size
@@ -1285,6 +1285,7 @@ async def extract(bot, message):
                             await bot.send_message(
                                 message.chat.id,
                                 text = "Conversion Going to Initiate..!!",
+                                reply_to_message_id=message.reply_to_message.message_id
                                 disable_web_page_preview = True,
                                 reply_markup = InlineKeyboardMarkup(
                                     [
