@@ -1886,8 +1886,10 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     await bot.send_message(
                         callbackQuery.message.chat.id, Msgs.feedbackMsg,
                         disable_web_page_preview = True
-                    )                
-            except Exception as e:            
+                    )  
+            except:
+                pass
+            """except Exception as e:            
                 try:
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
@@ -1898,7 +1900,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     PROCESS.remove(callbackQuery.message.chat.id)
                     doc.close()            
                 except Exception:
-                    pass
+                    pass"""
                                                  
         elif edit == "multipleImgAsPdfError":        
             try:
