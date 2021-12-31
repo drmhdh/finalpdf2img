@@ -1253,7 +1253,7 @@ async def extract(bot, message):
                         message.chat.id, "typing"
                     )
                     
-                    PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
+                    
                     isPdfOrImg = message.reply_to_message.document.file_name
                     fileSize = message.reply_to_message.document.file_size
                     fileNm, fileExt = os.path.splitext(isPdfOrImg)       
@@ -1281,10 +1281,12 @@ async def extract(bot, message):
                                     '`Doing Some other Work.. 🥵`'
                                 )
                                 return   
-                            
+                            await message.reply_text(
+                                '`Analysing Your PDF...🤹`'
+                            )
                             await bot.send_message(
                                 message.chat.id,
-                                text = "Conversion Going to Initiate..!!",
+                                text = "⚙️Conversion Going to Initiate..!!",
                                 reply_to_message_id=message.reply_to_message.message_id,
                                 disable_web_page_preview = True,
                                 reply_markup = InlineKeyboardMarkup(
@@ -1299,7 +1301,7 @@ async def extract(bot, message):
                                     ]
                                 )
                             ) 
-   
+                            PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
                             
                             
                         
