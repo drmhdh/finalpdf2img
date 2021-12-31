@@ -1555,23 +1555,12 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                
         elif edit in ["multipleImgAsImages", "multipleImgAsDocument", "asImages", "asDocument"]:        
             try:
-                if (callbackQuery.message.chat.id not in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):      
-                #if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):                
-                    """await bot.edit_message_text(
-                        chat_id = callbackQuery.message.chat.id,
-                        message_id = callbackQuery.message.message_id,
-                        text = "Same work done before..🏃"
-                    )
-                    return"""            
+                if (callbackQuery.message.chat.id in PROCESS) or (callbackQuery.message.chat.id not in PDF2IMG):                     
                 PROCESS.append(callbackQuery.message.chat.id)           
-                pdfMsgId = await bot.edit_message_text(
-                    #chat_id = callbackQuery.message.chat.id,
-                    message_id = callbackQuery.message.message_id,
-                    #text = "`Processinging your pdf..⏳`"
-                    
+                pdfMsgId = await bot.edit_message_text( 
                     chat_id=callbackQuery.message.chat.id,
-                    text=Translation.DOWNLOAD_START,
-                    #reply_to_message_id=callbackQuery.message.reply_to_message.message_id
+                    message_id = callbackQuery.message.message_id,                                      
+                    text=Translation.DOWNLOAD_START           
                 )   
                 c_time = time.time()
                 the_real_download_location = await bot.download_media(
@@ -1586,7 +1575,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 )   
                 if the_real_download_location is not None:
                     try:
-                        await bot.edit_message_text(
+                        await callbackQuery.edit_message_text(
                              text=Translation.SAVED_RECVD_DOC_FILE,
                              chat_id=callbackQuery.message.chat.id,
                              message_id=pdfMsgId.message_id
