@@ -1563,11 +1563,13 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     text=Translation.DOWNLOAD_START           
                 )   
                 c_time = time.time()
-                download_location = Config.DOWNLOAD_LOCATION + "/" 
-                #download_location = Config.DOWNLOAD_LOCATION + "/" + str(callbackQuery.message.message_id) + "pdf.pdf"
+                #download_location = Config.DOWNLOAD_LOCATION + "/" 
+                download_location = Config.DOWNLOAD_LOCATION + "/" + str(callbackQuery.message.message_id) + "pdf.pdf"
+                if not os.path.isdir(download_location):
+                    os.makedirs(download_location)
                 the_real_download_location = await bot.download_media(
                 message=PDF2IMG[callbackQuery.message.chat.id],
-                file_name = f'{callbackQuery.message.message_id}/pdf.pdf',
+                file_name = download_location,
                 progress=progress_for_pyrogram,
                     progress_args=(
                     Translation.DOWNLOAD_START,
