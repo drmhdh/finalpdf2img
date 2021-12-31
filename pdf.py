@@ -1574,7 +1574,8 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 #download_location = Config.DOWNLOAD_LOCATION + "/" + str(callbackQuery.message.message_id) + "pdf.pdf"
                 #if not os.path.isdir(download_location):
                 #os.makedirs(download_location)
-                the_real_download_location = await bot.download_media(
+                #the_real_download_location = await bot.download_media(
+                the_real_download_location =  await message.reply_to_message.download(
                 PDF2IMG[callbackQuery.message.chat.id],
                 f"{callbackQuery.message.message_id}/pdf.pdf",
                 )
