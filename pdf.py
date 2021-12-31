@@ -1303,8 +1303,8 @@ async def extract(bot, message):
                                     ]
                                 )
                             ) 
-                            #PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
-                            PDF2IMG[message.chat.id] = message.reply_to_message.message_id
+                            PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
+                            #PDF2IMG[message.chat.id] = message.reply_to_message.message_id
                             
                             
                         
@@ -1569,13 +1569,17 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     chat_id=callbackQuery.message.chat.id,
                     message_id = callbackQuery.message.message_id,                                      
                     text=Translation.DOWNLOAD_START         
-                )   
-                c_time = time.time()
+                )  
+                await callbackQuery.message.download(
+                PDF2IMG[callbackQuery.message.chat.id],
+                f"{callbackQuery.message.message_id}/pdf.pdf",
+                )
+                """c_time = time.time()
                 #download_location = Config.DOWNLOAD_LOCATION + "/" 
                 #download_location = Config.DOWNLOAD_LOCATION + "/" + str(callbackQuery.message.message_id) + "pdf.pdf"
-                #if not os.path.isdir(download_location):
-                #os.makedirs(download_location)
-                #the_real_download_location = await bot.download_media(
+                
+                
+                
                 the_real_download_location =  await callbackQuery.message.download(
                 PDF2IMG[callbackQuery.message.chat.id],
                 f"{callbackQuery.message.message_id}/pdf.pdf",
@@ -1595,7 +1599,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                              message_id=pdfMsgId.message_id
                         )
                     except:
-                        pass             
+                        pass"""             
                 
                 doc = fitz.open(f"{callbackQuery.message.message_id}/pdf.pdf")
                 noOfPages = doc.pageCount                        
