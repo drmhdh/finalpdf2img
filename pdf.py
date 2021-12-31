@@ -1303,7 +1303,8 @@ async def extract(bot, message):
                                     ]
                                 )
                             ) 
-                            PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
+                            #PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
+                            PDF2IMG[message.chat.id] = message.reply_to_message.message_id
                             
                             
                         
