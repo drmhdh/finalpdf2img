@@ -830,7 +830,7 @@ async def documents(bot, message):
         pass
 
 #  ------------------------------------------------------REPLY TO /start COMMAND ------------------------------------------------------#
-@bot.on_message(filters.command(["startpdf"]))
+@bot.on_message(filters.command('startpdf'))
 async def startpdf(bot, message)    
     try:
         await bot.send_chat_action(
