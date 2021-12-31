@@ -1605,7 +1605,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 doc = fitz.open(f"{callbackQuery.message.message_id}/pdf.pdf")
                 noOfPages = doc.pageCount                        
                 PDFINPUT = callbackQuery.message.message_id
-                PDF2IMG[callbackQuery.message.chat.id] = callbackQuery.message.reply_to_message.document.file_id
+                #PDF2IMG[callbackQuery.message.chat.id] = callbackQuery.message.reply_to_message.document.file_id
                 PDF2IMGPGNO[callbackQuery.message.chat.id] = noOfPages                
                 await bot.delete_messages(
                     chat_id = callbackQuery.message.chat.id,
