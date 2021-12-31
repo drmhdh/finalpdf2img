@@ -1642,7 +1642,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                             callbackQuery.message.chat.id,
                             "`Syntax Error: noSuchPageNumbers 🤭`"
                         )
-                         return    
+                        return    
                 elif len(pageStartAndEnd) == 1:                
                     if pageStartAndEnd[0] == "/extract":                    
                         if (PDF2IMGPGNO[callbackQuery.message.chat.id]) == 1:
