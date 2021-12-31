@@ -1281,13 +1281,14 @@ async def extract(bot, message):
                                     '`Doing Some other Work.. 🥵`'
                                 )
                                 return   
-                            """await message.reply_to_message.reply_text(
-                                '`Analysing Your PDF...🤹`'
-                            )"""
+                            await message.reply_text(
+                                text='`Analysing Your PDF...🤹`',
+                                reply_to_message_id=message.reply_to_message.message_id
+                            )
                             await bot.send_message(
                                 message.chat.id,
                                 text = "⚙️Conversion Going to Initiate..!!",
-                                reply_to_message_id=message.reply_to_message.message_id,
+                                reply_to_message_id=message.message_id,
                                 disable_web_page_preview = True,
                                 reply_markup = InlineKeyboardMarkup(
                                     [
