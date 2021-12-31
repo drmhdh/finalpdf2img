@@ -27,7 +27,6 @@ from time import sleep
 from bs4 import BeautifulSoup
 from pyrogram import Client, filters
 from pyrogram.types import ForceReply
-from support.file_size import get_size
 from hachoir.parser import createParser
 from PDFNetPython3.PDFNetPython import *
 from hachoir.metadata import extractMetadata
@@ -87,7 +86,7 @@ if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
                
 # ------------------------------------------------------PDF Compression ------------------------------------------------------#
-@bot.on_message(filters.command('getsize'))
+@bot.on_message(filters.command('getsizeforcompresspdf'))
 async def get_size(path_to_file):
     file_path = str()
     for file in os.listdir(path_to_file):
