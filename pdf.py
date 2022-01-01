@@ -1284,10 +1284,9 @@ async def extract(bot, message):
                                 text='`Analysing Your PDF...🤹`',
                                 reply_to_message_id=message.reply_to_message.message_id
                             )
-                            PROCESS.append(message.chat.id)           
+                                      
                             pdfMsgId = await bot.edit_message_text( 
-                                chat_id=message.chat.id,
-                                                                  
+                                chat_id=message.chat.id,                                                                 
                                 text=Translation.DOWNLOAD_START         
                             )  
                 
