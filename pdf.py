@@ -1291,7 +1291,7 @@ async def extract(bot, message):
                                 text=Translation.DOWNLOAD_START         
                             )  
                 
-                            await bot.download_media(               
+                                          
                             c_time = time.time()                                                            
                             the_real_download_location =  await message.download(
                                 message.reply_to_message.message_id,
