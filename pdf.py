@@ -1279,20 +1279,15 @@ async def extract(bot, message):
                                 await message.reply_text(
                                     '`Doing Some other Work.. 🥵`'
                                 )
-                                return   
-                            pdfMsgId=await message.reply_text(
-                                text='`Analysing Your PDF...🤹`',
+                                return  
+                            pdfMsgId = await bot.send_message(
+                                chat_id=message.chat.id,
+                                text=Translation.DOWNLOAD_START,
                                 reply_to_message_id=message.reply_to_message.message_id
-                            )
-                                      
-                            pdfMsgId = await bot.edit_message_text( 
-                                chat_id=message.chat.id,                                                                 
-                                text=Translation.DOWNLOAD_START         
-                            )  
-                
-                                          
+                            
+                            )                                                                     
                             c_time = time.time()                                                            
-                            the_real_download_location =  await message.download(
+                            the_real_download_location =  await message.reply_to_message.download(
                             message=message.reply_to_message.message_id,
                             file_name = f"{message.reply_to_message.message_id}/pdf.pdf",                                
                             progress=progress_for_pyrogram,
@@ -1304,7 +1299,7 @@ async def extract(bot, message):
                             )
                             if the_real_download_location is not None:
                                 try:
-                                    await callbackQuery.edit_message_text(
+                                    await message.edit_message_text(
                                         text=Translation.SAVED_RECVD_DOC_FILE,
                                         chat_id=message.chat.id,
                                         message_id=pdfMsgId.message_id
