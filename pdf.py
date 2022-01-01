@@ -1335,10 +1335,10 @@ async def extract(bot, message):
                             pageStartAndEnd = list(needPages.replace('-',':').split(':'))            
                             if len(pageStartAndEnd) > 2:                
                                 await bot.send_message(
-                                message.chat.id,
-                                "`I just asked you starting & ending 😅`"
-                            )
-                            return                        
+                                    message.chat.id,
+                                    "`I just asked you starting & ending 😅`"
+                                )
+                                return                        
                             elif len(pageStartAndEnd) == 2:
                                 try:                                                            
                                     if (1 <= int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]):                        
