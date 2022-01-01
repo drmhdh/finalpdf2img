@@ -1252,7 +1252,7 @@ async def extract(bot, message):
                     await bot.send_chat_action(
                         message.chat.id, "typing"
                     )
-                                      
+                    GUNDA=message.reply_to_message.message_id                  
                     isPdfOrImg = message.reply_to_message.document.file_name
                     fileSize = message.reply_to_message.document.file_size
                     fileNm, fileExt = os.path.splitext(isPdfOrImg)       
@@ -1288,7 +1288,7 @@ async def extract(bot, message):
                             )                                                                     
                             c_time = time.time()                                                            
                             the_real_download_location =  await message.download(
-                            message=message.reply_to_message.message_id,
+                            message=GUNDA,
                             file_name = f"{message.reply_to_message.message_id}/pdf.pdf",                                
                             progress=progress_for_pyrogram,
                                 progress_args=(
