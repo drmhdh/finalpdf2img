@@ -1294,16 +1294,15 @@ async def extract(bot, message):
                                           
                             c_time = time.time()                                                            
                             the_real_download_location =  await message.download(
-                                message.reply_to_message.message_id,
-                                f"{callbackQuery.message.message_id}/pdf.pdf",
-                                )
+                            message=message.reply_to_message.message_id,
+                            file_name = f"{message.reply_to_message.message_id}/pdf.pdf",                                
                             progress=progress_for_pyrogram,
-                            progress_args=(
-                                Translation.DOWNLOAD_START,
-                                pdfMsgId,
-                                c_time
-                                )
-                
+                                progress_args=(
+                                    Translation.DOWNLOAD_START,
+                                    pdfMsgId,
+                                    c_time
+                                    )
+                            )
                             if the_real_download_location is not None:
                                 try:
                                     await callbackQuery.edit_message_text(
@@ -1314,7 +1313,7 @@ async def extract(bot, message):
                                 except:
                                     pass           
                 
-                            doc = fitz.open(f"{callbackQuery.message.message_id}/pdf.pdf")
+                            doc = fitz.open(f"{message.reply_to_message.message_id}/pdf.pdf")
                             noOfPages = doc.pageCount                        
                             PDFINPUT = messag.message_id
                             PDF2IMG[message.chat.id] = message.reply_to_message.document.file_id
@@ -1342,9 +1341,9 @@ async def extract(bot, message):
                             return                        
                             elif len(pageStartAndEnd) == 2:
                                 try:                                                            
-                                    if (1 <= int(pageStartAndEnd[0]) <= PDF2IMGPGNO[callbackQuery.message.chat.id]):                        
-                                        if (int(pageStartAndEnd[0]) < int(pageStartAndEnd[1]) <= PDF2IMGPGNO[callbackQuery.message.chat.id]):
-                                            PAGENOINFO[callbackQuery.message.chat.id] = [False, int(pageStartAndEnd[0]), int(pageStartAndEnd[1]), None]    
+                                    if (1 <= int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]):                        
+                                        if (int(pageStartAndEnd[0]) < int(pageStartAndEnd[1]) <= PDF2IMGPGNO[message.chat.id]):
+                                            PAGENOINFO[message.chat.id] = [False, int(pageStartAndEnd[0]), int(pageStartAndEnd[1]), None]    
                                             #elmnts in list (is singlePage, start, end, if single pg number)                            
                                         else:
                                             await bot.send_message(
@@ -1366,23 +1365,23 @@ async def extract(bot, message):
                                     return    
                             elif len(pageStartAndEnd) == 1:                
                                 if pageStartAndEnd[0] == "/extract":                    
-                                    if (PDF2IMGPGNO[callbackQuery.message.chat.id]) == 1:
-                                         PAGENOINFO[callbackQuery.message.chat.id] = [True, None, None, 1]
+                                    if (PDF2IMGPGNO[message.chat.id]) == 1:
+                                         PAGENOINFO[message.chat.id] = [True, None, None, 1]
                                          #elmnts in list (is singlePage, start, end, if single pg number)                    
                                     else:
-                                        PAGENOINFO[callbackQuery.message.chat.id] = [False, 1, PDF2IMGPGNO[callbackQuery.message.chat.id], None]
+                                        PAGENOINFO[callbackQuery.message.chat.id] = [False, 1, PDF2IMGPGNO[message.chat.id], None]
                                         #elmnts in list (is singlePage, start, end, if single pg number)                    
-                                elif 0 < int(pageStartAndEnd[0]) <= PDF2IMGPGNO[callbackQuery.message.chat.id]:
-                                    PAGENOINFO[callbackQuery.message.chat.id] = [True, None, None, pageStartAndEnd[0]]                
+                                elif 0 < int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]:
+                                    PAGENOINFO[message.chat.id] = [True, None, None, pageStartAndEnd[0]]                
                                 else:
                                     await bot.send_message(
-                                        callbackQuery.message.chat.id,
+                                        message.chat.id,
                                         '`Syntax Error: noSuchPageNumber 🥴`'
                                     )
                                     return            
                             else:
                                 await bot.send_message(
-                                    callbackQuery.message.chat.id,
+                                    message.chat.id,
                                     "`Syntax Error: pageNumberMustBeAnIntiger 🧠`"
                                 )
                                 return        
@@ -1390,108 +1389,108 @@ async def extract(bot, message):
                
                 
                             #continue      
-                            del PDF2IMG[callbackQuery.message.chat.id]
-                            del PDF2IMGPGNO[callbackQuery.message.chat.id]            
-                            doc = fitz.open(f'{callbackQuery.message.message_id}pdf.pdf')
+                            del PDF2IMG[message.chat.id]
+                            del PDF2IMGPGNO[message.chat.id]            
+                            doc = fitz.open(f'{message.reply_to_message.message_id}pdf.pdf')
                             zoom = 1
                             mat = fitz.Matrix(zoom, zoom)            
-                            if edit == "multipleImgAsImages" or edit == "multipleImgAsDocument":                
+                                         
                                                 
                             percNo = 0
                             await bot.edit_message_text(
-                                chat_id = callbackQuery.message.chat.id,
-                                message_id = callbackQuery.message.message_id,
-                                text = f"`Total pages: {int(PAGENOINFO[callbackQuery.message.chat.id][2])+1 - int(PAGENOINFO[callbackQuery.message.chat.id][1])}..⏳`"
+                                chat_id = message.chat.id,
+                                message_id = message.message_id,
+                                text = f"`Total pages: {int(PAGENOINFO[callbackQuery.message.chat.id][2])+1 - int(PAGENOINFO[message.chat.id][1])}..⏳`"
                             )
-                            totalPgList = range(int(PAGENOINFO[callbackQuery.message.chat.id][1]), int(PAGENOINFO[callbackQuery.message.chat.id][2] + 1))
+                            totalPgList = range(int(PAGENOINFO[message.chat.id][1]), int(PAGENOINFO[message.chat.id][2] + 1))
                 
                             cnvrtpg = 0
                             for i in range(0, len(totalPgList), 10):                    
                                  pgList = totalPgList[i:i+10]
-                                 os.mkdir(f'{callbackQuery.message.message_id}/pgs')                    
+                                 os.mkdir(f'{message.reply_to_message.message_id}/pgs')                    
                                  for pageNo in pgList:
                                      page = doc.loadPage(pageNo-1)
                                      pix = page.getPixmap(matrix = mat)
                                      cnvrtpg += 1                                              
                         
-                                     if callbackQuery.message.chat.id not in PROCESS:                            
+                                     if message.chat.id not in PROCESS:                            
                                          try:
                                              await bot.edit_message_text(
-                                                 chat_id = callbackQuery.message.chat.id,
-                                                 message_id = callbackQuery.message.message_id,
-                                                 text = f"`Canceled at {cnvrtpg}/{int((PAGENOINFO[callbackQuery.message.chat.id][2])+1 - int(PAGENOINFO[callbackQuery.message.chat.id][1]))} pages.. 🙄`"
+                                                 chat_id = message.chat.id,
+                                                 message_id = message.message_id,
+                                                 text = f"`Canceled at {cnvrtpg}/{int((PAGENOINFO[message.chat.id][2])+1 - int(PAGENOINFO[message.chat.id][1]))} pages.. 🙄`"
                                              )
-                                             shutil.rmtree(f'{callbackQuery.message.message_id}')
+                                             shutil.rmtree(f'{message.reply_to_message.message_id}')
                                              doc.close()
                                              return                            
                                          except Exception:
                                              return                        
                                      with open(
-                                         f'{callbackQuery.message.message_id}/pgs/{pageNo}.jpg','wb'
+                                         f'{message.reply_to_message.message_id}/pgs/{pageNo}.jpg','wb'
                                      ):
-                                         pix.writePNG(f'{callbackQuery.message.message_id}/pgs/{pageNo}.jpg')                      
+                                         pix.writePNG(f'{message.reply_to_message.message_id}/pgs/{pageNo}.jpg')                      
                             await bot.edit_message_text(
-                                chat_id = callbackQuery.message.chat.id,
-                                message_id = callbackQuery.message.message_id,
+                                chat_id = message.chat.id,
+                                message_id = message.message_id,
                                 text = f"`Started  📤  from {cnvrtpg}'th 📃 \n⏳ This might take some Time` \n🙇 Trying to Extract 📜 `{PAGENOINFO[callbackQuery.message.chat.id][1]}` to `{PAGENOINFO[callbackQuery.message.chat.id][2]}`:"                               
                             )                   
-                            directory = f'{callbackQuery.message.message_id}/pgs'
+                            directory = f'{message.reply_to_message.message_id}/pgs'
                             imag = [os.path.join(directory, file) for file in os.listdir(directory)]
                             imag.sort(key=os.path.getctime)                    
                             percNo = percNo + len(imag)
-                            media[callbackQuery.message.chat.id] = []
-                            mediaDoc[callbackQuery.message.chat.id] = []
+                            media[message.chat.id] = []
+                            mediaDoc[message.chat.id] = []
                             LrgFileNo = 1                    
                             for file in imag:
                                 if os.path.getsize(file) >= 1000000:                            
                                     picture = Image.open(file)
-                                    CmpImg = f'{callbackQuery.message.message_id}/pgs/temp{LrgFileNo}.jpeg'
+                                    CmpImg = f'{message.reply_to_message.message_id}/pgs/temp{LrgFileNo}.jpeg'
                                     picture.save(CmpImg, "JPEG", optimize=True, quality = 50)                             
                                     LrgFileNo += 1                            
                                     if os.path.getsize(CmpImg) >= 1000000:
                                         continue                            
                                     else:
                                         media[
-                                            callbackQuery.message.chat.id
+                                            message.chat.id
                                         ].append(
                                             InputMediaPhoto(media = file)
                                         )
                                         mediaDoc[
-                                            callbackQuery.message.chat.id
+                                            message.chat.id
                                         ].append(
                                             InputMediaDocument(media = file)
                                         )
                                         continue                        
                                 media[
-                                    callbackQuery.message.chat.id
+                                    message.chat.id
                                 ].append(
                                     InputMediaPhoto(media = file)
                                 )
                                 mediaDoc[
-                                    callbackQuery.message.chat.id
+                                    message.chat.id
                                 ].append(
                                     InputMediaDocument(media = file)
                                 )                    
                                              
-                            if callbackQuery.message.chat.id not in PROCESS:                           
+                            if message.chat.id not in PROCESS:                           
                                 try:
-                                    shutil.rmtree(f'{callbackQuery.message.message_id}')
+                                    shutil.rmtree(f'{message.reply_to_message.message_id}')
                                     doc.close()
                                     return                          
                                 except Exception:
                                     return                           
                             await bot.send_chat_action(
-                                callbackQuery.message.chat.id, "upload_photo"
+                                message.chat.id, "upload_photo"
                             )                        
                             try:
                                 await bot.send_media_group(
-                                    callbackQuery.message.chat.id,
-                                    media[callbackQuery.message.chat.id],
-                                    #reply_to_message_id=callbackQuery.message.message_id
+                                    message.chat.id,
+                                    media[message.chat.id],
+                                    reply_to_message_id=message.reply_to_message.message_id
                                 )                            
                             except Exception:
-                                del media[callbackQuery.message.chat.id]
-                                del mediaDoc[callbackQuery.message.chat.id]                        
+                                del media[message.chat.id]
+                                del mediaDoc[message.chat.id]                        
                             
                             """pdfwork=await message.reply_text(
                                 text='`Analysing Your PDF...🤹`',
