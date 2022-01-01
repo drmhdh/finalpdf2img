@@ -1287,7 +1287,7 @@ async def extract(bot, message):
                             
                             )                                                                     
                             c_time = time.time()                                                            
-                            the_real_download_location =  await message.reply_to_message.download(
+                            the_real_download_location =  await message.download(
                             message=message.reply_to_message.message_id,
                             file_name = f"{message.reply_to_message.message_id}/pdf.pdf",                                
                             progress=progress_for_pyrogram,
