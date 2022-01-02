@@ -108,7 +108,7 @@ async def ocr(bot, msg):
     image = await bot.download_media(
         message=msg,
         file_name=download_location)
-    img = Image.open(
+    img = PIL.Image.open(
         f"testdata/{msg.from_user.id}.jpg"
     )
     text = pytesseract.image_to_string(img, lang=f"{lang_code.text}")
