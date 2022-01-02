@@ -96,7 +96,7 @@ async def ocr(bot, message):
     lang_code = await bot.ask(
         message.chat.id, 
         
-        '`Trying to Read your Image..🤧 \n\nNow send the ISO language code.`\n\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', 
+        '`Trying to Read your Image..🤧 \n\nNow send the ISO language code.`\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', 
         filters=filters.text, 
         reply_to_message_id=message.reply_to_message.message_id,
         parse_mode='Markdown', 
