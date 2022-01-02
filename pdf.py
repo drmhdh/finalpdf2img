@@ -113,7 +113,7 @@ async def ocr(bot, message):
     #image = await bot.download_media(
         #message=msg,
         #file_name=download_location
-        file_name=f"text_{msg.from_user.id}.jpg"
+        file_name=f"text_{message.from_user.id}.jpg"
         #f"{message.chat.id}/{message.from_user.id}.jpg"
     )
     img = PIL.Image.open(
