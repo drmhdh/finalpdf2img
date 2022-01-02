@@ -109,7 +109,7 @@ async def ocr(bot, message):
         parse_mode='Markdown', 
         disable_web_page_preview=True
     )"""
-    data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code.text}.traineddata"
+    data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code}.traineddata"
     #data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code.text}.traineddata"
     dirs = r"/app/vendor/tessdata"
     
@@ -118,7 +118,7 @@ async def ocr(bot, message):
            
     if not os.path.isdir(dirs):
         os.makedirs(dirs)
-    path = os.path.join(dirs, f"{lang_code.text}.traineddata")
+    path = os.path.join(dirs, f"{lang_code}.traineddata")
     if not os.path.exists(path):
         data = requests.get(data_url, allow_redirects=True, headers={'User-Agent': 'Mozilla/5.0'})
         if data.status_code == 200:
@@ -131,7 +131,7 @@ async def ocr(bot, message):
     
         
         
-        file_name=f"text_{message.from_user.id}.jpg"
+        file_name=f"{lang_code}+{message.from_user.id}.jpg"
         
     )
     img = PIL.Image.open(
