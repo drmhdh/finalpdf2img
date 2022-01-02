@@ -21,6 +21,7 @@ import logging
 from pyromod import listen
 import requests
 import pytesseract
+from pytesseract import image_to_string
 
 import convertapi
 import weasyprint
