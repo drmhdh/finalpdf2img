@@ -106,15 +106,15 @@ async def ocr(bot, message):
         else:
             return await message.reply("`Either the lang code is wrong or the lang is not supported.`", parse_mode='md')
     message = await message.reply("`Downloading and Extracting...`", parse_mode='md')
-    image = await message.download(
+    image = await message.message.download(
     #await message.reply_to_message.download(
     #image = await bot.download_media(
         #message=msg,
         #file_name=download_location
-        f"{message.chat.id}/{message.chat.id}.jpg"
+        f"{message.chat.id}/{message.from_user.id}.jpg"
     )
     img = PIL.Image.open(
-        f"{message.chat.id}/{message.chat.id}.jpg"
+        f"{message.chat.id}/{message.from_user.id}.jpg"
     )
     text = pytesseract.image_to_string(img, lang=f"{lang_code.text}")
     try:
