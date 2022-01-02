@@ -90,8 +90,8 @@ if Config.MAX_FILE_SIZE:
 
     
 @bot.on_message(filters.private & filters.photo)
-async def ocr(bot, msg):
-    lang_code = await bot.ask(msg.chat.id,'`Now send the ISO language code.`\n\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', filters=filters.text, parse_mode='Markdown', disable_web_page_preview=True)
+async def ocr(bot, message):
+    lang_code = await bot.ask(message.chat.id,'`Now send the ISO language code.`\n\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', filters=filters.text, parse_mode='Markdown', disable_web_page_preview=True)
     data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code.text}.traineddata"
     #dirs = r"/app/vendor/tessdata"
     download_location = Config.DOWNLOAD_LOCATIONS + "/" 
@@ -104,9 +104,9 @@ async def ocr(bot, msg):
         if data.status_code == 200:
             open(path, 'wb').write(data.content)
         else:
-            return await msg.reply("`Either the lang code is wrong or the lang is not supported.`", parse_mode='md')
-    message = await msg.reply("`Downloading and Extracting...`", parse_mode='md')
-    image = await msg.download(
+            return await message.reply("`Either the lang code is wrong or the lang is not supported.`", parse_mode='md')
+    message = await message.reply("`Downloading and Extracting...`", parse_mode='md')
+    image = await message.download(
     #await message.reply_to_message.download(
     #image = await bot.download_media(
         #message=msg,
@@ -118,9 +118,9 @@ async def ocr(bot, msg):
     )
     text = pytesseract.image_to_string(img, lang=f"{lang_code.text}")
     try:
-        await msg.reply(text[:-1], quote=True, disable_web_page_preview=True)
+        await message.reply(text[:-1], quote=True, disable_web_page_preview=True)
     except MessageEmpty:
-        return await msg.reply("`Either the image has no text or the text is not recognizable.`", quote=True, parse_mode='md')
+        return await message.reply("`Either the image has no text or the text is not recognizable.`", quote=True, parse_mode='md')
     await message.delete()
     os.remove(image)    
     
