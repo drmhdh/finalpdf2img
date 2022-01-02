@@ -93,11 +93,13 @@ if Config.MAX_FILE_SIZE:
 async def ocr(bot, message):
     lang_code = await bot.ask(message.chat.id,'`Now send the ISO language code.`\n\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', filters=filters.text, parse_mode='Markdown', disable_web_page_preview=True)
     data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code.text}.traineddata"
-    #dirs = r"/app/vendor/tessdata"
-    download_location = Config.DOWNLOAD_LOCATIONS + "/" 
+    dirs = r"/app/vendor/tessdata"
+    #download_location = Config.DOWNLOAD_LOCATIONS + "/" 
     # + "testdata" + "/" + str(msg.from_user.id) + ".jpg"
-    if not os.path.isdir(download_location):
-            os.makedirs(download_location)
+    #if not os.path.isdir(download_location):
+           # os.makedirs(download_location)
+    if not os.path.isdir:
+        os.makedirs
     path = os.path.join(download_location, f"{lang_code.text}.traineddata")
     if not os.path.exists(path):
         data = requests.get(data_url, allow_redirects=True, headers={'User-Agent': 'Mozilla/5.0'})
@@ -105,7 +107,7 @@ async def ocr(bot, message):
             open(path, 'wb').write(data.content)
         else:
             return await message.reply("`Either the lang code is wrong or the lang is not supported.`", parse_mode='md')
-    message = await message.reply("`Downloading and Extracting...`", parse_mode='md')
+    imgocr = await message.reply("`Downloading and Extracting...`", parse_mode='md')
     image = await message.download(
     #await message.reply_to_message.download(
     #image = await bot.download_media(
@@ -121,7 +123,7 @@ async def ocr(bot, message):
         await message.reply(text[:-1], quote=True, disable_web_page_preview=True)
     except MessageEmpty:
         return await message.reply("`Either the image has no text or the text is not recognizable.`", quote=True, parse_mode='md')
-    await message.delete()
+    await imgocr.delete()
     os.remove(image)    
     
 # ------------------------------------------------------PDF Compression ------------------------------------------------------#
