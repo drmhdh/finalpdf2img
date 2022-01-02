@@ -105,10 +105,10 @@ async def ocr(bot, msg):
             return await msg.reply("`Either the lang code is wrong or the lang is not supported.`", parse_mode='md')
     message = await msg.reply("`Downloading and Extracting...`", parse_mode='md')
     #image = await msg.download(
-    Image = await bot.download_media(
+    image = await bot.download_media(
         message=msg,
         file_name=download_location)
-    img = Image.open(download_location)
+    img = Image.open(image)
     text = pytesseract.image_to_string(img, lang=f"{lang_code.text}")
     try:
         await msg.reply(text[:-1], quote=True, disable_web_page_preview=True)
