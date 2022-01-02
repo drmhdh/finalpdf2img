@@ -97,7 +97,8 @@ async def ocr(bot, message):
     await bot.send_message(
         chat_id=message.chat.id,
         text= '`Trying to Read your Image..🤧 `\n\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', 
-        reply_to_message_id=message.reply_to_message.message_id
+        reply_to_message_id=message.reply_to_message.message_id,
+        disable_web_page_preview=True
       )                                 
     """lang_code = await bot.ask(
         message.chat.id, 
@@ -108,7 +109,8 @@ async def ocr(bot, message):
         parse_mode='Markdown', 
         disable_web_page_preview=True
     )"""
-    data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code.text}.traineddata"
+    data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code}.traineddata"
+    #data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code.text}.traineddata"
     dirs = r"/app/vendor/tessdata"
     
    
