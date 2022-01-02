@@ -10,7 +10,7 @@ hachoir
 numpy
 Pillow
 requests
-
+tesseract-ocr
 bs4
 
 weasyprint
