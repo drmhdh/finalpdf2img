@@ -1230,10 +1230,10 @@ async def encrypt(bot, message):
             f"{message.message_id}/pdf.pdf"
         )
         pgNmbr = inputFile.numPages        
-        if pgNmbr > 150:
+        if pgNmbr > 2000:
             await bot.send_message(
                 message.chat.id,
-                f"send me a pdf less than 150pgs..👀"
+                f"send me a pdf less than 2000pgs..👀"
             )
             return        
         for i in range(pgNmbr):           
