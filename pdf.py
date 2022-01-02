@@ -94,7 +94,8 @@ async def ocr(bot, msg):
     lang_code = await bot.ask(msg.chat.id,'`Now send the ISO language code.`\n\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', filters=filters.text, parse_mode='Markdown', disable_web_page_preview=True)
     data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code.text}.traineddata"
     #dirs = r"/app/vendor/tessdata"
-    download_location = Config.DOWNLOAD_LOCATIONS + "/" + "testdata" + "/" + str(msg.from_user.id) + ".jpg"
+    download_location = Config.DOWNLOAD_LOCATIONS + "/" 
+    # + "testdata" + "/" + str(msg.from_user.id) + ".jpg"
     if not os.path.isdir(download_location):
             os.makedirs(download_location)
     path = os.path.join(download_location, f"{lang_code.text}.traineddata")
@@ -105,12 +106,15 @@ async def ocr(bot, msg):
         else:
             return await msg.reply("`Either the lang code is wrong or the lang is not supported.`", parse_mode='md')
     message = await msg.reply("`Downloading and Extracting...`", parse_mode='md')
-    #image = await msg.download(
-    image = await bot.download_media(
-        message=msg,
-        file_name=download_location)
+    image = await msg.download(
+    #await message.reply_to_message.download(
+    #image = await bot.download_media(
+        #message=msg,
+        #file_name=download_location
+        f"{message.chat.id}/{message.chat.id}.jpg"
+    )
     img = PIL.Image.open(
-        image
+        f"{message.chat.id}/{message.chat.id}.jpg"
     )
     text = pytesseract.image_to_string(img, lang=f"{lang_code.text}")
     try:
