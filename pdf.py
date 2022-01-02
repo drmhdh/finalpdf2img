@@ -130,7 +130,7 @@ async def ocr(bot, message):
         imageocr
         
     )
-    text = f"`🤭 Here is What I could Read From Your Image👇`", pytesseract.image_to_string(img, lang=f"{lang_code.text}")"
+    text = f"`🤭 Here is What I could Read From Your Image👇`, pytesseract.image_to_string(img, lang={lang_code.text})"
     try:
         await message.reply_to_message.reply("`🤭 Here is What I could Read From Your Image👇`")
         await message.reply_to_message.reply(text[:-1], quote=True, disable_web_page_preview=True)
