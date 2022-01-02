@@ -55,6 +55,9 @@
 		}
 	},
 	"buildpacks": [
+		 {
+                        "url": "https://github.com/samadii/heroku-buildpack-tesseract"
+                },
 		{
 			"url": "heroku/python"
 		}
