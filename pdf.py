@@ -93,7 +93,7 @@ if Config.MAX_FILE_SIZE:
     
 @bot.on_message(filters.command('imgocr'))  #filters.private & filters.photo)
 async def ocr(bot, message):
-    lang_code = message.text.replace('/extract ', '')
+    lang_code = message.text.replace('/imgocr ', '')
     await bot.send_message(
         chat_id=message.chat.id,
         text= '`Trying to Read your Image..🤧 `\n\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', 
@@ -109,7 +109,7 @@ async def ocr(bot, message):
         parse_mode='Markdown', 
         disable_web_page_preview=True
     )"""
-    data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code}.traineddata"
+    data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code.text}.traineddata"
     #data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code.text}.traineddata"
     dirs = r"/app/vendor/tessdata"
     
