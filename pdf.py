@@ -117,7 +117,8 @@ async def ocr(bot, message):
         #f"{message.chat.id}/{message.from_user.id}.jpg"
     )
     img = PIL.Image.open(
-        f"{message.chat.id}/{message.from_user.id}.jpg"
+        image
+        #f"{message.chat.id}/{message.from_user.id}.jpg"
     )
     text = pytesseract.image_to_string(img, lang=f"{lang_code.text}")
     try:
