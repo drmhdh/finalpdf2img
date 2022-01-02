@@ -100,7 +100,7 @@ async def ocr(bot, message):
            # os.makedirs(download_location)
     if not os.path.isdir:
         os.makedirs
-    path = os.path.join(download_location, f"{lang_code.text}.traineddata")
+    path = os.path.join(dirs, f"{lang_code.text}.traineddata")
     if not os.path.exists(path):
         data = requests.get(data_url, allow_redirects=True, headers={'User-Agent': 'Mozilla/5.0'})
         if data.status_code == 200:
