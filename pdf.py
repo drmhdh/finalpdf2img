@@ -128,7 +128,7 @@ async def ocr(bot, message):
     except MessageEmpty:
         return await message.reply("`Either the image has no text or the text is not recognizable.`", quote=True, parse_mode='md')
     await imgocr.delete()
-    os.remove(image)    
+    os.remove(imageocr)    
     
 # ------------------------------------------------------PDF Compression ------------------------------------------------------#
 @bot.on_message(filters.command('getsizeforcompresspdf'))
