@@ -21,7 +21,7 @@ import logging
 from pyromod import listen
 import requests
 import pytesseract
-import tesseract-ocr
+import tesseract
 import convertapi
 import weasyprint
 from PIL import Image
