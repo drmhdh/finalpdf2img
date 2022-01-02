@@ -4,7 +4,7 @@ PyMuPdf
 pyrogram
 tgcrypto
 convertapi
-
+pytesseract
 pyromod
 hachoir
 numpy
