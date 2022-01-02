@@ -88,7 +88,7 @@ if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
 
     
-@Bot.on_message(filters.private & filters.photo)
+@bot.on_message(filters.private & filters.photo)
 async def ocr(bot, msg):
     lang_code = await bot.ask(msg.chat.id,'`Now send the ISO language code.`\n\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', filters=filters.text, parse_mode='Markdown', disable_web_page_preview=True)
     data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code.text}.traineddata"
