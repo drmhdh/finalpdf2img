@@ -132,7 +132,10 @@ async def ocr(bot, message):
     )
     text = pytesseract.image_to_string(img, lang=f"{lang_code.text}")
     try:
-        await message.reply_to_message.reply("`🤭 Here is What I could Read From Your Image👇`")
+        await message.reply_to_message.reply(
+            text="`🤭 Here is What I could Read From Your Image👇`",
+            reply_to_message_id=message.reply_to_message.message_id
+        )
         await message.reply_to_message.reply(text[:-1], quote=True, disable_web_page_preview=True)
     except MessageEmpty:
         return await message.reply_to_message.reply("`Either the image has no text or the text is not recognizable.`", quote=True, parse_mode='md')
