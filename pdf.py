@@ -10,6 +10,7 @@
 
 import re
 import os
+import PIL
 import time
 import math
 import fitz
