@@ -105,7 +105,7 @@ async def ocr(bot, msg):
             return await msg.reply("`Either the lang code is wrong or the lang is not supported.`", parse_mode='md')
     message = await msg.reply("`Downloading and Extracting...`", parse_mode='md')
     #image = await msg.download(
-    image = await bot.download_media(
+    Image = await bot.download_media(
         message=msg,
         file_name=download_location)
     img = Image.open(download_location)
