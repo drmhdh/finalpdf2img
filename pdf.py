@@ -183,6 +183,7 @@ async def compress_pdf(bot, message):
     await asyncio.sleep(2)
     await msg.edit(Presets.DOWNLOAD_MSG)
     current_time = time.time()
+    PROCESS.append(message.chat.id)
     await message.reply_to_message.download(
         file_name=dl_location,
         progress=progress_for_pyrogram,
@@ -269,6 +270,7 @@ async def link2pdf(bot, message):
     #
     thumbnail = os.path.join(os.getcwd(), "img", "thumbnail.png")
     #
+    PROCESS.append(message.chat.id)
     await bot.send_chat_action(message.chat.id, "typing")
     msg = await message.reply_to_message.reply_text(
         text ="`Processing your link..🤧`", 
@@ -341,6 +343,7 @@ async def rename_doc(bot, message):
             reply_to_message_id=message.reply_to_message.message_id
         )
         c_time = time.time()
+        PROCESS.append(message.chat.id)
         the_real_download_location = await bot.download_media(
             message=message.reply_to_message,
             file_name=download_location,
@@ -671,7 +674,8 @@ async def documents(bot, message):
                     reply_to_message_id = message.reply_to_message.message_id
                 )                
                 if not isinstance(PDF.get(message.chat.id), list):
-                    PDF[message.chat.id] = []               
+                    PDF[message.chat.id] = []    
+                
                 await message.reply_to_message.download(
                     f"{message.chat.id}/{message.chat.id}.jpg"
                 )                
