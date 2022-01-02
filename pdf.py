@@ -106,7 +106,7 @@ async def ocr(bot, msg):
     message = await msg.reply("`Downloading and Extracting...`", parse_mode='md')
     #image = await msg.download(
     image = await bot.download_media(
-        #message=msg,
+        message=msg,
         file_name=download_location)
     img = Image.open(download_location)
     text = pytesseract.image_to_string(img, lang=f"{lang_code.text}")
