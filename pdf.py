@@ -98,8 +98,8 @@ async def ocr(bot, message):
     # + "testdata" + "/" + str(msg.from_user.id) + ".jpg"
     #if not os.path.isdir(download_location):
            # os.makedirs(download_location)
-    #if not os.path.isdir(dirs):
-        #os.makedirs(dirs)
+    if not os.path.isdir(dirs):
+        os.makedirs(dirs)
     path = os.path.join(dirs, f"{lang_code.text}.traineddata")
     if not os.path.exists(path):
         data = requests.get(data_url, allow_redirects=True, headers={'User-Agent': 'Mozilla/5.0'})
@@ -108,17 +108,17 @@ async def ocr(bot, message):
         else:
             return await message.reply("`Either the lang code is wrong or the lang is not supported.`", parse_mode='md')
     imgocr = await message.reply("`Downloading and Extracting...`", parse_mode='md')
-    image = await message.download(
-    #await message.reply_to_message.download(
-    #image = await bot.download_media(
-        #message=msg,
-        #file_name=download_location
+    imageocr = await message.download(
+    
+    
+        
+        
         file_name=f"text_{message.from_user.id}.jpg"
-        #f"{message.chat.id}/{message.from_user.id}.jpg"
+        
     )
     img = PIL.Image.open(
-        image
-        #f"{message.chat.id}/{message.from_user.id}.jpg"
+        imageocr
+        
     )
     text = pytesseract.image_to_string(img, lang=f"{lang_code.text}")
     try:
