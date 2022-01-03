@@ -240,7 +240,7 @@ async def compress_pdf(bot, message):
     # Let's find out the compressed document file size
     size_path = await get_size(dl_location)
     compressed_size = size_path[0]
-    ratio = 1 - (compressed_size / initial_size)
+    ratio = 1 - (int(compressed_size) / (int(initial_size))
     #
     
     summary = {
