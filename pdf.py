@@ -253,19 +253,19 @@ async def compress_pdf(bot, message):
     current_time = time.time()
     #
     if initial_size < compressed_size:
-    await message.reply_to_message.reply_document(
-        document=size_path[1],
-        reply_to_message_id=message.reply_to_message.message_id,
-        caption=summary
-        #caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
-        #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
-        progress=progress_for_pyrogram,
-        progress_args=(
-            Presets.UPLOAD_MSG,
-            message,
-            current_time
-        )
-    )    
+        await message.reply_to_message.reply_document(
+            document=size_path[1],
+            reply_to_message_id=message.reply_to_message.message_id,
+            caption=summary
+            #caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
+            #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
+            progress=progress_for_pyrogram,
+            progress_args=(
+                Presets.UPLOAD_MSG,
+                message,
+                current_time
+            )
+        )    
     await msg.delete()
     #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)
     
