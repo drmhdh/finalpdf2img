@@ -211,9 +211,9 @@ async def compress_pdf(bot, message):
     message = await msg.edit(Presets.UPLOAD_MSG)
     current_time = time.time()
     #
-    If initial_size - compressed_size > 5:
+    #If initial_size - compressed_size > 5:
     #If initial_size - compressed_size = > 5:
-    #if compressed_size < initial_size:
+    if compressed_size < initial_size:
         await message.reply_to_message.reply_document(
             document=size_path[1],
             reply_to_message_id=message.reply_to_message.message_id,
