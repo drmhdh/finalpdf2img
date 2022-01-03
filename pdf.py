@@ -241,7 +241,7 @@ async def compress_pdf(bot, message):
     size_path = await get_size(dl_location)
     compressed_size = size_path[0]
     ratio = 1 - (int(compressed_size) / (int(initial_size))
-    Compression Ratio = "{0:.3%}.".format(ratio)         
+    Compression 
     #
    
     """summary = f"{
@@ -257,8 +257,8 @@ async def compress_pdf(bot, message):
         await message.reply_to_message.reply_document(
             document=size_path[1],
             reply_to_message_id=message.reply_to_message.message_id,
-            caption=caption=Presets.SUMMARY.format(initial_size, compressed_size, Compression Ratio),
-            #caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
+            #caption=caption=Presets.SUMMARY.format(initial_size, compressed_size, Compression Ratio),
+            caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
             #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
             progress=progress_for_pyrogram,
             progress_args=(
