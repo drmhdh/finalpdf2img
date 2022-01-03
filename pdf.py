@@ -244,11 +244,11 @@ async def compress_pdf(bot, message):
     Compression 
     #
    
-    """summary = f"{
-        "Initial Size": get_size_format(initial_size),
-        "Compressed Size": get_size_format(compressed_size),
-        "Compression Ratio": "{0:.3%}.".format(ratio)"""
-    }"
+    #"""summary = f"{
+        #"Initial Size": get_size_format(initial_size),
+       # "Compressed Size": get_size_format(compressed_size),
+       # "Compression Ratio": "{0:.3%}.".format(ratio)"""
+    #}"
     await asyncio.sleep(2)
     message = await msg.edit(Presets.UPLOAD_MSG)
     current_time = time.time()
