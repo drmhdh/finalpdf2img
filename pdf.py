@@ -159,6 +159,18 @@ async def get_size(path_to_file):
     size = naturalsize(os.path.getsize(file_path))
     return size, file_path
 
+async def get_size_format(b, factor=1024, suffix="B"):
+    """
+    Scale bytes to its proper byte format
+    e.g:
+        1253656 => '1.20MB'
+        1253656678 => '1.17GB'
+    """
+    for unit in ["", "K", "M", "G", "T", "P", "E", "Z"]:
+        if b < factor:
+            return f"{b:.2f}{unit}{suffix}"
+        b /= factor
+    return f"{b:.2f}Y{suffix}"
 @bot.on_message(filters.command('compresspdf') & filters.user(ADMINS)) # & filters.private) #& filters.document
 async def compress_pdf(bot, message):
     msg = await bot.send_message(
@@ -203,6 +215,9 @@ async def compress_pdf(bot, message):
     # Let's find out the initial document size
     size_path = await get_size(dl_location)
     initial_size = size_path[0]
+    
+    
+   
     #
     try:
         """
@@ -225,15 +240,24 @@ async def compress_pdf(bot, message):
     # Let's find out the compressed document file size
     size_path = await get_size(dl_location)
     compressed_size = size_path[0]
+    ratio = 1 - (compressed_size / initial_size)
     #
+    
+    summary = {
+        "Input File": input_file, "Initial Size": get_size_format(initial_size),
+        "Output File": output_file, f"Compressed Size": get_size_format(compressed_size),
+        "Compression Ratio": "{0:.3%}.".format(ratio)
+    }
     await asyncio.sleep(2)
     message = await msg.edit(Presets.UPLOAD_MSG)
     current_time = time.time()
     #
+    if initial_size < compressed_size:
     await message.reply_to_message.reply_document(
         document=size_path[1],
         reply_to_message_id=message.reply_to_message.message_id,
-        caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
+        caption=summary
+        #caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
         #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
         progress=progress_for_pyrogram,
         progress_args=(
