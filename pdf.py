@@ -654,7 +654,7 @@ async def documents(bot, message):
                 await message.reply_to_message.download(
                     f"{message.chat.id}/{message.chat.id}.jpg"
                 )                
-                img = Image.open(
+                img = PIL.Image.open(
                     f"{message.chat.id}/{message.chat.id}.jpg"
                 ).convert("RGB")                
                 PDF[message.chat.id].append(img)
