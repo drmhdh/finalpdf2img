@@ -382,7 +382,7 @@ async def rename_doc(bot, message):
                     width = metadata.get("width")
                 if metadata.has("height"):
                     height = metadata.get("height")         
-                Image.open(thumb_image_path).convert("RGB").save(thumb_image_path)
+                PIL.Image.open(thumb_image_path).convert("RGB").save(thumb_image_path)
                 img = Image.open(thumb_image_path)
                 img.resize((320, height))
                 img.save(thumb_image_path, "JPEG")
