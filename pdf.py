@@ -275,9 +275,9 @@ async def compress_pdf(bot, message):
         except Exception:
             pass
     else:
-        await message.reply_to_message.reply(
+        await message.edit(
             "Cant Compress....!!"
-        
+        )
         try:
             os.remove(size_path[1])
         except Exception:
@@ -346,7 +346,7 @@ async def link2pdf(bot, message):
         os.remove(file_name)
     except Exception:
         pass
-    await msg.delete()
+    await message.delete()
                                                   
 #  ------------------------------------------------------#Rename PDF#------------------------------------------------------#
 @bot.on_message(filters.command('rename'))
