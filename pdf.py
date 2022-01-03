@@ -215,10 +215,10 @@ async def compress_pdf(bot, message):
     #If initial_size - compressed_size = > 5:
     #If int(initial_size) - int(compressed_size)>5:
     #if compressed_size < initial_size:
-    #If (int(initial_size) - int(compressed_size))>5:
+    if (int(initial_size) - int(compressed_size))>5:
     #initial_size=int(initial_size)
     #compressed_size=int(compressed_size)
-    if (initial_size - compressed_size)>5:
+    #if (initial_size - compressed_size)>5:
     
     
         await message.reply_to_message.reply_document(
