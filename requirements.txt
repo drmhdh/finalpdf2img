@@ -5,16 +5,12 @@ pyrogram
 tgcrypto
 convertapi
 pytesseract
-
 pyromod
 hachoir
 numpy
 Pillow
 requests
-
 bs4
-
 weasyprint
-
 humanize
 PDFNetPython3==8.1.0
