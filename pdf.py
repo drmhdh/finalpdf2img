@@ -241,7 +241,7 @@ async def compress_pdf(bot, message):
     size_path = await get_size(dl_location)
     compressed_size = size_path[0]
     ratio = 1 - (int(compressed_size) / (int(initial_size))
-    Compression Ratio: "{0:.3%}.".format(ratio)         
+    Compression Ratio = "{0:.3%}.".format(ratio)         
     #
    
     """summary = f"{
