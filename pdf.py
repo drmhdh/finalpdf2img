@@ -1833,7 +1833,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         LrgFileNo = 1                    
                         for file in imag:
                             if os.path.getsize(file) >= 1000000:                            
-                                picture = Image.open(file)
+                                picture = PIL.Image.open(file)
                                 CmpImg = f'{callbackQuery.message.message_id}/pgs/temp{LrgFileNo}.jpeg'
                                 picture.save(CmpImg, "JPEG", optimize=True, quality = 50)                             
                                 LrgFileNo += 1                            
