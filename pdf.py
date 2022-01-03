@@ -214,33 +214,33 @@ async def compress_pdf(bot, message):
     #If initial_size - compressed_size > 5:
     #If initial_size - compressed_size = > 5:
     #If int(initial_size) - int(compressed_size)>5:
-    #if compressed_size < initial_size:
-    if int((int(initial_size) - int(compressed_size)) > 5):
+    if compressed_size < initial_size:
+    #if int((int(initial_size) - int(compressed_size)) > 5):
     #initial_size=int(initial_size)
     #compressed_size=int(compressed_size)
     #if (initial_size - compressed_size)>5:
     
+        
+        await message.reply_to_message.reply_document(
+            document=size_path[1],
+            reply_to_message_id=message.reply_to_message.message_id,
+            caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
+            #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
+            progress=progress_for_pyrogram,
+            progress_args=(
+                Presets.UPLOAD_MSG,
+                message,
+                current_time
+            )
+        )    
+        await msg.delete()
+        #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)    
         try:
-            await message.reply_to_message.reply_document(
-                document=size_path[1],
-                reply_to_message_id=message.reply_to_message.message_id,
-                caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
-                #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
-                progress=progress_for_pyrogram,
-                progress_args=(
-                    Presets.UPLOAD_MSG,
-                    message,
-                    current_time
-                )
-            )    
-            await msg.delete()
-            #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)    
-            try:
-                os.remove(size_path[1])
-            except Exception:
-                pass
-        except:   
-            await msg.edit("`Document is not Compressible as It is Already Optimized....!!`")
+            os.remove(size_path[1])
+        except Exception:
+            pass
+        
+            
         #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)
     else:
         await msg.edit("`Document is not Compressible as It is Already Optimized....!!`")
