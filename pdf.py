@@ -1304,6 +1304,11 @@ async def extract(bot, message):
         pass
     if (clicked == typed) or (clicked in ADMINS):    
         try:
+            if message.reply_to_message==False:
+                await bot.send_message(
+                    message.chat.id,
+                    "`No PDF Found in Message`"
+                )
             if message.chat.id in PROCESS:            
                 await bot.send_chat_action(
                     message.chat.id, "typing"
