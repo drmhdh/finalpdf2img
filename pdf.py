@@ -250,11 +250,11 @@ async def compress_pdf(bot, message):
        # "Compression Ratio": "{0:.3%}.".format(ratio)"""
     #}"
     await asyncio.sleep(2)
-    #message = await message.edit(Presets.UPLOAD_MSG)
+    message = await message.edit(Presets.UPLOAD_MSG)
     current_time = time.time()
     #
     if initial_size > compressed_size:
-        message = await message.edit(Presets.UPLOAD_MSG)
+        #message = await message.edit(Presets.UPLOAD_MSG)
         await message.reply_to_message.reply_document(
             document=size_path[1],
             reply_to_message_id=message.reply_to_message.message_id,
