@@ -234,7 +234,7 @@ async def compress_pdf(bot, message):
         doc.Save(size_path[1], SDFDoc.e_linearized)
         doc.Close()
     except Exception:
-        await msg.edit(Presets.JOB_ERROR, reply_markup=close_button)
+        await message.edit(Presets.JOB_ERROR, reply_markup=close_button)
         return
     #
     # Let's find out the compressed document file size
@@ -250,7 +250,7 @@ async def compress_pdf(bot, message):
        # "Compression Ratio": "{0:.3%}.".format(ratio)"""
     #}"
     await asyncio.sleep(2)
-    message = await msg.edit(Presets.UPLOAD_MSG)
+    message = await messsge.edit(Presets.UPLOAD_MSG)
     current_time = time.time()
     #
     if initial_size > compressed_size:
@@ -267,7 +267,7 @@ async def compress_pdf(bot, message):
                 current_time
             )
         )    
-        await msg.delete()
+        await message.delete()
         #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)
     
         try:
@@ -277,7 +277,7 @@ async def compress_pdf(bot, message):
     else:
         await message.reply_to_message.reply(
             "Cant Compress....!!"
-        await msg.delete()
+        await message.delete()
         try:
             os.remove(size_path[1])
         except Exception:
