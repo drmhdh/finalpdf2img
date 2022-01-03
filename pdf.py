@@ -1912,7 +1912,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     file = f'{callbackQuery.message.message_id}/pgs/{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpg'
                     
                     if os.path.getsize(file) >= 1000000:
-                        picture = Image.open(file)
+                        picture = PIL.Image.open(file)
                         CmpImg = f'{callbackQuery.message.message_id}/pgs/temp{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpeg'                    
                         picture.save(
                             CmpImg,
