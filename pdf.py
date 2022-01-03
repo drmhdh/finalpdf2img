@@ -277,7 +277,7 @@ async def compress_pdf(bot, message):
     else:
         await message.reply_to_message.reply(
             "Cant Compress....!!"
-        await message.delete()
+        
         try:
             os.remove(size_path[1])
         except Exception:
