@@ -18,19 +18,18 @@ import numpy
 import shutil
 import asyncio
 import logging
-from pyromod import listen
 import requests
 import pytesseract
-from pytesseract import image_to_string
-
 import convertapi
 import weasyprint
 from PIL import Image
 import urllib.request
 from time import sleep
+from pyromod import listen
 from bs4 import BeautifulSoup
 from humanize import naturalsize
 from pyrogram import Client, filters
+from pytesseract import image_to_string
 from hachoir.parser import createParser
 from PDFNetPython3.PDFNetPython import *
 from hachoir.metadata import extractMetadata
@@ -90,7 +89,7 @@ if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE"))
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
 
-    
+#--------------------------------------------------------- Image2Ocr -----------------------------------------------------------#    
 @bot.on_message(filters.command('imgocr'))  #filters.private & filters.photo)
 async def ocr(bot, message):
     lang_code = message.text.replace('/imgocr ', '')
@@ -99,23 +98,10 @@ async def ocr(bot, message):
         text= '`Trying to Read your Image..🤧 `\n\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', 
         reply_to_message_id=message.reply_to_message.message_id,
         disable_web_page_preview=True
-      )                                 
-    """lang_code = await bot.ask(
-        message.chat.id, 
-        
-        '`Trying to Read your Image..🤧 \n\nNow send the ISO language code.`\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', 
-        filters=filters.text, 
-        reply_to_message_id=message.reply_to_message.message_id,
-        parse_mode='Markdown', 
-        disable_web_page_preview=True
-    )"""
+      )                                    
     data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code}.traineddata"
     #data_url = f"https://github.com/tesseract-ocr/tessdata/raw/main/{lang_code.text}.traineddata"
-    dirs = r"/app/vendor/tessdata"
-    
-   
-    
-           
+    dirs = r"/app/vendor/tessdata"                      
     if not os.path.isdir(dirs):
         os.makedirs(dirs)
     path = os.path.join(dirs, f"{lang_code}.traineddata")
@@ -127,16 +113,11 @@ async def ocr(bot, message):
             return await message.reply_to_message.reply("`Either the lang code is wrong or the lang is not supported.`", parse_mode='md')
     imgocr = await message.reply_to_message.reply("`Downloading and Extracting...`", parse_mode='md')
     imageocr = await message.reply_to_message.download(
-    
-    
-        
-        
-        file_name=f"{lang_code}+{message.from_user.id}.jpg"
-        
+                        
+        file_name=f"{lang_code}+{message.from_user.id}.jpg"        
     )
     img = PIL.Image.open(
-        imageocr
-        
+        imageocr        
     )
     text = pytesseract.image_to_string(img, lang=f"{lang_code}")
     try:
@@ -243,8 +224,7 @@ async def compress_pdf(bot, message):
         )
     )    
     await msg.delete()
-    #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)
-    
+    #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)    
     try:
         os.remove(size_path[1])
     except Exception:
@@ -416,7 +396,6 @@ async def rename_doc(bot, message):
             text=Translation.REPLY_TO_DOC_FOR_RENAME_FILE,
             reply_to_message_id=message.message_id
         )    
-
 #progress        
 async def progress_for_pyrogram(
     current,
@@ -460,7 +439,6 @@ async def progress_for_pyrogram(
         except:
             pass
 
-
 def humanbytes(size):
     # https://stackoverflow.com/a/49361727/4723940
     # 2**10 = 1024
@@ -473,7 +451,6 @@ def humanbytes(size):
         size /= power
         n += 1
     return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
-
 
 def TimeFormatter(milliseconds: int) -> str:
     seconds, milliseconds = divmod(int(milliseconds), 1000)
@@ -608,11 +585,9 @@ async def img2pdf(bot, message):
     try:
         await bot.send_chat_action(
             message.chat.id, "typing"
-        )
-        
+        )        
         if Config.UPDATE_CHANNEL:
-            check = await forceSub(message.chat.id)
-            
+            check = await forceSub(message.chat.id)            
             if check == "notSubscribed":
                 return        
         imageReply = await bot.send_message(
