@@ -180,7 +180,7 @@ async def compress_pdf(bot, message):
     await asyncio.sleep(2)
     await msg.edit(Presets.START_COMPRESSING)
     await asyncio.sleep(2)
-    #
+    
     # Let's find out the initial document size
     size_path = await get_size(dl_location)
     initial_size = size_path[0]
@@ -211,25 +211,32 @@ async def compress_pdf(bot, message):
     message = await msg.edit(Presets.UPLOAD_MSG)
     current_time = time.time()
     #
-    await message.reply_to_message.reply_document(
-        document=size_path[1],
-        reply_to_message_id=message.reply_to_message.message_id,
-        caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
-        #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
-        progress=progress_for_pyrogram,
-        progress_args=(
-            Presets.UPLOAD_MSG,
-            message,
-            current_time
-        )
-    )    
-    await msg.delete()
-    #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)    
-    try:
-        os.remove(size_path[1])
-    except Exception:
-        pass
-
+    if compressed_size < initial_size:
+        await message.reply_to_message.reply_document(
+            document=size_path[1],
+            reply_to_message_id=message.reply_to_message.message_id,
+            caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
+            #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
+            progress=progress_for_pyrogram,
+            progress_args=(
+                Presets.UPLOAD_MSG,
+                message,
+                current_time
+            )
+        )    
+        await msg.delete()
+        #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)    
+        try:
+            os.remove(size_path[1])
+        except Exception:
+            pass
+    else:
+        message = await msg.edit(`Document is not Compressible....!!`)
+        try:
+            os.remove(size_path[1])
+        except Exception:
+            pass
+        
 #  ------------------------------------------------------#WEB2PDF Main execution fn# ------------------------------------------------------#
 @bot.on_message(filters.command('link2pdf')) # & filters.private) # & filters.text
 async def link2pdf(bot, message):
