@@ -220,27 +220,30 @@ async def compress_pdf(bot, message):
     #compressed_size=int(compressed_size)
     #if (initial_size - compressed_size)>5:
     
-    
-        await message.reply_to_message.reply_document(
-            document=size_path[1],
-            reply_to_message_id=message.reply_to_message.message_id,
-            caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
-            #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
-            progress=progress_for_pyrogram,
-            progress_args=(
-                Presets.UPLOAD_MSG,
-                message,
-                current_time
-            )
-        )    
-        await msg.delete()
-        #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)    
         try:
-            os.remove(size_path[1])
-        except Exception:
-            pass
+            await message.reply_to_message.reply_document(
+                document=size_path[1],
+                reply_to_message_id=message.reply_to_message.message_id,
+                caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
+                #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
+                progress=progress_for_pyrogram,
+                progress_args=(
+                    Presets.UPLOAD_MSG,
+                    message,
+                    current_time
+                )
+            )    
+            await msg.delete()
+            #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)    
+            try:
+                os.remove(size_path[1])
+            except Exception:
+                pass
+        except:   
+            await msg.edit("`Document is not Compressible as It is Already Optimized....!!`")
+        #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)
     else:
-        await msg.edit("`Document is not Compressible....!!`")
+        await msg.edit("`Document is not Compressible as It is Already Optimized....!!`")
         try:
             os.remove(size_path[1])
         except Exception:
