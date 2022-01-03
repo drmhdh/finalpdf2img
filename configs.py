@@ -240,5 +240,5 @@ class Presets(object):
     FINISHED_DL = "Success !\nDocument downloaded successfully."
     START_COMPRESSING = "⌛️ Processing  ⌛\nTrying to compress the document."
     FINISHED_JOB = "Success ✅ \n\nSize before job: {}\nSize after job: {}\n\nCredits:@dent_tech_for_books"
-                    
+    SUMMARY= "Success ✅ \n\nSize before job: {}\nSize after job: {}\nCompression Ratio: {}\n\nCredits:@dent_tech_for_books"
     JOB_ERROR = "Error:\nSomething went wrong ! Process exited"
