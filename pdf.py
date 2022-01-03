@@ -207,9 +207,9 @@ async def compress_pdf(bot, message):
     )
     #
     await asyncio.sleep(1)
-    await msg.edit(Presets.FINISHED_DL)
+    await message.edit(Presets.FINISHED_DL)
     await asyncio.sleep(2)
-    await msg.edit(Presets.START_COMPRESSING)
+    await message.edit(Presets.START_COMPRESSING)
     await asyncio.sleep(2)
     #
     # Let's find out the initial document size
@@ -234,7 +234,7 @@ async def compress_pdf(bot, message):
         doc.Save(size_path[1], SDFDoc.e_linearized)
         doc.Close()
     except Exception:
-        await message.edit(Presets.JOB_ERROR, reply_markup=close_button)
+        await message.edit(Presets.JOB_ERROR)
         return
     #
     # Let's find out the compressed document file size
@@ -250,10 +250,11 @@ async def compress_pdf(bot, message):
        # "Compression Ratio": "{0:.3%}.".format(ratio)"""
     #}"
     await asyncio.sleep(2)
-    message = await message.edit(Presets.UPLOAD_MSG)
+    #message = await message.edit(Presets.UPLOAD_MSG)
     current_time = time.time()
     #
     if initial_size > compressed_size:
+        message = await message.edit(Presets.UPLOAD_MSG)
         await message.reply_to_message.reply_document(
             document=size_path[1],
             reply_to_message_id=message.reply_to_message.message_id,
