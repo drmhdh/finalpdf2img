@@ -244,8 +244,8 @@ async def compress_pdf(bot, message):
     #
     
     summary = {
-        "Input File": input_file, "Initial Size": get_size_format(initial_size),
-        "Output File": output_file, f"Compressed Size": get_size_format(compressed_size),
+        "Initial Size": get_size_format(initial_size),
+        "Compressed Size": get_size_format(compressed_size),
         "Compression Ratio": "{0:.3%}.".format(ratio)
     }
     await asyncio.sleep(2)
@@ -266,13 +266,21 @@ async def compress_pdf(bot, message):
                 current_time
             )
         )    
-    await msg.delete()
-    #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)
+        await msg.delete()
+        #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)
     
-    try:
-        os.remove(size_path[1])
-    except Exception:
-        pass
+        try:
+            os.remove(size_path[1])
+        except Exception:
+            pass
+    else:
+        await message.reply_to_message.reply(
+            "Cant Compress....!!"
+        await msg.delete()
+        try:
+            os.remove(size_path[1])
+        except Exception:
+            pass
 
 #  ------------------------------------------------------#WEB2PDF Main execution fn# ------------------------------------------------------#
 @bot.on_message(filters.command('link2pdf')) # & filters.private) # & filters.text
