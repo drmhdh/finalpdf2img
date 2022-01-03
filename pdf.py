@@ -173,13 +173,13 @@ async def get_size_format(b, factor=1024, suffix="B"):
     return f"{b:.2f}Y{suffix}"
 @bot.on_message(filters.command('compresspdf') & filters.user(ADMINS)) # & filters.private) #& filters.document
 async def compress_pdf(bot, message):
-    msg = await bot.send_message(
+    message = await bot.send_message(
         chat_id=message.chat.id,
         text=Presets.WAIT_MESSAGE, 
         reply_to_message_id=message.reply_to_message.message_id
     )
     if not str(message.reply_to_message.document.file_name).lower().endswith('.pdf'):
-        await msg.edit(Presets.INVALID_FORMAT)
+        await message.edit(Presets.INVALID_FORMAT)
         return
     #
     dl_location = os.getcwd() + '/' + "downloads" + '/' + str(message.from_user.id) + '/'
