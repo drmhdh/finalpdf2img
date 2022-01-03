@@ -481,7 +481,7 @@ async def generate_custom_thumbnail(bot, message):
             save_final_image = download_location + str(round(time.time())) + ".jpg"
             list_im = os.listdir(download_location)
             if len(list_im) == 2:
-                imgs = [ Image.open(download_location + i) for i in list_im ]
+                imgs = [ PIL.Image.open(download_location + i) for i in list_im ]
                 inm_aesph = sorted([(numpy.sum(i.size), i.size) for i in imgs])
                 min_shape = inm_aesph[1][1]
                 imgs_comb = numpy.hstack(numpy.asarray(i.resize(min_shape)) for i in imgs)
