@@ -241,12 +241,13 @@ async def compress_pdf(bot, message):
     size_path = await get_size(dl_location)
     compressed_size = size_path[0]
     ratio = 1 - (int(compressed_size) / (int(initial_size))
+    Compression Ratio: "{0:.3%}.".format(ratio)         
     #
-    
-    summary = f"{
+   
+    """summary = f"{
         "Initial Size": get_size_format(initial_size),
         "Compressed Size": get_size_format(compressed_size),
-        "Compression Ratio": "{0:.3%}.".format(ratio)
+        "Compression Ratio": "{0:.3%}.".format(ratio)"""
     }"
     await asyncio.sleep(2)
     message = await msg.edit(Presets.UPLOAD_MSG)
@@ -256,7 +257,7 @@ async def compress_pdf(bot, message):
         await message.reply_to_message.reply_document(
             document=size_path[1],
             reply_to_message_id=message.reply_to_message.message_id,
-            caption=summary,caption=Presets.FINISHED_JOB.format(initial_size
+            caption=caption=Presets.SUMMARY.format(initial_size, compressed_size, Compression Ratio),
             #caption=Presets.FINISHED_JOB.format(initial_size, compressed_size),                           
             #caption=message.reply_to_message.caption if message.reply_to_message.caption else '',
             progress=progress_for_pyrogram,
