@@ -1898,7 +1898,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                             if os.path.getsize(file) >= 1000000:                            
                                 picture = PIL.Image.open(file)
                                 CmpImg = f'{callbackQuery.message.message_id}/pgs/temp{LrgFileNo}.jpeg'
-                                picture.save(CmpImg, "JPEG", optimize=True, quality = 50)                             
+                                picture.save(CmpImg, "JPEG", optimize=True, quality = 60)                             
                                 LrgFileNo += 1                            
                                 if os.path.getsize(CmpImg) >= 1000000:
                                     continue                            
