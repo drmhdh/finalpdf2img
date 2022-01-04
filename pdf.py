@@ -1543,9 +1543,9 @@ async def extract(bot, message):
                             else:
                                 PAGENOINFO[message.chat.id] = [False, 1, PDF2IMGPGNO[message.chat.id], None]
                                 #elmnts in list (is singlePage, start, end, if single pg number)                    
-                       elif 0 < int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]:
+                        elif 0 < int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]:
                             PAGENOINFO[message.chat.id] = [True, None, None, pageStartAndEnd[0]]                
-                       else:
+                        else:
                             await bot.send_message(
                                 message.chat.id,
                                 '`Syntax Error: noSuchPageNumber 🥴`'
