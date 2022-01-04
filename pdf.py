@@ -14,7 +14,7 @@ import PIL
 import time
 import math
 import fitz
-from fitz import load_page, get_pixmap, save
+from fitz import Document.load_page, Page.get_pixmap, Pixmap.save
 import numpy
 import shutil
 import asyncio
