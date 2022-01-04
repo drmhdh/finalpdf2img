@@ -14,3 +14,4 @@ bs4
 weasyprint
 humanize
 PDFNetPython3==8.1.0
+fitz
