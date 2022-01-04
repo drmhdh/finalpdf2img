@@ -19,9 +19,9 @@ import shutil
 import asyncio
 import logging
 import requests
-import pytesseract
 import convertapi
 import weasyprint
+import pytesseract
 from PIL import Image
 import urllib.request
 from time import sleep
@@ -31,10 +31,10 @@ from humanize import naturalsize
 from pyrogram import Client, filters
 from pytesseract import image_to_string
 from hachoir.parser import createParser
+from pyrogram.errors import MessageEmpty
 from PDFNetPython3.PDFNetPython import *
 from hachoir.metadata import extractMetadata
 from PyPDF2 import PdfFileWriter, PdfFileReader
-from pyrogram.errors import MessageEmpty
 from configs import Config, Msgs, ADMINS, Translation, Presets
 from pyrogram.types import InputMediaPhoto, InputMediaDocument, CallbackQuery
 from pyrogram.types import ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
@@ -202,7 +202,7 @@ async def compress_pdf(bot, message):
     except Exception:
         await msg.edit(Presets.JOB_ERROR, reply_markup=close_button)
         return
-    #
+
     # Let's find out the compressed document file size
     size_path = await get_size(dl_location)
     compressed_size = size_path[0]
@@ -210,17 +210,8 @@ async def compress_pdf(bot, message):
     await asyncio.sleep(2)
     message = await msg.edit(Presets.UPLOAD_MSG)
     current_time = time.time()
-    #
-    
-    
-    
-    if compressed_size < initial_size:
-    
-    
-  
-  
-    
-        
+    #            
+    if compressed_size < initial_size:                        
         await message.reply_to_message.reply_document(
             document=size_path[1],
             reply_to_message_id=message.reply_to_message.message_id,
@@ -239,8 +230,7 @@ async def compress_pdf(bot, message):
             os.remove(size_path[1])
         except Exception:
             pass
-        
-            
+                    
         #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)
     else:
         await msg.edit("`Document is not Compressible as It is Already Optimized....!!`")
@@ -415,7 +405,7 @@ async def rename_doc(bot, message):
             text=Translation.REPLY_TO_DOC_FOR_RENAME_FILE,
             reply_to_message_id=message.message_id
         )    
-#progress        
+#--------------------------------------------------------progress---------------------------------------------------#       
 async def progress_for_pyrogram(
     current,
     total,
@@ -970,6 +960,83 @@ async def startpdf(bot, message):
     except Exception:
         pass
             
+#  ------------------------------------------------------REPLY TO /start COMMAND ------------------------------------------------------#
+@bot.on_message(filters.command('start'))
+async def start(bot, message):    
+    try:
+        await bot.send_chat_action(
+            message.chat.id, "typing"
+        )        
+        if Config.UPDATE_CHANNEL:        
+            try:
+                await bot.get_chat_member(
+                    str(Config.UPDATE_CHANNEL), message.chat.id
+                )            
+            except Exception:
+                invite_link = await bot.create_chat_invite_link(
+                    int(Config.UPDATE_CHANNEL)
+                )                
+                await bot.send_message(
+                    message.chat.id,
+                    Msgs.forceSubMsg.format(
+                        message.from_user.first_name, message.chat.id
+                    ),
+                    reply_markup = InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton(
+                                    "🌟 JOIN CHANNEL 🌟",
+                                    url = invite_link.invite_link
+                                )
+                            ],
+                            [
+                                InlineKeyboardButton(
+                                    "Refresh ♻️",
+                                    callback_data = "refresh"
+                                )
+                            ]
+                        ]
+                    )
+                )                
+                await bot.delete_messages(
+                    chat_id = message.chat.id,
+                    message_ids = message.message_id
+                )
+                return        
+        await bot.send_message(
+            message.chat.id,
+            Msgs.welcomeMsg.format(
+                message.from_user.first_name, message.chat.id
+            ),
+            disable_web_page_preview = True,
+            reply_markup = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            "About",
+                            callback_data = "strtDevEdt"
+                        ),
+                        InlineKeyboardButton(
+                            "Help 🎊",
+                            callback_data = "imgsToPdfEdit"
+                        )
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            "Close",
+                            callback_data = "close"
+                        )
+                    ]
+                ]
+            )
+        )
+        await bot.delete_messages(
+            chat_id = message.chat.id,
+            message_ids = message.message_id
+        )        
+    except Exception:
+        pass
+                    
 #  --------------------------------------/deletes : Deletes current Images to pdf Queue --------------------------------------------#
 @bot.on_message(filters.command(["deletepdf"]))
 async def cancelI2P(bot, message):    
@@ -1389,11 +1456,9 @@ async def extract(bot, message):
                             pdfMsgId = await message.reply_to_message.reply_text(
                                 Msgs.pdfReplyMsg.format(noOfPages)
                             )                     
-                            #doc.close()
-                            #shutil.rmtree(f'{message.message_id}')   
-                            
-                            #Magic                         
-                            
+                            doc.close()
+                            shutil.rmtree(f'{message.message_id}')   
+                                                                
                             pageStartAndEnd = list(needPages.replace('-',':').split(':'))            
                             if len(pageStartAndEnd) > 2:                
                                 await bot.send_message(
@@ -1504,8 +1569,7 @@ async def extract(bot, message):
                                 del PAGENOINFO[message.chat.id]
                                 PROCESS.remove(message.chat.id)            
                             except Exception:
-                                pass
-                                                          
+                                pass                                                         
                     else:            
                         try:
                             await bot.send_chat_action(
