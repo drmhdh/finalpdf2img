@@ -1304,11 +1304,11 @@ async def extract(bot, message):
         pass
     if (clicked == typed) or (clicked in ADMINS):    
         try:
-            if message.reply_to_message==False:
-                await bot.send_message(
-                    message.chat.id,
-                    "`No PDF Found in Message`"
-                )
+            
+                
+                    
+                    
+                
             if message.chat.id in PROCESS:            
                 await bot.send_chat_action(
                     message.chat.id, "typing"
@@ -1477,7 +1477,7 @@ async def extract(bot, message):
                                                 ],[
                                                     InlineKeyboardButton("Document 📁", callback_data ="multipleImgAsDocument")
                                                 ],[
-                                                    InlineKeyboardButton("PDF 🎭", callback_data ="multipleImgAsPdfError")
+                                                    InlineKeyboardButton("PDF 🎭", callback_data ="multipleImgAsPdf")
                                                 ]                                   
                                             ]
                                         )
@@ -1490,11 +1490,11 @@ async def extract(bot, message):
                                     reply_markup = InlineKeyboardMarkup(    
                                         [
                                             [
-                                                InlineKeyboardButton("Images 🖼️️", callback_data ="multipleImgAsImages")
+                                                InlineKeyboardButton("Images 🖼️️", callback_data ="asImages")
                                             ],[
-                                                InlineKeyboardButton("Document 📁", callback_data ="multipleImgAsDocument")
+                                                InlineKeyboardButton("Document 📁", callback_data ="asDocument")
                                             ],[
-                                                InlineKeyboardButton("PDF 🎭", callback_data ="multipleImgAsPdfError")
+                                                InlineKeyboardButton("PDF 🎭", callback_data ="asPdf")
                                             ]                                   
                                         ]
                                     )
