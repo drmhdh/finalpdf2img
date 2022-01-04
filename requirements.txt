@@ -1,6 +1,6 @@
 pillow
 PyPDF2
-PyMuPdf v1.19.0
+PyMuPdf==1.19.0
 pyrogram
 tgcrypto
 convertapi
