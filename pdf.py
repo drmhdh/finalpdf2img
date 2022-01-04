@@ -1893,7 +1893,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         pgList = totalPgList[i:i+10]
                         os.mkdir(f'{callbackQuery.message.message_id}/pgs')                    
                         for pageNo in pgList:
-                            page = doc.loadPage(pageNo-1)
+                            page = doc.load_page(pageNo-1)
                             pix = page.getPixmap(matrix = mat)
                             cnvrtpg += 1                                              
                         
@@ -2016,7 +2016,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         message_id = callbackQuery.message.message_id,
                         text = f"`Fetching page Number:{PAGENOINFO[callbackQuery.message.chat.id][3]} 🤧`"
                     )                
-                    page = doc.loadPage(int(PAGENOINFO[callbackQuery.message.chat.id][3])-1)
+                    page = doc.load_page(int(PAGENOINFO[callbackQuery.message.chat.id][3])-1)
                     pix = page.getPixmap(matrix = mat)
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
