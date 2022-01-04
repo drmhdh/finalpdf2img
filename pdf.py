@@ -2006,7 +2006,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                             CmpImg,
                             "JPEG",
                             optimize = True,
-                            quality = 50
+                            quality = 60
                         )
                         file = CmpImg                    
                         if os.path.getsize(CmpImg) >= 1000000:
