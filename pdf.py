@@ -2024,7 +2024,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 await bot.edit_message_text(
                     chat_id = callbackQuery.message.chat.id,
                     message_id = callbackQuery.message.message_id,
-                    text = "`Downloading your pdf..🤹`"
+                    text = "`Trying to Split ✂️ Your PDF..🤹`"
                 )            
                 await bot.download_media(
                     PDF2IMG[callbackQuery.message.chat.id],
