@@ -1839,7 +1839,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                 del PDF2IMG[callbackQuery.message.chat.id]
                 del PDF2IMGPGNO[callbackQuery.message.chat.id]            
                 doc = fitz.open(f'{callbackQuery.message.message_id}/pdf.pdf')
-                zoom = 1
+                zoom = 2
                 mat = fitz.Matrix(zoom, zoom)            
                 if edit == "multipleImgAsImages" or edit == "multipleImgAsDocument":                
                     if int(int(PAGENOINFO[callbackQuery.message.chat.id][2])+1 - int(PAGENOINFO[callbackQuery.message.chat.id][1])) >= 11:
