@@ -1458,141 +1458,170 @@ async def extract(bot, message):
                             )                     
                             doc.close()
                             shutil.rmtree(f'{message.message_id}')   
-                                                                
-                            pageStartAndEnd = list(needPages.replace('-',':').split(':'))            
-                            if len(pageStartAndEnd) > 2:                
-                                await bot.send_message(
-                                    message.chat.id,
-                                    "`I just asked you starting & ending 😅`"
+                              
+                        
+                        except Exception as e:        
+                            try:
+                            
+                                PROCESS.remove(message.chat.id)
+                                doc.close()
+                                shutil.rmtree(f'{message.message_id}')
+                    
+                                await pdfMsgId.edit(
+                                    Msgs.errorEditMsg.format(e)
                                 )
-                                return            
-                            elif len(pageStartAndEnd) == 2:
-                                try:                                                            
-                                    if (1 <= int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]):                        
-                                        if (int(pageStartAndEnd[0]) < int(pageStartAndEnd[1]) <= PDF2IMGPGNO[message.chat.id]):
-                                            PAGENOINFO[message.chat.id] = [False, int(pageStartAndEnd[0]), int(pageStartAndEnd[1]), None]    
-                                            #elmnts in list (is singlePage, start, end, if single pg number)                            
-                                        else:
-                                            await bot.send_message(
-                                                message.chat.id,
-                                                "`Syntax Error: errorInEndingPageNumber 😅`"
-                                            )
-                                            return                       
-                                    else:
-                                        await bot.send_message(
-                                            message.chat.id,
-                                            "`Syntax Error: errorInStartingPageNumber 😅`"
-                                        )
-                                        return                               
-                                except:                    
-                                    await bot.send_message(
-                                        message.chat.id,
-                                        "`Syntax Error: noSuchPageNumbers 🤭`"
-                                    )
-                                    return                            
-                            elif len(pageStartAndEnd) == 1:                
-                                if pageStartAndEnd[0] == "/extract":                    
-                                    if (PDF2IMGPGNO[message.chat.id]) == 1:
-                                        PAGENOINFO[message.chat.id] = [True, None, None, 1]
-                                        #elmnts in list (is singlePage, start, end, if single pg number)                    
-                                    else:
-                                        PAGENOINFO[message.chat.id] = [False, 1, PDF2IMGPGNO[message.chat.id], None]
-                                        #elmnts in list (is singlePage, start, end, if single pg number)                    
-                                elif 0 < int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]:
-                                    PAGENOINFO[message.chat.id] = [True, None, None, pageStartAndEnd[0]]                
+                                sleep(15)
+                                await bot.delete_messages(
+                                    chat_id = message.chat.id,
+                                    message_ids = pdfMsgId.message_id
+                                )
+                                await bot.delete_messages(
+                                    chat_id = message.chat.id,
+                                    message_ids = message.message_id
+                                )
+                
+                            except Exception:
+                                pass
+                        
+                        #$#$#$#$#    
+                      else:            
+                          try:
+                              await bot.send_chat_action(
+                                  message.chat.id, "typing"
+                              )
+                              unSuprtd = await bot.send_message(
+                              message.chat.id, "`unsupported file..🙄`"
+                              )
+                              sleep(15)
+                              await bot.delete_messages(
+                                  chat_id = message.chat.id,
+                                  message_ids = message.message_id
+                              )
+                              await bot.delete_messages(
+                                  chat_id = message.chat.id,
+                                  message_ids = unSuprtd.message_id
+                              )                
+                          except Exception:
+                              pass   
+                    
+                    pageStartAndEnd = list(needPages.replace('-',':').split(':'))            
+                    if len(pageStartAndEnd) > 2:                
+                        await bot.send_message(
+                            message.chat.id,
+                            "`I just asked you starting & ending 😅`"
+                        )
+                        return            
+                    elif len(pageStartAndEnd) == 2:
+                        try:                                                            
+                            if (1 <= int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]):                        
+                                if (int(pageStartAndEnd[0]) < int(pageStartAndEnd[1]) <= PDF2IMGPGNO[message.chat.id]):
+                                    PAGENOINFO[message.chat.id] = [False, int(pageStartAndEnd[0]), int(pageStartAndEnd[1]), None]    
+                                    #elmnts in list (is singlePage, start, end, if single pg number)                            
                                 else:
                                     await bot.send_message(
                                         message.chat.id,
-                                        '`Syntax Error: noSuchPageNumber 🥴`'
+                                        "`Syntax Error: errorInEndingPageNumber 😅`"
                                     )
-                                    return            
+                                    return                       
                             else:
                                 await bot.send_message(
                                     message.chat.id,
-                                    "`Syntax Error: pageNumberMustBeAnIntiger 🧠`"
+                                    "`Syntax Error: errorInStartingPageNumber 😅`"
                                 )
-                                return            
-                            if PAGENOINFO[message.chat.id][0] == False:                
-                                if pageStartAndEnd[0] == "/extract":
-                                    await bot.send_message(
-                                        message.chat.id,
-                                        text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
-                                        disable_web_page_preview = True,
-                                        reply_markup = InlineKeyboardMarkup(
-                                            [
-                                                [
-                                                    InlineKeyboardButton("Images 🖼️️", callback_data ="multipleImgAsImages")
-                                                ],[
-                                                    InlineKeyboardButton("Document 📁", callback_data ="multipleImgAsDocument")
-                                                ],[
-                                                    InlineKeyboardButton("PDF 🎭", callback_data ="multipleImgAsPdfError")
-                                                ]                                   
-                                            ]
-                                        )
-                                    ) 
-                                else:
-                                    await bot.send_message(
-                                        message.chat.id,
-                                        text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
-                                        disable_web_page_preview = True,
-                                        reply_markup = InlineKeyboardMarkup(
-                                            [
-                                                [
-                                                    InlineKeyboardButton("Images 🖼️️", callback_data ="multipleImgAsImages")
-                                                ],[
-                                                    InlineKeyboardButton("Document 📁", callback_data ="multipleImgAsDocument")
-                                                ],[
-                                                    InlineKeyboardButton("PDF 🎭", callback_data ="multipleImgAsPdf")
-                                                ]                                   
-                                            ]
-                                        )
-                                    ) 
-                            if PAGENOINFO[message.chat.id][0] == True:                
-                                await bot.send_message(
-                                    message.chat.id,
-                                    text = f"Extract page number: `{PAGENOINFO[message.chat.id][3]}` As:",
-                                    disable_web_page_preview = True,
-                                    reply_markup = InlineKeyboardMarkup(    
+                                return                               
+                        except:                    
+                            await bot.send_message(
+                                message.chat.id,
+                                "`Syntax Error: noSuchPageNumbers 🤭`"
+                            )
+                            return                            
+                    elif len(pageStartAndEnd) == 1:                
+                        if pageStartAndEnd[0] == "/extract":                    
+                            if (PDF2IMGPGNO[message.chat.id]) == 1:
+                                PAGENOINFO[message.chat.id] = [True, None, None, 1]
+                                #elmnts in list (is singlePage, start, end, if single pg number)                    
+                            else:
+                                PAGENOINFO[message.chat.id] = [False, 1, PDF2IMGPGNO[message.chat.id], None]
+                                #elmnts in list (is singlePage, start, end, if single pg number)                    
+                       elif 0 < int(pageStartAndEnd[0]) <= PDF2IMGPGNO[message.chat.id]:
+                            PAGENOINFO[message.chat.id] = [True, None, None, pageStartAndEnd[0]]                
+                       else:
+                            await bot.send_message(
+                                message.chat.id,
+                                '`Syntax Error: noSuchPageNumber 🥴`'
+                            )
+                            return            
+                    else:
+                        await bot.send_message(
+                            message.chat.id,
+                            "`Syntax Error: pageNumberMustBeAnIntiger 🧠`"
+                        )
+                        return            
+                    if PAGENOINFO[message.chat.id][0] == False:                
+                        if pageStartAndEnd[0] == "/extract":
+                            await bot.send_message(
+                                message.chat.id,
+                                text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
+                                disable_web_page_preview = True,
+                                reply_markup = InlineKeyboardMarkup(
+                                    [
                                         [
-                                            [
-                                                InlineKeyboardButton("Images 🖼️️", callback_data ="asImages")
-                                            ],[
-                                                InlineKeyboardButton("Document 📁", callback_data ="asDocument")
-                                            ],[
-                                                InlineKeyboardButton("PDF 🎭", callback_data ="asPdf")
-                                            ]                                   
-                                        ]
-                                    )
-                                ) 
-                        except Exception:        
-                            try:
-                                del PAGENOINFO[message.chat.id]
-                                PROCESS.remove(message.chat.id)            
-                            except Exception:
-                                pass                                                         
-                    else:            
-                        try:
-                            await bot.send_chat_action(
-                                message.chat.id, "typing"
-                            )
-                            unSuprtd = await bot.send_message(
-                                message.chat.id, "`unsupported file..🙄`"
-                            )
-                            sleep(15)
-                            await bot.delete_messages(
-                                chat_id = message.chat.id,
-                                message_ids = message.message_id
-                            )
-                            await bot.delete_messages(
-                                chat_id = message.chat.id,
-                                message_ids = unSuprtd.message_id
-                            )                
-                        except Exception:
-                            pass
-                except:
+                                            InlineKeyboardButton("Images 🖼️️", callback_data ="multipleImgAsImages")
+                                        ],[
+                                            InlineKeyboardButton("Document 📁", callback_data ="multipleImgAsDocument")
+                                        ],[
+                                            InlineKeyboardButton("PDF 🎭", callback_data ="multipleImgAsPdfError")
+                                        ]                                   
+                                    ]
+                                )
+                            ) 
+                        else:
+                            await bot.send_message(
+                                message.chat.id,
+                                text = f"Extract images from `{PAGENOINFO[message.chat.id][1]}` to `{PAGENOINFO[message.chat.id][2]}` As:",
+                                disable_web_page_preview = True,
+                                reply_markup = InlineKeyboardMarkup(
+                                    [
+                                        [
+                                            InlineKeyboardButton("Images 🖼️️", callback_data ="multipleImgAsImages")
+                                        ],[
+                                            InlineKeyboardButton("Document 📁", callback_data ="multipleImgAsDocument")
+                                        ],[
+                                            InlineKeyboardButton("PDF 🎭", callback_data ="multipleImgAsPdf")
+                                        ]                                   
+                                    ]
+                                )
+                            ) 
+                        if PAGENOINFO[message.chat.id][0] == True:                
+                            await bot.send_message(
+                                message.chat.id,
+                                text = f"Extract page number: `{PAGENOINFO[message.chat.id][3]}` As:",
+                                disable_web_page_preview = True,
+                                reply_markup = InlineKeyboardMarkup(    
+                                    [
+                                        [
+                                            InlineKeyboardButton("Images 🖼️️", callback_data ="asImages")
+                                        ],[
+                                            InlineKeyboardButton("Document 📁", callback_data ="asDocument")
+                                        ],[
+                                            InlineKeyboardButton("PDF 🎭", callback_data ="asPdf")
+                                        ]                                   
+                                    ]
+                                )
+                            ) 
+                        
+                                
+                                                                                         
+            
+            
+                    
+                    
+                    
+                    
+                except:       
                     pass  
-            else:
-                pass
+             
+            
         except:
             pass
     else:
