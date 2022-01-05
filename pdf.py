@@ -1912,7 +1912,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                             with open(
                                 f'{callbackQuery.message.message_id}/pgs/{pageNo}.jpg','wb'
                             ):
-                                pix.writePNG(f'{callbackQuery.message.message_id}/pgs/{pageNo}.jpg')                      
+                                pix.save(f'{callbackQuery.message.message_id}/pgs/{pageNo}.jpg')                      
                         await bot.edit_message_text(
                             chat_id = callbackQuery.message.chat.id,
                             message_id = callbackQuery.message.message_id,
@@ -2027,7 +2027,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                     with open(
                         f'{callbackQuery.message.message_id}/pgs/{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpg','wb'
                     ):
-                        pix.writePNG(f'{callbackQuery.message.message_id}/pgs/{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpg')                
+                        pix.save(f'{callbackQuery.message.message_id}/pgs/{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpg')                
                     file = f'{callbackQuery.message.message_id}/pgs/{PAGENOINFO[callbackQuery.message.chat.id][3]}.jpg'
                     
                     if os.path.getsize(file) >= 1000000:
