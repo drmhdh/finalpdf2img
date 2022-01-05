@@ -1894,7 +1894,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         os.mkdir(f'{callbackQuery.message.message_id}/pgs')                    
                         for pageNo in pgList:
                             page = doc.load_page(pageNo-1)
-                            pix = page.getPixmap(matrix = mat)
+                            pix = page.get_pixmap(matrix = mat)
                             cnvrtpg += 1                                              
                         
                             if callbackQuery.message.chat.id not in PROCESS:                            
@@ -2017,7 +2017,7 @@ async def answer(client: bot, callbackQuery: CallbackQuery):
                         text = f"`Fetching page Number:{PAGENOINFO[callbackQuery.message.chat.id][3]} 🤧`"
                     )                
                     page = doc.load_page(int(PAGENOINFO[callbackQuery.message.chat.id][3])-1)
-                    pix = page.getPixmap(matrix = mat)
+                    pix = page.get_pixmap(matrix = mat)
                     await bot.edit_message_text(
                         chat_id = callbackQuery.message.chat.id,
                         message_id = callbackQuery.message.message_id,
