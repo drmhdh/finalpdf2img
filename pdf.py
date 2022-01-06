@@ -1588,23 +1588,23 @@ async def extract(bot, message):
                                     ]
                                 )
                             ) 
-                        if PAGENOINFO[message.chat.id][0] == True:                
-                            await bot.send_message(
-                                message.chat.id,
-                                text = f"Extract page number: `{PAGENOINFO[message.chat.id][3]}` As:",
-                                disable_web_page_preview = True,
-                                reply_markup = InlineKeyboardMarkup(    
+                    if PAGENOINFO[message.chat.id][0] == True:                
+                        await bot.send_message(
+                            message.chat.id,
+                            text = f"Extract page number: `{PAGENOINFO[message.chat.id][3]}` As:",
+                            disable_web_page_preview = True,
+                            reply_markup = InlineKeyboardMarkup(    
+                                [
                                     [
-                                        [
-                                            InlineKeyboardButton("Images 🖼️️", callback_data ="asImages")
-                                        ],[
-                                            InlineKeyboardButton("Document 📁", callback_data ="asDocument")
-                                        ],[
-                                            InlineKeyboardButton("PDF 🎭", callback_data ="asPdf")
-                                        ]                                   
-                                    ]
-                                )
-                            ) 
+                                        InlineKeyboardButton("Images 🖼️️", callback_data ="asImages")
+                                    ],[
+                                        InlineKeyboardButton("Document 📁", callback_data ="asDocument")
+                                    ],[
+                                        InlineKeyboardButton("PDF 🎭", callback_data ="asPdf")
+                                    ]                                   
+                                ]
+                            )
+                        ) 
                 except:
                     pass
                             
@@ -1816,23 +1816,23 @@ async def extract(bot, message):
                                     ]
                                 )
                             ) 
-                        if PAGENOINFO[message.chat.id][0] == True:                
-                            await bot.send_message(
-                                message.chat.id,
-                                text = f"Extract page number: `{PAGENOINFO[message.chat.id][3]}` As:",
-                                disable_web_page_preview = True,
-                                reply_markup = InlineKeyboardMarkup(    
+                    if PAGENOINFO[message.chat.id][0] == True:                
+                        await bot.send_message(
+                            message.chat.id,
+                            text = f"Extract page number: `{PAGENOINFO[message.chat.id][3]}` As:",
+                            disable_web_page_preview = True,
+                            reply_markup = InlineKeyboardMarkup(    
+                                [
                                     [
-                                        [
-                                            InlineKeyboardButton("Images 🖼️️", callback_data ="asImages")
-                                        ],[
-                                            InlineKeyboardButton("Document 📁", callback_data ="asDocument")
-                                        ],[
-                                            InlineKeyboardButton("PDF 🎭", callback_data ="asPdf")
-                                        ]                                   
-                                    ]
-                                )
-                            )  
+                                        InlineKeyboardButton("Images 🖼️️", callback_data ="asImages")
+                                    ],[
+                                        InlineKeyboardButton("Document 📁", callback_data ="asDocument")
+                                    ],[
+                                        InlineKeyboardButton("PDF 🎭", callback_data ="asPdf")
+                                    ]                                   
+                                ]
+                            )
+                        )  
                                                                                                                                                          
                 except Exception:        
                     try:
