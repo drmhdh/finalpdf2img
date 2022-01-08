@@ -93,7 +93,7 @@ if Config.MAX_FILE_SIZE:
 @bot.on_message(filters.command('imgocr'))  #filters.private & filters.photo)
 async def ocr(bot, message):
     lang_code = message.text.replace('/imgocr ', '')
-    await bot.send_message(
+    imgocr = await bot.send_message(
         chat_id=message.chat.id,
         text= '`Trying to Read your Image..🤧 `\n\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)', 
         reply_to_message_id=message.reply_to_message.message_id,
@@ -110,8 +110,9 @@ async def ocr(bot, message):
         if data.status_code == 200:
             open(path, 'wb').write(data.content)
         else:
-            return await message.reply_to_message.reply("`Either the lang code is wrong or the lang is not supported.`", parse_mode='md')
-    imgocr = await message.reply_to_message.reply("`Downloading and Extracting...`", parse_mode='md')
+            return await message.reply_to_message.reply("`Either the lang code is wrong or the lang is not supported.\n\n[List of ISO 639-2 language codes](https://en.m.wikipedia.org/wiki/List_of_ISO_639-2_codes)`", parse_mode='md')
+    #imgocr = await message.reply_to_message.reply("`Downloading and Extracting...`", parse_mode='md')
+    imgocr2 = await imgocr.edit("`Downloading and Extracting...`", parse_mode='md')
     imageocr = await message.reply_to_message.download(
                         
         file_name=f"{lang_code}+{message.from_user.id}.jpg"        
@@ -121,9 +122,10 @@ async def ocr(bot, message):
     )
     text = pytesseract.image_to_string(img, lang=f"{lang_code}")
     try:
-        await message.reply_to_message.reply(
+        #await message.reply_to_message.reply(
+        await imgocr2.edit(
             text="`🤭 Here is What I could Read From Your Image👇`",
-            reply_to_message_id=message.reply_to_message.message_id
+            #reply_to_message_id=message.reply_to_message.message_id
         )
         await message.reply_to_message.reply(text[:-1], quote=True, disable_web_page_preview=True)
     except MessageEmpty:
