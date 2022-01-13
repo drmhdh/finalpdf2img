@@ -353,6 +353,7 @@ async def rename_video(bot, message):
             chat_id=message.chat.id,
             text=Translation.REPLY_TO_DOC_FOR_RENAME_FILE,
             reply_to_message_id=message.message_id    
+        )
 #--------------------------------------------------------- Image2Ocr -----------------------------------------------------------#    
 @bot.on_message(filters.command('imgocr'))  #filters.private & filters.photo)
 async def ocr(bot, message):
