@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
 
@@ -115,7 +116,92 @@ async def generate_screen_shots(
             images.append(ss_img)
         return images
     else:
-        return None    
+        return None   
+    
+@bot.on_message(filters.command('watermarkingvids'))  
+async def place_water_mark(input_file, output_file, water_mark_file):
+    watermarked_file = output_file + ".watermark.png"
+    metadata = extractMetadata(createParser(input_file))
+    width = metadata.get("width")
+    # https://stackoverflow.com/a/34547184/4723940
+    shrink_watermark_file_genertor_command = [
+        "ffmpeg",
+        "-i", water_mark_file,
+        "-y -v quiet",
+        "-vf",
+        "scale={}*0.5:-1".format(width),
+        watermarked_file
+    ]
+    # print(shrink_watermark_file_genertor_command)
+    process = await asyncio.create_subprocess_exec(
+        *shrink_watermark_file_genertor_command,
+        # stdout must a pipe to be accessible as process.stdout
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    # Wait for the subprocess to finish
+    stdout, stderr = await process.communicate()
+    e_response = stderr.decode().strip()
+    t_response = stdout.decode().strip()
+    commands_to_execute = [
+        "ffmpeg",
+        "-i", input_file,
+        "-i", watermarked_file,
+        "-filter_complex",
+        # https://stackoverflow.com/a/16235519
+        # "\"[0:0] scale=400:225 [wm]; [wm][1:0] overlay=305:0 [out]\"",
+        # "-map \"[out]\" -b:v 896k -r 20 -an ",
+        "\"overlay=(main_w-overlay_w):(main_h-overlay_h)\"",
+        # "-vf \"drawtext=text='@FFMovingPictureExpertGroupBOT':x=W-(W/2):y=H-(H/2):fontfile=" + Config.FONT_FILE + ":fontsize=12:fontcolor=white:shadowcolor=black:shadowx=5:shadowy=5\"",
+        output_file
+    ]
+    # print(commands_to_execute)
+    process = await asyncio.create_subprocess_exec(
+        *commands_to_execute,
+        # stdout must a pipe to be accessible as process.stdout
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    # Wait for the subprocess to finish
+    stdout, stderr = await process.communicate()
+    e_response = stderr.decode().strip()
+    t_response = stdout.decode().strip()
+    return output_file   
+    
+@bot.on_message(filters.command('smallvixeoclutnshsh'))  
+async def cult_small_video(video_file, output_directory, start_time, end_time):
+    # https://stackoverflow.com/a/13891070/4723940
+    out_put_file_name = output_directory + \
+        "/" + str(round(time.time())) + ".mp4"
+    file_genertor_command = [
+        "ffmpeg",
+        "-i",
+        video_file,
+        "-ss",
+        start_time,
+        "-to",
+        end_time,
+        "-async",
+        "1",
+        "-strict",
+        "-2",
+        out_put_file_name
+    ]
+    process = await asyncio.create_subprocess_exec(
+        *file_genertor_command,
+        # stdout must a pipe to be accessible as process.stdout
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    # Wait for the subprocess to finish
+    stdout, stderr = await process.communicate()
+    e_response = stderr.decode().strip()
+    t_response = stdout.decode().strip()
+    if os.path.lexists(out_put_file_name):
+        return out_put_file_name
+    else:
+        return None
+    
 @bot.on_message(filters.command('screenshortforvideo'))   
 async def take_screen_shot(video_file, output_directory, ttl):
     # https://stackoverflow.com/a/13891070/4723940
@@ -146,6 +232,7 @@ async def take_screen_shot(video_file, output_directory, ttl):
         return out_put_file_name
     else:
         return None    
+    
 @bot.on_message(filters.command(["rename_video"]))
 async def rename_video(bot, message):
     if message.from_user.id in Config.BANNED_USERS:
@@ -155,7 +242,7 @@ async def rename_video(bot, message):
             revoke=True
         )
         return
-    message.from_user.id, message.text, "rename"
+    #message.from_user.id, message.text, "rename"
     if (" " in message.text) and (message.reply_to_message is not None):
         cmd, file_name = message.text.split(" ", 1)
         if len(file_name) > 64:
