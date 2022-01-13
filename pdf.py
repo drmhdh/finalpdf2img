@@ -89,6 +89,127 @@ if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE"))
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
 
+    
+@bot.on_message(filters.command(["rename_video"]))
+async def rename_video(bot, message):
+    if message.from_user.id in Config.BANNED_USERS:
+        await bot.delete_messages(
+            chat_id=message.chat.id,
+            message_ids=message.message_id,
+            revoke=True
+        )
+        return
+    (message.from_user.id, message.text, "rename")
+    if (" " in message.text) and (message.reply_to_message is not None):
+        cmd, file_name = message.text.split(" ", 1)
+        if len(file_name) > 64:
+            await message.reply_text(
+                Translation.IFLONG_FILE_NAME.format(
+                    alimit="64",
+                    num=len(file_name)
+                )
+            )
+            return
+        description = Translation.CUSTOM_CAPTION_UL_FILE
+        download_location = Config.DOWNLOAD_LOCATIONS + "/"
+        b = await bot.send_message(
+            chat_id=message.chat.id,
+            text=Translation.DOWNLOAD_START,
+            reply_to_message_id=message.message_id
+        )
+        c_time = time.time()
+        the_real_download_location = await bot.download_media(
+            message=message.reply_to_message,
+            file_name=download_location,
+            progress=progress_for_pyrogram,
+            progress_args=(
+                Translation.DOWNLOAD_START,
+                b,
+                c_time
+            )
+        )
+        if the_real_download_location is not None:
+            try:
+                await bot.edit_message_text(
+                    text=Translation.SAVED_RECVD_DOC_FILE,
+                    chat_id=message.chat.id,
+                    message_id=b.message_id
+                )
+            except:
+                pass
+            new_file_name = download_location + file_name
+            os.rename(the_real_download_location, new_file_name)
+            await bot.edit_message_text(
+                text=Translation.UPLOAD_START_VIDEO,
+                chat_id=message.chat.id,
+                message_id=b.message_id
+                )
+            logger.info(the_real_download_location)
+            width = 0
+            height = 0
+            duration = 0
+            metadata = extractMetadata(createParser(new_file_name))
+            try:
+             if metadata.has("duration"):
+                duration = metadata.get('duration').seconds
+            except:
+              pass
+            thumb_image_path = Config.DOWNLOAD_LOCATIONS + "/" + str(message.from_user.id) + ".jpg"
+            if not os.path.exists(thumb_image_path):
+               try:
+                    thumb_image_path = await take_screen_shot(new_file_name, os.path.dirname(new_file_name), random.randint(0, duration - 1))
+               except:
+                    thumb_image_path = None
+            else:
+                width = 0
+                height = 0
+                metadata = extractMetadata(createParser(thumb_image_path))
+                if metadata.has("width"):
+                    width = metadata.get("width")
+                if metadata.has("height"):
+                    height = metadata.get("height")
+                # resize image
+                # ref: https://t.me/PyrogramChat/44663
+                # https://stackoverflow.com/a/21669827/4723940
+                Image.open(thumb_image_path).convert("RGB").save(thumb_image_path)
+                img = Image.open(thumb_image_path)
+                # https://stackoverflow.com/a/37631799/4723940
+                # img.thumbnail((90, 90))
+                img.resize((320, height))
+                img.save(thumb_image_path, "JPEG")
+                # https://pillow.readthedocs.io/en/3.1.x/reference/Image.html#create-thumbnails
+            c_time = time.time()
+            await bot.send_video(
+                chat_id=message.chat.id,
+                video=new_file_name,
+                duration=duration,
+                thumb=thumb_image_path,
+                caption=description,
+                # reply_markup=reply_markup,
+                reply_to_message_id=message.reply_to_message.message_id,
+                progress=progress_for_pyrogram,
+                progress_args=(
+                    Translation.UPLOAD_START,
+                    b, 
+                    c_time
+                )
+            )
+            try:
+                os.remove(new_file_name)
+                #os.remove(thumb_image_path)
+            except:
+                pass
+            await bot.edit_message_text(
+                text=Translation.AFTER_SUCCESSFUL_UPLOAD_MSG,
+                chat_id=message.chat.id,
+                message_id=b.message_id,
+                disable_web_page_preview=True
+            )
+    else:
+        await bot.send_message(
+            chat_id=message.chat.id,
+            text=Translation.REPLY_TO_DOC_FOR_RENAME_FILE,
+            reply_to_message_id=message.message_id    
 #--------------------------------------------------------- Image2Ocr -----------------------------------------------------------#    
 @bot.on_message(filters.command('imgocr'))  #filters.private & filters.photo)
 async def ocr(bot, message):
