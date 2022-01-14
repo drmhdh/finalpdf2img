@@ -96,7 +96,7 @@ async def DetectFileSize(url):
     total_size = int(r.headers.get("content-length", 0))
     return total_size
 
-@bot.on_message(filters.command('downloadfilefromurl') & filters.private)
+@bot.on_message(filters.command('downloadfilefromurl') & filters.private & filters.incoming)
 async def DownLoadFile(url, file_name, chunk_size, client, ud_type, message_id, chat_id):
     if os.path.exists(file_name):
         os.remove(file_name)
