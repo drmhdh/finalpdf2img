@@ -15,4 +15,4 @@ weasyprint
 humanize
 PDFNetPython3==8.1.0
 beautifulsoup4
-https://raw.githubusercontent.com/yuno74/pyrogram/main/pyrogram-asyncio.zip
+
