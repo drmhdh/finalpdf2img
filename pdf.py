@@ -90,6 +90,45 @@ if Config.MAX_FILE_SIZE:
     MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE"))
     MAX_FILE_SIZE_IN_kiB = MAX_FILE_SIZE * 10000
 
+@bot.on_message(filters.command('filesizedetect'))   
+async def DetectFileSize(url):
+    r = requests.get(url, allow_redirects=True, stream=True)
+    total_size = int(r.headers.get("content-length", 0))
+    return total_size
+
+@bot.on_message(filters.command('downloadfilefromurl') & filters.private)
+async def DownLoadFile(url, file_name, chunk_size, client, ud_type, message_id, chat_id):
+    if os.path.exists(file_name):
+        os.remove(file_name)
+    if not url:
+        return file_name
+    r = requests.get(url, allow_redirects=True, stream=True)
+    # https://stackoverflow.com/a/47342052/4723940
+    total_size = int(r.headers.get("content-length", 0))
+    downloaded_size = 0
+    with open(file_name, 'wb') as fd:
+        for chunk in r.iter_content(chunk_size=chunk_size):
+            if chunk:
+                fd.write(chunk)
+                downloaded_size += chunk_size
+            if client is not None:
+                if ((total_size // downloaded_size) % 5) == 0:
+                    time.sleep(0.3)
+                    try:
+                        client.edit_message_text(
+                            chat_id,
+                            message_id,
+                            text="{}: {} of {}".format(
+                                ud_type,
+                                humanbytes(downloaded_size),
+                                humanbytes(total_size)
+                            )
+                        )
+                    except:
+                        pass
+    return file_name    
+    
+    
 @bot.on_message(filters.command('genscreen4vids'))  
 async def generate_screen_shots(
     video_file,
