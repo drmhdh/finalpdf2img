@@ -534,6 +534,11 @@ async def compress_pdf(bot, message):
         #await msg.edit(Presets.FINISHED_JOB.format(initial_size, compressed_size)    
         try:
             os.remove(size_path[1])
+            PROCESS.remove(message.chat.id)        
+            sleep(5)
+            await bot.send_chat_action(
+                message.chat.id, "typing"
+            )
         except Exception:
             pass
                     
@@ -542,6 +547,11 @@ async def compress_pdf(bot, message):
         await msg.edit("`Document is not Compressible as It is Already Optimized....!!`")
         try:
             os.remove(size_path[1])
+            PROCESS.remove(message.chat.id)        
+            sleep(5)
+            await bot.send_chat_action(
+                message.chat.id, "typing"
+            )
         except Exception:
             pass
         
@@ -606,6 +616,11 @@ async def link2pdf(bot, message):
     )
     try:
         os.remove(file_name)
+        PROCESS.remove(message.chat.id)        
+        sleep(5)
+        await bot.send_chat_action(
+            message.chat.id, "typing"
+        )
     except Exception:
         pass
     await msg.delete()
@@ -697,6 +712,11 @@ async def rename_doc(bot, message):
             )
             try:
                 os.remove(new_file_name)
+                PROCESS.remove(message.chat.id)        
+                sleep(5)
+                await bot.send_chat_action(
+                    message.chat.id, "typing"
+                )
             except:
                 pass
             await bot.edit_message_text(
