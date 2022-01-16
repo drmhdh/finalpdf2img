@@ -1040,7 +1040,7 @@ async def documents(bot, message):
                     parse_mode = "md"
                 )                
                 doc.close()
-                shutil.rmtree(f'{message.message_id}')           
+                shutil.rmtree(f'{message.reply_to_message.message_id}')           
             except Exception as e:               
                 try:
                     PROCESS.remove(message.chat.id)
