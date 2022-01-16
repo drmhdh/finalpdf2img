@@ -646,7 +646,7 @@ async def rename_doc(bot, message):
             pass
                      
         description = Translation.CUSTOM_CAPTION_UL_FILE
-        download_location = Config.DOWNLOAD_LOCATIONS + "/" + str(message.from_user.id)
+        download_location = Config.DOWNLOAD_LOCATIONS + "/" 
         a = await bot.send_message(
             chat_id=message.chat.id,
             text=Translation.DOWNLOAD_START,
