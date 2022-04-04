@@ -1210,8 +1210,8 @@ async def documents(bot, message):
         pass
 
 #  ------------------------------------------------------REPLY TO /start COMMAND ------------------------------------------------------#
-@bot.on_message(filters.command('startpdf'))
-async def startpdf(bot, message):    
+"""#@bot.on_message(filters.command('startpdf'))
+#async def startpdf(bot, message):    
     try:
         await bot.send_chat_action(
             message.chat.id, "typing"
@@ -1284,10 +1284,10 @@ async def startpdf(bot, message):
             message_ids = message.message_id
         )        
     except Exception:
-        pass
+        pass"""
             
 #  ------------------------------------------------------REPLY TO /start COMMAND ------------------------------------------------------#
-@bot.on_message(filters.command('start'))
+@bot.on_message(filters.command["start", "startpdf"])
 async def start(bot, message):    
     try:
         await bot.send_chat_action(
